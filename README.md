@@ -8,7 +8,7 @@ WatchWise is a compact PCB module that mounts on the back of a standard watch. I
 
 ## Repository Structure
 
-```
+```text
 watch_wise/
 ├── altium/                          # PCB design files
 │   └── ece453-student-cyble-416045-02-full-custom/
