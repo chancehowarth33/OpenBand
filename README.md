@@ -73,3 +73,6 @@ Open the project in ModusToolbox or run:
 ```bash
 make build
 ```
+
+3.3V+ → 3.3V: AP2112K-3.3
+3.3V+ → 1.8V: TLV70018
