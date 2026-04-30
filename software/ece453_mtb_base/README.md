@@ -67,6 +67,56 @@ This example uses the kit’s default configuration. See the respective kit guid
 
 **Note:** The AIROC&trade; CYW20829 Bluetooth&reg; kit (CYW920829M2EVK-02) ships with KitProg3 version 2.21 installed. The ModusToolbox&trade; software requires KitProg3 with latest version 2.40. Before using this code example, make sure that the board is upgraded to KitProg3. The tool and instructions are available in the [Firmware Loader](https://github.com/Infineon/Firmware-loader) GitHub repository. If you do not upgrade, you will see an error such as "unable to find CMSIS-DAP device" or "KitProg firmware is out of date".
 
+## VSCode Setup
+
+### Prerequisites
+
+1. Install **ModusToolbox v3.7+** from Infineon — the build system expects it at `/Applications/ModusToolbox/tools_*` on macOS.
+2. Install the following VSCode extensions:
+   - **clangd** — IntelliSense (already configured via `.clangd` in the project)
+   - **Cortex-Debug** — flashing and debugging on the PSoC6
+   - **ModusToolbox** (optional) — Infineon's official extension
+
+### First-time setup
+
+Open a terminal in this directory (`software/ece453_mtb_base/`) and run:
+
+```bash
+make getlibs
+```
+
+This fetches the FreeRTOS and retarget-io libraries defined in `deps/`. The `libs/` folder is gitignored so it is not in the repo — this step is required before the project will build.
+
+Then generate the VSCode config files:
+
+```bash
+make vscode
+```
+
+This creates a `.vscode/` folder (also gitignored) containing `launch.json`, `tasks.json`, and `c_cpp_properties.json` pre-configured for the PSoC6 target.
+
+### Open in VSCode
+
+Open **this folder** specifically — not the repo root:
+
+```bash
+code .
+```
+
+### Common make targets
+
+| Command | Description |
+|---------|-------------|
+| `make build` | Compile firmware |
+| `make program` | Flash to the board via OpenOCD |
+| `make clean` | Remove build artifacts |
+| `make getlibs` | Fetch/update library dependencies |
+| `make vscode` | Regenerate VSCode config files |
+
+### Debug output
+
+UART retarget-io is initialized on **P5_0 / P5_1** at **115200 baud**. Connect a serial monitor to the KitProg3 USB COM port to see debug output.
+
 ## Related resources
 
 
