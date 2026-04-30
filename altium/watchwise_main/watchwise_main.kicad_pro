@@ -647,7 +647,7 @@
     "top_level_sheets": [
       {
         "filename": "watchwise_main.kicad_sch",
-        "name": "01-Revision_History_and_Contents",
+        "name": "01-Revision_History_and_Cont",
         "uuid": "d77efb11-9eab-486d-8801-3235cfc9fd51"
       },
       {
@@ -664,15 +664,20 @@
         "filename": "04-Programming_Reset.kicad_sch",
         "name": "04-Programming_Reset",
         "uuid": "62e3c630-bd63-47c6-9963-364c5adf6400"
+      },
+      {
+        "filename": "05-power.kicad_sch",
+        "name": "05-Power",
+        "uuid": "afdf4e11-c018-4838-8bbc-a78e7271db46"
       }
     ],
-    "used_designators": "U1-2",
+    "used_designators": "C1-4,#PWR1-6,U1-4",
     "variants": []
   },
   "sheets": [
     [
       "d77efb11-9eab-486d-8801-3235cfc9fd51",
-      "01-Revision_History_and_Contents"
+      "01-Revision_History_and_Cont"
     ],
     [
       "0938a53f-5d53-44ec-90ad-4ffdf9288872",
@@ -685,6 +690,10 @@
     [
       "62e3c630-bd63-47c6-9963-364c5adf6400",
       "04-Programming_Reset"
+    ],
+    [
+      "afdf4e11-c018-4838-8bbc-a78e7271db46",
+      "05-Power"
     ]
   ],
   "text_variables": {
