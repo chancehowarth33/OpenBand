@@ -11,6 +11,7 @@
 #include "task_bmi270.h"
 #include "task_system_control.h"
 #include "bmi270_config.h"
+#include "health_algo.h"
 #include <string.h>
 
 #define BMI270_ADDR     0x68
@@ -172,9 +173,7 @@ void task_bmi270(void *pvParameters)
             bmi270_gyr_y = (int16_t)((buf[9]  << 8) | buf[8]);
             bmi270_gyr_z = (int16_t)((buf[11] << 8) | buf[10]);
 
-            printf("[BMI270] Acc: X=%6d Y=%6d Z=%6d | Gyr: X=%6d Y=%6d Z=%6d\n",
-                   bmi270_acc_x, bmi270_acc_y, bmi270_acc_z,
-                   bmi270_gyr_x, bmi270_gyr_y, bmi270_gyr_z);
+            health_algo_update_imu(bmi270_acc_x, bmi270_acc_y, bmi270_acc_z);
         }
 
         vTaskDelay(pdMS_TO_TICKS(100));

@@ -11,6 +11,7 @@
 #include "task_system_control.h"
 #include "task_max30102.h"
 #include "task_bmi270.h"
+#include "health_algo.h"
 
 /* Shared I2C bus - SCB3: P6_5 SDA, P6_4 SCL                */
 /* NOTE: BMI270 pull-up jumper must be cut on SparkFun board */
@@ -54,7 +55,13 @@ void system_control_initialize(void) {
 
 void task_system_control(void *pvParameters) {
     while (1) {
-        printf("System Control Task is running...\n");
-        vTaskDelay(pdMS_TO_TICKS(1000));
+        if (health_hr > 0) {
+            printf("=== Health === HR: %u BPM | SpO2: %u%% | Steps: %lu\n",
+                   health_hr, health_spo2, health_steps);
+        } else {
+            printf("=== Health === No finger detected | Steps: %lu\n",
+                   health_steps);
+        }
+        vTaskDelay(pdMS_TO_TICKS(5000));
     }
 }

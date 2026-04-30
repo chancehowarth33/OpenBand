@@ -7,6 +7,7 @@
  */
 #include "task_max30102.h"
 #include "task_system_control.h"
+#include "health_algo.h"
 
 #define MAX30102_ADDR   0x57
 
@@ -108,9 +109,9 @@ void task_max30102(void *pvParameters)
             max30102_ir  = ((uint32_t)(buf[3] & 0x03) << 16) |
                            ((uint32_t)buf[4] << 8) |
                             (uint32_t)buf[5];
-        }
 
-        printf("[MAX30102] Red: %lu  IR: %lu\n", max30102_red, max30102_ir);
+            health_algo_update_ppg(max30102_red, max30102_ir);
+        }
         vTaskDelay(pdMS_TO_TICKS(100));
     }
 }
