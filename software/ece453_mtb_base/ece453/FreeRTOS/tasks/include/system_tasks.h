@@ -13,5 +13,7 @@
 
 /* Add includes for all system tasks */
 #include "task_system_control.h"
+#include "task_max30102.h"
+#include "task_bmi270.h"
 
 #endif
