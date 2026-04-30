@@ -51,9 +51,9 @@ watch_wise/
 
 | Part | Description |
 |------|-------------|
-| XC620P182MR-G | LDO voltage regulator — 3.3V to 1.8V (for sensors requiring 1.8V) |
+| AP2112K-3.3 | LDO voltage regulator — 5V to 3.3V |
+| TLV70018 | LDO voltage regulator — 3.3V to 1.8V (for sensors requiring 1.8V) |
 | TYPE-C-31-M-12 | USB-C connector for charging |
-| AMS1117-3.3 / NCP167AMX330TBG | LDO voltage regulator — 5V to 3.3V |
 | MCP73831 | Single-cell LiPo battery charger IC |
 | DW01 | Battery protection IC (overcurrent, overvoltage, short circuit) |
 | PTS810SJG250SMTRLFS | Tactile push buttons (reset / programming) |
@@ -74,5 +74,3 @@ Open the project in ModusToolbox or run:
 make build
 ```
 
-3.3V+ → 3.3V: AP2112K-3.3
-3.3V+ → 1.8V: TLV70018
