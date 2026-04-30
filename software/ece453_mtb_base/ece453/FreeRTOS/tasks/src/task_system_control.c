@@ -62,6 +62,6 @@ void task_system_control(void *pvParameters) {
             printf("=== Health === No finger detected | Steps: %lu\n",
                    health_steps);
         }
-        vTaskDelay(pdMS_TO_TICKS(5000));
+        vTaskDelay(pdMS_TO_TICKS(2000));
     }
 }

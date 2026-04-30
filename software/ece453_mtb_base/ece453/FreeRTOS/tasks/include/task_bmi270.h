@@ -32,6 +32,8 @@
 #define BMI270_REG_GYR_CONF     0x42
 #define BMI270_REG_GYR_RANGE    0x43
 #define BMI270_REG_INTERNAL_STATUS  0x21
+#define BMI270_REG_FEAT_PAGE    0x2F   /* selects 16-byte feature window    */
+#define BMI270_REG_FEATURES     0x30   /* first byte of feature data window */
 #define BMI270_REG_INIT_CTRL    0x59
 #define BMI270_REG_INIT_ADDR_0  0x5B
 #define BMI270_REG_INIT_ADDR_1  0x5C

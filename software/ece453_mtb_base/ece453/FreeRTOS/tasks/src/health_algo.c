@@ -1,53 +1,56 @@
 /**
  * @file health_algo.c
- * @brief Health metric algorithms: heart rate, SpO2, step count
+ * @brief Heart rate and SpO2 algorithm (PPG)
  *
  * Heart rate + SpO2
  * -----------------
- * Maintains a 100-sample (4 s at 25 Hz) ring buffer of IR and Red values.
- * Once full, recalculates once per second:
- *   1. Remove DC (mean) to get the pulsatile AC component.
- *   2. Find peaks in the AC IR signal.  Average RR interval → HR.
- *   3. SpO2 from the ratio R = (AC_red/DC_red) / (AC_ir/DC_ir)
- *      using Maxim's empirical calibration curve.
+ * Maintains a 100-sample (4 s at 25 Hz) ring buffer.  Recomputes once/second:
+ *   1. Remove DC mean → AC component.
+ *   2. Smooth AC with a 5-sample moving average to reduce sample-to-sample noise.
+ *   3. Threshold = 0.35 × max positive AC peak (adapts to actual signal height).
+ *   4. Find peaks; need ≥ 2 to compute an RR interval.
+ *   5. EMA (α = 0.25) so the reported BPM drifts gradually rather than jumping.
  *
- * Step counting
- * -------------
- * Computes the resultant acceleration magnitude from the IMU at 10 Hz.
- * A step is counted when magnitude rises above STEP_HIGH then falls back
- * below STEP_LOW, with a 500 ms debounce between steps.
+ * "No finger" is only declared when the IR DC mean stays below FINGER_THRESH.
+ * If the finger is on but the signal is weak, the last valid reading is held.
  */
 #include "health_algo.h"
 #include <math.h>
 #include <stdbool.h>
 
 /* ═══════════════════════════════════════════════════════════════════════
- * PPG — heart rate + SpO2
+ * Tuneable constants
  * ═══════════════════════════════════════════════════════════════════════ */
+#define PPG_N           100     /* ring buffer: 4 s at 25 Hz effective rate  */
+#define FINGER_THRESH   20000   /* IR DC below this → no finger              */
+#define MIN_PEAK_GAP    8       /* min samples between peaks  (~0.32 s)      */
+#define COMPUTE_EVERY   25      /* recompute interval (25 samples = 1 s)     */
+#define EMA_ALPHA       0.25f   /* weight given to newest HR sample          */
+#define SMOOTH_WINDOW   5       /* moving-average kernel width for AC signal */
 
-#define PPG_N           100    /* ring buffer length: 4 s at 25 Hz        */
-#define FINGER_THRESH   50000  /* min IR DC for "finger detected"          */
-#define MIN_PEAK_GAP    10     /* min samples between detected peaks       */
-#define COMPUTE_EVERY   25     /* recompute once per second (25 samples)   */
-
-/* Ring buffer — static so they live in BSS, not on any task's stack */
+/* ── Buffers (all static → BSS, never on any task stack) ─────────────── */
 static uint32_t ir_buf [PPG_N];
 static uint32_t red_buf[PPG_N];
-
-/* Temporary AC arrays used only inside compute_hr_spo2 — also static */
-static float ac_ir [PPG_N];
-static float ac_red[PPG_N];
+static float    ac_ir  [PPG_N];
+static float    ac_red [PPG_N];
+static float    smooth [PPG_N];   /* smoothed AC IR for peak detection        */
 
 static uint16_t ppg_head      = 0;
 static bool     ppg_full      = false;
 static uint8_t  compute_timer = 0;
 
-volatile uint8_t  health_hr   = 0;
-volatile uint8_t  health_spo2 = 0;
+static float hr_ema   = 0.0f;
+static float spo2_ema = 0.0f;
+
+volatile uint8_t  health_hr    = 0;
+volatile uint8_t  health_spo2  = 0;
+volatile uint32_t health_steps = 0;   /* written by task_bmi270 hardware counter */
+
+/* ── Core computation ─────────────────────────────────────────────────── */
 
 static void compute_hr_spo2(void)
 {
-    /* ── DC means ─────────────────────────────────────────────────── */
+    /* ── DC means ──────────────────────────────────────────────────── */
     float dc_ir = 0.0f, dc_red = 0.0f;
     for (int i = 0; i < PPG_N; i++) {
         dc_ir  += (float)ir_buf[i];
@@ -60,51 +63,72 @@ static void compute_hr_spo2(void)
     if (dc_ir < (float)FINGER_THRESH) {
         health_hr   = 0;
         health_spo2 = 0;
+        hr_ema      = 0.0f;
+        spo2_ema    = 0.0f;
         return;
     }
 
-    /* ── AC signals + RMS ─────────────────────────────────────────── */
-    float ac_ir_sq = 0.0f, ac_red_sq = 0.0f, ac_ir_peak = 0.0f;
+    /* ── AC signals ────────────────────────────────────────────────── */
+    float ac_ir_sq = 0.0f, ac_red_sq = 0.0f;
     for (int i = 0; i < PPG_N; i++) {
         ac_ir[i]   = (float)ir_buf[i]  - dc_ir;
         ac_red[i]  = (float)red_buf[i] - dc_red;
         ac_ir_sq  += ac_ir[i]  * ac_ir[i];
         ac_red_sq += ac_red[i] * ac_red[i];
-        if (ac_ir[i] > ac_ir_peak)
-            ac_ir_peak = ac_ir[i];
     }
     float ac_ir_rms  = sqrtf(ac_ir_sq  / PPG_N);
     float ac_red_rms = sqrtf(ac_red_sq / PPG_N);
 
-    /* ── SpO2 (Maxim AN6409 calibration curve) ────────────────────── */
-    if (ac_ir_rms > 10.0f) {
+    /* ── SpO2 ──────────────────────────────────────────────────────── */
+    if (ac_ir_rms > 1.0f) {
         float R    = (ac_red_rms / dc_red) / (ac_ir_rms / dc_ir);
         float spo2 = -45.060f * R * R + 30.354f * R + 94.845f;
         if      (spo2 > 100.0f) spo2 = 100.0f;
-        else if (spo2 <  70.0f) spo2 =   0.0f;   /* clamp implausible */
-        health_spo2 = (uint8_t)spo2;
+        else if (spo2 <  70.0f) spo2 =   0.0f;
+
+        if (spo2 > 0.0f) {
+            spo2_ema    = (spo2_ema < 1.0f) ? spo2
+                        : (EMA_ALPHA * spo2 + (1.0f - EMA_ALPHA) * spo2_ema);
+            health_spo2 = (uint8_t)(spo2_ema + 0.5f);
+        }
     }
 
-    /* ── Peak detection for heart rate ───────────────────────────── */
-    float threshold = 0.4f * ac_ir_peak;
-    if (threshold < 50.0f)
-        return;   /* signal too flat — skip HR this cycle */
+    /* ── 5-sample moving average on AC IR to reduce noise ─────────── */
+    int half = SMOOTH_WINDOW / 2;
+    for (int i = 0; i < PPG_N; i++) {
+        float sum = 0.0f;
+        int   cnt = 0;
+        for (int k = i - half; k <= i + half; k++) {
+            if (k >= 0 && k < PPG_N) { sum += ac_ir[k]; cnt++; }
+        }
+        smooth[i] = sum / cnt;
+    }
+
+    /* ── Peak detection on smoothed signal ───────────────────────── */
+    /* Find the maximum positive excursion — threshold is 35% of it  */
+    float peak_max = 0.0f;
+    for (int i = 0; i < PPG_N; i++)
+        if (smooth[i] > peak_max) peak_max = smooth[i];
+
+    if (peak_max < 1.0f)
+        return;   /* flat signal — leave last valid HR in place */
+
+    float threshold = 0.35f * peak_max;
 
     bool  above   = false;
     float seg_max = 0.0f;
     int   seg_idx = 0;
-
-    int  peaks[20];
-    int  n_peaks = 0;
+    int   peaks[20];
+    int   n_peaks = 0;
 
     for (int i = 0; i < PPG_N && n_peaks < 20; i++) {
-        if (ac_ir[i] > threshold) {
+        if (smooth[i] > threshold) {
             if (!above) {
                 above   = true;
-                seg_max = ac_ir[i];
+                seg_max = smooth[i];
                 seg_idx = i;
-            } else if (ac_ir[i] > seg_max) {
-                seg_max = ac_ir[i];
+            } else if (smooth[i] > seg_max) {
+                seg_max = smooth[i];
                 seg_idx = i;
             }
         } else if (above) {
@@ -114,14 +138,22 @@ static void compute_hr_spo2(void)
         }
     }
 
+    /* Need ≥ 2 peaks to compute one RR interval */
     if (n_peaks >= 2) {
         float span   = (float)(peaks[n_peaks - 1] - peaks[0]);
-        float avg_rr = span / (float)(n_peaks - 1);   /* samples/beat */
-        float hr     = 60.0f * 25.0f / avg_rr;        /* beats/min    */
-        if (hr >= 40.0f && hr <= 200.0f)
-            health_hr = (uint8_t)hr;
+        float avg_rr = span / (float)(n_peaks - 1);
+        float hr     = 60.0f * 25.0f / avg_rr;   /* 25 Hz sample rate */
+
+        if (hr >= 40.0f && hr <= 200.0f) {
+            hr_ema    = (hr_ema < 1.0f) ? hr
+                      : (EMA_ALPHA * hr + (1.0f - EMA_ALPHA) * hr_ema);
+            health_hr = (uint8_t)(hr_ema + 0.5f);
+        }
     }
+    /* If no valid peaks this cycle, health_hr keeps its last value */
 }
+
+/* ── Public API ───────────────────────────────────────────────────────── */
 
 void health_algo_update_ppg(uint32_t red, uint32_t ir)
 {
@@ -133,43 +165,8 @@ void health_algo_update_ppg(uint32_t red, uint32_t ir)
         ppg_full = true;
     }
 
-    /* Only compute once per second once the buffer has filled */
     if (ppg_full && ++compute_timer >= COMPUTE_EVERY) {
         compute_timer = 0;
         compute_hr_spo2();
-    }
-}
-
-/* ═══════════════════════════════════════════════════════════════════════
- * IMU — step counting
- * ═══════════════════════════════════════════════════════════════════════
- *
- * At ±2g / 16-bit: 1 g ≈ 16 384 LSB.  Magnitude at rest ≈ 16 384.
- * A step swings the wrist above ~1.22 g then back below ~0.73 g.
- */
-#define STEP_HIGH     20000.0f   /* ~1.22 g */
-#define STEP_LOW      12000.0f   /* ~0.73 g */
-#define STEP_MIN_GAP  5          /* 500 ms min between steps (5 × 100 ms) */
-
-volatile uint32_t health_steps = 0;
-
-void health_algo_update_imu(int16_t ax, int16_t ay, int16_t az)
-{
-    static bool     above       = false;
-    static uint32_t sample_cnt  = 0;
-    static uint32_t last_step   = 0;
-
-    sample_cnt++;
-
-    float mag = sqrtf((float)ax * ax + (float)ay * ay + (float)az * az);
-
-    if (!above && mag > STEP_HIGH) {
-        above = true;
-    } else if (above && mag < STEP_LOW) {
-        above = false;
-        if ((sample_cnt - last_step) >= STEP_MIN_GAP) {
-            health_steps++;
-            last_step = sample_cnt;
-        }
     }
 }

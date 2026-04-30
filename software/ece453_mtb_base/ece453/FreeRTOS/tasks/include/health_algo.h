@@ -18,7 +18,6 @@ extern volatile uint32_t health_steps;  /* cumulative steps                     
 /* Called from task_max30102 for every FIFO sample */
 void health_algo_update_ppg(uint32_t red, uint32_t ir);
 
-/* Called from task_bmi270 every loop iteration */
-void health_algo_update_imu(int16_t ax, int16_t ay, int16_t az);
+/* health_steps is written directly by task_bmi270 from the hardware counter */
 
 #endif /* HEALTH_ALGO_H */
