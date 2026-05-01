@@ -667,11 +667,11 @@
       },
       {
         "filename": "05-power.kicad_sch",
-        "name": "05-Power",
+        "name": "05-Power and Charging",
         "uuid": "afdf4e11-c018-4838-8bbc-a78e7271db46"
       }
     ],
-    "used_designators": "C1-4,#PWR1-6,U1-4",
+    "used_designators": "#FLG1,#PWR29,#PWR44-46",
     "variants": []
   },
   "sheets": [
@@ -693,7 +693,7 @@
     ],
     [
       "afdf4e11-c018-4838-8bbc-a78e7271db46",
-      "05-Power"
+      "05-Power and Charging"
     ]
   ],
   "text_variables": {
