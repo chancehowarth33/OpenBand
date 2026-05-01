@@ -2491,10 +2491,6 @@
 		(uuid "2452472e-cb45-4eec-b3f5-655de0883b03")
 	)
 	(no_connect
-		(at 74.93 74.93)
-		(uuid "765ec4ea-8a15-4118-aba4-a680c7b4500d")
-	)
-	(no_connect
 		(at 87.63 78.74)
 		(uuid "7747d867-a2cd-4275-a4e9-fa2627833a58")
 	)
@@ -2628,7 +2624,7 @@
 	)
 	(wire
 		(pts
-			(xy 128.27 58.42) (xy 128.27 69.85)
+			(xy 128.27 58.42) (xy 128.27 71.12)
 		)
 		(stroke
 			(width 0)
@@ -3000,7 +2996,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
 			(at 97.79 121.92 0)
 			(hide yes)
 			(show_name no)
@@ -3236,7 +3232,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12"
 			(at 76.2 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -3682,7 +3678,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 78.4352 165.1 0)
 			(hide yes)
 			(show_name no)
@@ -3740,7 +3736,6 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "34002fb5-f149-4b2d-a070-010fc19eb256")
 		(property "Reference" "#PWR038"
 			(at 128.27 101.6 0)
@@ -3754,7 +3749,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 128.27 100.33 0)
+			(at 130.556 95.504 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3842,7 +3837,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 51.7652 165.1 0)
 			(hide yes)
 			(show_name no)
@@ -4091,7 +4086,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 150.8252 165.1 0)
 			(hide yes)
 			(show_name no)
@@ -4251,7 +4246,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 115.316 86.614 90)
 			(hide yes)
 			(show_name no)
@@ -4333,7 +4328,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 145.7452 76.2 0)
 			(hide yes)
 			(show_name no)
@@ -4727,7 +4722,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 121.6152 165.1 0)
 			(hide yes)
 			(show_name no)
@@ -4808,7 +4803,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "LED_SMD:LED_0402_1005Metric"
 			(at 107.95 83.82 0)
 			(hide yes)
 			(show_name no)
@@ -4979,7 +4974,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 116.5352 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -5058,7 +5053,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 100.076 72.644 90)
 			(hide yes)
 			(show_name no)
@@ -5137,7 +5132,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 108.966 71.374 90)
 			(hide yes)
 			(show_name no)
@@ -5216,7 +5211,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 91.694 72.136 90)
 			(hide yes)
 			(show_name no)
@@ -5443,7 +5438,7 @@
 			)
 		)
 		(property "Value" "MCP73831-2-MC"
-			(at 119.634 70.358 0)
+			(at 137.16 78.74 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects

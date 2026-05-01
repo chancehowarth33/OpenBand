@@ -1686,28 +1686,28 @@
 		(uuid "0b37b0ea-68b1-4565-8794-81f07947a611")
 	)
 	(junction
+		(at 149.86 111.76)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4214f20d-783d-43e9-9802-30f64742f1f2")
+	)
+	(junction
+		(at 149.86 114.3)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7c2194f0-425b-4a56-8669-486b779b980a")
+	)
+	(junction
 		(at 55.88 152.4)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "7f12fc7d-de71-4da3-bd69-110f6159c853")
 	)
 	(junction
-		(at 149.86 114.3)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "962679fb-c772-4231-af91-87a63fa093ae")
-	)
-	(junction
 		(at 99.06 55.88)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "b5d3e1ae-7a4d-4085-9754-e7920583d91a")
-	)
-	(junction
-		(at 149.86 111.76)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "bdaf8a8a-bc05-4cfb-afd1-61aa86ba1074")
 	)
 	(no_connect
 		(at 142.24 81.28)
@@ -1821,16 +1821,6 @@
 		(at 142.24 66.04)
 		(uuid "ff1b5a55-1560-43f2-b794-04972aee53db")
 	)
-	(wire
-		(pts
-			(xy 149.86 109.22) (xy 149.86 111.76)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "02db9a0e-44b6-4f52-ab35-aaf7038ea5bd")
-	)
 	(polyline
 		(pts
 			(xy 144.78 129.54) (xy 144.78 177.8)
@@ -1861,26 +1851,6 @@
 			(type default)
 		)
 		(uuid "19d96de5-569c-44ef-98ce-db3009aea4a3")
-	)
-	(wire
-		(pts
-			(xy 142.24 109.22) (xy 149.86 109.22)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2f4ad747-659b-42db-8c98-ac16c6696947")
-	)
-	(wire
-		(pts
-			(xy 149.86 111.76) (xy 149.86 114.3)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "34439ccf-02aa-41be-b866-9d5c1c5f119b")
 	)
 	(wire
 		(pts
@@ -1915,16 +1885,6 @@
 	)
 	(wire
 		(pts
-			(xy 142.24 111.76) (xy 149.86 111.76)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4bd9c633-a3a4-426f-aac5-283a0c8b5d9a")
-	)
-	(wire
-		(pts
 			(xy 119.38 154.94) (xy 119.38 160.02)
 		)
 		(stroke
@@ -1942,6 +1902,16 @@
 			(type default)
 		)
 		(uuid "50d55f7e-1d61-4525-9bed-c01d1cb2f7a5")
+	)
+	(wire
+		(pts
+			(xy 142.24 109.22) (xy 149.86 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "525a2f4a-51fa-4fe7-a7a2-58a6a610a3e5")
 	)
 	(wire
 		(pts
@@ -1973,6 +1943,16 @@
 			(type default)
 		)
 		(uuid "6a9ea644-8eaa-48b0-af00-6327ac6e8979")
+	)
+	(wire
+		(pts
+			(xy 142.24 111.76) (xy 149.86 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "719888f8-3132-494f-b31b-4ad8f389baa4")
 	)
 	(polyline
 		(pts
@@ -2066,6 +2046,26 @@
 			(type default)
 		)
 		(uuid "96baa9a6-4e2b-4b65-bc1b-b46ba6584558")
+	)
+	(wire
+		(pts
+			(xy 149.86 109.22) (xy 149.86 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9c30d22a-e8e3-4d90-8579-83328656f9be")
+	)
+	(wire
+		(pts
+			(xy 149.86 111.76) (xy 149.86 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9de52781-ae53-4a71-b6cb-ded972a85cd9")
 	)
 	(polyline
 		(pts
@@ -20067,7 +20067,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 36.5252 162.56 0)
 			(hide yes)
 			(show_name no)
@@ -20117,7 +20117,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 104.14 166.37 0)
+		(at 104.14 167.64 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -20128,7 +20128,7 @@
 		(fields_autoplaced yes)
 		(uuid "32036c4c-2d11-4583-9b8f-6f5646068f4b")
 		(property "Reference" "#PWR027"
-			(at 104.14 172.72 0)
+			(at 104.14 173.99 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20139,7 +20139,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 104.14 171.45 0)
+			(at 104.14 172.72 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -20149,7 +20149,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 104.14 166.37 0)
+			(at 104.14 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20160,7 +20160,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 104.14 166.37 0)
+			(at 104.14 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20171,7 +20171,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 104.14 166.37 0)
+			(at 104.14 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20227,7 +20227,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 56.8452 162.56 0)
 			(hide yes)
 			(show_name no)
@@ -20542,7 +20542,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 105.1052 167.64 0)
 			(hide yes)
 			(show_name no)
@@ -21089,7 +21089,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Crystal:Crystal_SMD_3215-2Pin_3.2x1.5mm"
 			(at 46.99 152.4 0)
 			(hide yes)
 			(show_name no)
@@ -21170,7 +21170,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 83.5152 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -21251,7 +21251,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 91.1352 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -21333,7 +21333,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 120.3452 167.64 0)
 			(hide yes)
 			(show_name no)

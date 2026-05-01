@@ -13876,7 +13876,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 68.326 40.894 90)
 			(hide yes)
 			(show_name no)
@@ -13956,7 +13956,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Button_Switch_THT:SW_DIP_SPSTx01_Slide_6.7x4.1mm_W7.62mm_P2.54mm_LowProfile"
 			(at 48.26 45.72 0)
 			(hide yes)
 			(show_name no)
@@ -14035,7 +14035,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical"
 			(at 48.26 157.48 0)
 			(hide yes)
 			(show_name no)

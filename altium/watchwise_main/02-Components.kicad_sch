@@ -1770,16 +1770,16 @@
 		(uuid "2cb925de-65d5-483c-bd98-6f4fd4c993d3")
 	)
 	(junction
+		(at 109.22 119.38)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2d1a49a5-9a94-4f5f-ae4f-2288357629e8")
+	)
+	(junction
 		(at 96.52 135.89)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "38cfa0e4-4b8d-4e93-83e8-37b2b5b0bc51")
-	)
-	(junction
-		(at 107.95 129.54)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "3d5714e6-f0d4-41f8-91b5-1fe820c9c545")
 	)
 	(junction
 		(at 96.52 129.54)
@@ -1794,16 +1794,10 @@
 		(uuid "4a8c6eca-dc21-4b00-b51a-1dd0f44a6e25")
 	)
 	(junction
-		(at 107.95 135.89)
+		(at 109.22 135.89)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "648b9ea1-f908-436e-b50a-dd1ef6b684b0")
-	)
-	(junction
-		(at 107.95 121.92)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "70aaff13-79f8-44be-a5a0-22c36186eec7")
 	)
 	(junction
 		(at 97.79 35.56)
@@ -1861,7 +1855,7 @@
 	)
 	(wire
 		(pts
-			(xy 107.95 135.89) (xy 105.41 135.89)
+			(xy 109.22 135.89) (xy 105.41 135.89)
 		)
 		(stroke
 			(width 0)
@@ -1911,7 +1905,7 @@
 	)
 	(wire
 		(pts
-			(xy 107.95 115.57) (xy 107.95 121.92)
+			(xy 109.22 115.57) (xy 109.22 119.38)
 		)
 		(stroke
 			(width 0)
@@ -1962,7 +1956,7 @@
 	)
 	(wire
 		(pts
-			(xy 105.41 121.92) (xy 107.95 121.92)
+			(xy 105.41 121.92) (xy 109.22 121.92)
 		)
 		(stroke
 			(width 0)
@@ -2012,7 +2006,7 @@
 	)
 	(wire
 		(pts
-			(xy 107.95 148.59) (xy 107.95 135.89)
+			(xy 109.22 148.59) (xy 109.22 135.89)
 		)
 		(stroke
 			(width 0)
@@ -2022,7 +2016,7 @@
 	)
 	(wire
 		(pts
-			(xy 105.41 129.54) (xy 107.95 129.54)
+			(xy 105.41 129.54) (xy 109.22 129.54)
 		)
 		(stroke
 			(width 0)
@@ -2053,7 +2047,17 @@
 	)
 	(wire
 		(pts
-			(xy 105.41 115.57) (xy 107.95 115.57)
+			(xy 109.22 119.38) (xy 109.22 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6e8f2856-d5df-4bf2-b25c-0247ec6cb877")
+	)
+	(wire
+		(pts
+			(xy 105.41 115.57) (xy 109.22 115.57)
 		)
 		(stroke
 			(width 0)
@@ -2114,7 +2118,7 @@
 	)
 	(wire
 		(pts
-			(xy 107.95 129.54) (xy 107.95 135.89)
+			(xy 109.22 129.54) (xy 109.22 135.89)
 		)
 		(stroke
 			(width 0)
@@ -2377,6 +2381,16 @@
 	)
 	(wire
 		(pts
+			(xy 109.22 148.59) (xy 107.95 148.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cff234d7-b76a-4c77-b310-b3781ff41e55")
+	)
+	(wire
+		(pts
 			(xy 92.71 85.09) (xy 100.33 85.09)
 		)
 		(stroke
@@ -2394,16 +2408,6 @@
 			(type default)
 		)
 		(uuid "d6ac52c8-4f90-4539-a065-21bf67c593f9")
-	)
-	(wire
-		(pts
-			(xy 107.95 121.92) (xy 107.95 129.54)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "dbef352c-8897-495c-8a0d-ae2b62cec85c")
 	)
 	(wire
 		(pts
@@ -17887,7 +17891,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 105.41 128.5748 0)
 			(hide yes)
 			(show_name no)
@@ -17966,7 +17970,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 97.79 136.8552 0)
 			(hide yes)
 			(show_name no)
@@ -18045,7 +18049,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 87.63 40.3352 0)
 			(hide yes)
 			(show_name no)
@@ -18530,7 +18534,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 105.41 38.4048 0)
 			(hide yes)
 			(show_name no)
@@ -18690,7 +18694,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 50.546 52.324 90)
 			(hide yes)
 			(show_name no)
@@ -18847,7 +18851,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 105.41 114.6048 0)
 			(hide yes)
 			(show_name no)
@@ -19006,7 +19010,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 72.136 183.134 90)
 			(hide yes)
 			(show_name no)
@@ -19167,7 +19171,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 40.386 183.134 90)
 			(hide yes)
 			(show_name no)
@@ -19288,6 +19292,85 @@
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
 					(reference "#PWR016")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 109.22 119.38 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "bdb32965-806e-474a-b91d-bd240fa8eae7")
+		(property "Reference" "#PWR044"
+			(at 115.57 119.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 113.03 119.3799 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 109.22 119.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 109.22 119.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 109.22 119.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "8ce5c287-1f7f-4ef3-99ca-23e7cfa3a7c6")
+		)
+		(instances
+			(project "watchwise_main"
+				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
+					(reference "#PWR044")
 					(unit 1)
 				)
 			)
@@ -19547,7 +19630,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 56.896 183.134 90)
 			(hide yes)
 			(show_name no)
@@ -19940,7 +20023,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 105.41 120.9548 0)
 			(hide yes)
 			(show_name no)
