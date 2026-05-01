@@ -904,7 +904,7 @@
 	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "1b41d15f-ba57-4e71-8203-4a5dda98a417")
-		(at 107.6435 100.34958 90)
+		(at 107.6035 102.34958 90)
 		(descr "Through hole straight pin header, 1x05, 2.54mm pitch, single row")
 		(tags "Through hole pin header THT 1x05 2.54mm single row")
 		(property "Reference" "J1"
@@ -9346,8 +9346,8 @@
 		)
 	)
 	(gr_rect
-		(start 102.1835 87.34958)
-		(end 124.1835 97.34958)
+		(start 101.6835 87.34958)
+		(end 123.6835 97.34958)
 		(stroke
 			(width 0.2)
 			(type default)
