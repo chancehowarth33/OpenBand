@@ -1,0 +1,8 @@
+(fp_lib_table
+	(version 7)
+	(lib (name "watchwise_main-backups") (type "KiCad") (uri "${KIPRJMOD}/watchwise_main-backups.pretty") (options "") (descr ""))
+	(lib (name "BMI270") (type "KiCad") (uri "/Users/chancehowarth/Documents/KiCad_shit/BMI270.pretty") (options "") (descr ""))
+	(lib (name "MAX30102EFD_T") (type "KiCad") (uri "/Users/chancehowarth/Documents/KiCad_shit/MAX30102.pretty") (options "") (descr ""))
+	(lib (name "TLV70018DDCR") (type "KiCad") (uri "/Users/chancehowarth/Documents/KiCad_shit/TLV70018DDCR.pretty") (options "") (descr ""))
+	(lib (name "CYBLE-416045-02-Infineon-Symbol-Eagle-285743") (type "KiCad") (uri "/Users/chancehowarth/Documents/KiCad_shit/CYBLE-416045-02-Infineon-Symbol-Eagle-285743") (options "") (descr ""))
+)

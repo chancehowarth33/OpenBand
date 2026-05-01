@@ -18025,7 +18025,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "2b9ccb39-b50a-49d3-bbbb-df7e00cc7cec")
-		(property "Reference" "C8"
+		(property "Reference" "C9"
 			(at 88.138 41.148 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -18087,7 +18087,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "C8")
+					(reference "C9")
 					(unit 1)
 				)
 			)
@@ -18510,7 +18510,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "45313e22-cefe-45bc-8232-d7c016b193a3")
-		(property "Reference" "C9"
+		(property "Reference" "C0"
 			(at 104.902 37.592 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -18572,7 +18572,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "C9")
+					(reference "C0")
 					(unit 1)
 				)
 			)
@@ -18905,7 +18905,6 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "6c062663-c7d9-473e-b512-62589830580b")
 		(property "Reference" "#PWR012"
 			(at 96.52 134.62 0)
@@ -18919,7 +18918,7 @@
 			)
 		)
 		(property "Value" "+3.3V"
-			(at 96.52 143.51 0)
+			(at 93.218 137.922 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects

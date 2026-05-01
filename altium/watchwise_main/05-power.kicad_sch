@@ -2441,12 +2441,6 @@
 		(uuid "1812d2ad-4034-429f-a0ed-122c3134871b")
 	)
 	(junction
-		(at 128.27 91.44)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "2053e928-0b6b-4c7d-aa05-c84ad7c06dec")
-	)
-	(junction
 		(at 107.95 58.42)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2475,6 +2469,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "883366c1-54bb-4465-af3c-e02236cb34f2")
+	)
+	(junction
+		(at 128.27 91.44)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a3264cd7-9712-481d-a006-e7430c94170a")
 	)
 	(junction
 		(at 50.8 168.91)
@@ -2605,6 +2605,16 @@
 			(type default)
 		)
 		(uuid "2e83118f-4467-4b2c-9fe4-362f6911c2e7")
+	)
+	(wire
+		(pts
+			(xy 128.27 95.25) (xy 128.27 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "35abccac-8a70-4afe-9e8b-ca4c6966444c")
 	)
 	(wire
 		(pts
@@ -3722,7 +3732,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 128.27 91.44 0)
+		(at 128.27 95.25 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3733,7 +3743,7 @@
 		(fields_autoplaced yes)
 		(uuid "34002fb5-f149-4b2d-a070-010fc19eb256")
 		(property "Reference" "#PWR038"
-			(at 128.27 97.79 0)
+			(at 128.27 101.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3744,7 +3754,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 128.27 96.52 0)
+			(at 128.27 100.33 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3754,7 +3764,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 128.27 91.44 0)
+			(at 128.27 95.25 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3765,7 +3775,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 128.27 91.44 0)
+			(at 128.27 95.25 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3776,7 +3786,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 128.27 91.44 0)
+			(at 128.27 95.25 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4219,7 +4229,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "77ff6d63-dc62-497d-b535-1579f7acae1f")
-		(property "Reference" "R_PROG"
+		(property "Reference" "R_PROG1"
 			(at 116.078 85.598 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4283,7 +4293,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "R_PROG")
+					(reference "R_PROG1")
 					(unit 1)
 				)
 			)
@@ -5107,7 +5117,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "e8356241-2e50-40d8-99ae-f4bd612ffe8a")
-		(property "Reference" "RLED"
+		(property "Reference" "RLED1"
 			(at 106.172 67.31 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5169,7 +5179,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "RLED")
+					(reference "RLED1")
 					(unit 1)
 				)
 			)
