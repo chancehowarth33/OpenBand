@@ -1703,12 +1703,6 @@
 		(color 0 0 0 0)
 		(uuid "7f12fc7d-de71-4da3-bd69-110f6159c853")
 	)
-	(junction
-		(at 99.06 55.88)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "b5d3e1ae-7a4d-4085-9754-e7920583d91a")
-	)
 	(no_connect
 		(at 142.24 81.28)
 		(uuid "28d63912-75cb-46f5-9b71-0048ed45ec10")
@@ -1752,6 +1746,10 @@
 	(no_connect
 		(at 106.68 76.2)
 		(uuid "734412cb-04fc-4d67-b037-14a743e40786")
+	)
+	(no_connect
+		(at 106.68 58.42)
+		(uuid "7afe8f70-cf55-4187-a4d9-31c48a16c04d")
 	)
 	(no_connect
 		(at 142.24 101.6)
@@ -2100,16 +2098,6 @@
 	)
 	(wire
 		(pts
-			(xy 90.17 55.88) (xy 99.06 55.88)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b4374b21-5abe-46ab-b9ee-33ac16388079")
-	)
-	(wire
-		(pts
 			(xy 55.88 152.4) (xy 60.96 152.4)
 		)
 		(stroke
@@ -2153,16 +2141,6 @@
 	)
 	(wire
 		(pts
-			(xy 106.68 58.42) (xy 82.55 58.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d438ff4f-d8ab-4391-9f86-2dfe14548983")
-	)
-	(wire
-		(pts
 			(xy 99.06 48.26) (xy 99.06 55.88)
 		)
 		(stroke
@@ -2180,16 +2158,6 @@
 			(type default)
 		)
 		(uuid "e39a6ceb-b7ab-4fa1-9b6d-ce2e1ef8d4a3")
-	)
-	(wire
-		(pts
-			(xy 82.55 58.42) (xy 82.55 55.88)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e8460458-6224-497b-9cdf-d9681e1ddf99")
 	)
 	(wire
 		(pts
@@ -20747,162 +20715,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 90.17 48.26 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "9c7037a6-0993-442b-8147-3249d030df64")
-		(property "Reference" "#PWR034"
-			(at 90.17 41.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 90.17 43.18 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 90.17 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 90.17 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 90.17 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "d41ab195-cb6a-4de6-a4a7-29c3092cbec7")
-		)
-		(instances
-			(project "watchwise_main"
-				(path "/9d88fbd1-5e5a-4353-ba44-7f94f89d5ff8"
-					(reference "#PWR034")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 82.55 48.26 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "c961eb4a-a151-4213-9f66-a09dafbf692b")
-		(property "Reference" "#PWR032"
-			(at 82.55 41.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 82.55 43.18 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 82.55 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 82.55 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 82.55 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "e3b37df5-5305-47c8-b049-ea20f7cc868c")
-		)
-		(instances
-			(project "watchwise_main"
-				(path "/9d88fbd1-5e5a-4353-ba44-7f94f89d5ff8"
-					(reference "#PWR032")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:+3.3V")
 		(at 104.14 154.94 0)
 		(unit 1)
@@ -21132,168 +20944,6 @@
 			(project "watchwise_main"
 				(path "/9d88fbd1-5e5a-4353-ba44-7f94f89d5ff8"
 					(reference "Y1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 82.55 52.07 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "f7d8edcc-e12c-492d-9a29-51be2a442ebf")
-		(property "Reference" "C10"
-			(at 75.946 50.8 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "1uF"
-			(at 76.2 53.34 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
-			(at 83.5152 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 82.55 52.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Unpolarized capacitor"
-			(at 82.55 52.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "d17d0456-0fda-4f85-990b-b9bd21fd3133")
-		)
-		(pin "2"
-			(uuid "d60b0b78-cbec-4a41-b50b-42a8c9103835")
-		)
-		(instances
-			(project "watchwise_main"
-				(path "/9d88fbd1-5e5a-4353-ba44-7f94f89d5ff8"
-					(reference "C10")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 90.17 52.07 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "fa7e02a3-89e2-44ee-87e9-a29aaffc3c0d")
-		(property "Reference" "C11"
-			(at 93.472 50.8 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "1uF"
-			(at 93.472 53.34 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
-			(at 91.1352 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 90.17 52.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Unpolarized capacitor"
-			(at 90.17 52.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "34b84965-886e-48ad-988c-ec580298ee00")
-		)
-		(pin "2"
-			(uuid "5bdec3ed-e25f-46fe-a7dc-c48b25ad6444")
-		)
-		(instances
-			(project "watchwise_main"
-				(path "/9d88fbd1-5e5a-4353-ba44-7f94f89d5ff8"
-					(reference "C11")
 					(unit 1)
 				)
 			)
