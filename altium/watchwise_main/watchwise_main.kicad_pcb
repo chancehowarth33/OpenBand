@@ -2518,7 +2518,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "47k"
 			(at 1.49 1 0)
 			(layer "F.Fab")
 			(uuid "a331d6b2-5d91-4fdb-bbf4-c11302881a46")
@@ -4020,10 +4020,10 @@
 	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "8a66df45-9eb9-4644-b4cc-8752f7b5e30e")
-		(at 146.8335 74.31958)
+		(at 146.8335 74.56958)
 		(descr "Through hole straight pin header, 1x05, 2.54mm pitch, single row")
 		(tags "Through hole pin header THT 1x05 2.54mm single row")
-		(property "Reference" "JPROG"
+		(property "Reference" "J1"
 			(at -2.65 6.32 90)
 			(layer "F.SilkS")
 			(uuid "9356bb70-3332-4d09-8db6-361889926d1e")

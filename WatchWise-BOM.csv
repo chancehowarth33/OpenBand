@@ -1,0 +1,37 @@
+Reference,Qty,Value,Description,Package,Schematic Sheet,Notes
+,,,,,,
+--- ICs / Modules ---,,,,,,
+MD300,1,CYBLE-416045-02,PSoC6 BLE SoC Module (ARM Cortex-M4 + M0+, BLE 5.0) with Trace Antenna,Module,03-MCU,Replaces the CY8CPROTO-063-BLE breakout board. On-chip RTC resolves clock concern.
+U1,1,BMI270,6-Axis IMU — Accelerometer + Gyroscope (I2C/SPI),LGA-14,02-Components,Replaces SparkFun BMI270 breakout board. 1.8V supply.
+U2,1,MAX30102EFD_T,High-Sensitivity Pulse Oximeter + Heart-Rate Sensor (I2C),DFN-8 (2x3mm),02-Components,Replaces SunFounder MAX30102 breakout board. 1.8V supply.
+U3,1,AP2112K-3.3,600mA LDO — 5V to 3.3V Fixed Output with Enable,SOT-23-5,05-power,Replaces AMS1117-3.3 / NCP167AMX330TBG
+U4,1,TLV70018,200mA LDO — 3.3V to 1.8V Fixed Output,SC70-5 / SOT-353,05-power,Replaces XC6206P182MR-G. Supplies BMI270 and MAX30102 1.8V rails.
+U5,1,MCP73831-2-OT,Single-Cell Li-Ion/Li-Po Charge Management Controller (4.20V),SOT-23-5,05-power,Same as original BOM. I_PROG set by R_PROG1.
+,,,,,,
+--- Crystals ---,,,,,,
+Y1,1,32.768kHz,RTC Crystal,2-Pin SMD,03-MCU,Load caps C12 and C15 (6pF each) for CYBLE-416045-02 RTC
+,,,,,,
+--- Capacitors ---,,,,,,
+C12 C15,2,6pF,Crystal Load Capacitor,0402,03-MCU,For 32.768kHz RTC crystal
+C0 C6 C8 C9,4,100nF (0.1uF),Decoupling Capacitor,0402,02-Components,BMI270 and MAX30102 decoupling
+C17,1,100nF (0.1uF),MCU Decoupling Capacitor,0402,03-MCU,
+C1 C2 C3 C4,4,1uF,LDO Input/Output Decoupling Capacitor,0402,05-power,U3 and U4 input/output caps
+C7,1,4.7uF,MAX30102 Bulk Supply Capacitor,0402 or 0603,02-Components,
+C13 C14,2,4.7uF,MCP73831 Input/Output Bulk Capacitor,0402 or 0603,05-power,
+C5 C16,2,10uF,Bulk Bypass Capacitor,0603,02-Components / 03-MCU,BMI270 and MCU module bulk supply
+,,,,,,
+--- Resistors ---,,,,,,
+R1 R2 R3,3,4.7k,I2C Pull-up Resistor,0402,02-Components,SDA/SCL pull-ups for BMI270 and MAX30102 I2C bus
+R8 R_PWR1,2,10k,Pull-up Resistor,0402,04-Programming_Reset / 05-power,R8: reset pull-up; R_PWR1: Power Good LED pull-up
+R_PROG1,1,10k,MCP73831 Charge Current Programming Resistor,0402,05-power,"Sets I_CHARGE = 1000V / R_PROG = 100mA. Increase to 4.7k for ~210mA."
+RLED1,1,330Ω (0.33k),LED Current Limiting Resistor,0402,05-power,For charging status LED
+,,,,,,
+--- LEDs ---,,,,,,
+D1,1,LED,Charging Status Indicator LED,0402,05-power,Connected to MCP73831 STAT pin
+P_GOOD1,1,LED,Power Good Indicator LED,0402,05-power,
+,,,,,,
+--- Connectors ---,,,,,,
+J1,1,5-pin SWD Programming Header,SWD Debug/Programming Connector (SWDIO/SWDCLK/VCC/GND/RESET),1x5 2.54mm or 1.27mm,04-Programming_Reset,For KitProg3 / J-Link programmer
+J2,1,2-pin Battery Connector,LiPo Battery Connector,JST PH 2.0 1x2,05-power,Battery dimensions: 4x12x15mm (TxWxL)
+J3,1,2-pin Charging Input Connector,USB Charging Input Connector,1x2,05-power,Connects to USB-C power source; TYPE-C-31-M-12 recommended for USB-C
+,,,,,,

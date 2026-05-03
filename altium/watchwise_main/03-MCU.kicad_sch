@@ -1665,7 +1665,7 @@
 		(margins 0.9525 0.9525 0.9525 0.9525)
 		(stroke
 			(width 0)
-			(type default)
+			(type solid)
 			(color 160 160 160 1)
 		)
 		(fill

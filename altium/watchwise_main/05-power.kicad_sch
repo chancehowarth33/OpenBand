@@ -1742,6 +1742,28 @@
 		)
 		(uuid "e35ab4a1-34f9-4729-946e-2d015cda13e1")
 	)
+	(text_box "DESIGN NOTE:\n\nMaximum Charge Voltage/Current: 4.25V/30mAh for battery so set R_PROG = 1000 / I_charge. \n\nI_charge = 1000 / 47,000 = 0.0213A = 21.3mA. That's 71% of the battery's 30mA max safe margin but can go higher."
+		(exclude_from_sim no)
+		(at 55.88 78.5386 0)
+		(size 43.18 22.35)
+		(margins 0.9525 0.9525 0.9525 0.9525)
+		(stroke
+			(width 0)
+			(type solid)
+			(color 153 153 153 1)
+		)
+		(fill
+			(type color)
+			(color 255 255 255 1)
+		)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "96d8351d-f922-42dc-ae33-6531959a3fce")
+	)
 	(junction
 		(at 107.95 58.42)
 		(diameter 0)
@@ -3587,7 +3609,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "77ff6d63-dc62-497d-b535-1579f7acae1f")
-		(property "Reference" "R_PROG1"
+		(property "Reference" "R_PROG"
 			(at 116.078 85.598 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3598,7 +3620,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "47k"
 			(at 115.316 89.408 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3651,7 +3673,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "R_PROG1")
+					(reference "R_PROG")
 					(unit 1)
 				)
 			)
@@ -4479,10 +4501,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "e6fe80b7-6c14-41c9-a7ff-3c88cd0ad38b")
 		(property "Reference" "U5"
-			(at 130.4133 68.58 0)
+			(at 133.096 71.882 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4493,7 +4514,7 @@
 			)
 		)
 		(property "Value" "MCP73831-2-OT"
-			(at 130.4133 71.12 0)
+			(at 136.906 78.486 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
