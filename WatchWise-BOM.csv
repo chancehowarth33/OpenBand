@@ -23,7 +23,7 @@ C5 C16,2,10uF,Bulk Bypass Capacitor,0603,02-Components / 03-MCU,BMI270 and MCU m
 --- Resistors ---,,,,,,
 R1 R2 R3,3,4.7k,I2C Pull-up Resistor,0402,02-Components,SDA/SCL pull-ups for BMI270 and MAX30102 I2C bus
 R8 R_PWR1,2,10k,Pull-up Resistor,0402,04-Programming_Reset / 05-power,R8: reset pull-up; R_PWR1: Power Good LED pull-up
-R_PROG1,1,10k,MCP73831 Charge Current Programming Resistor,0402,05-power,"Sets I_CHARGE = 1000V / R_PROG = 100mA. Increase to 4.7k for ~210mA."
+R_PROG1,1,47k,MCP73831 Charge Current Programming Resistor,0402,05-power,"Sets I_CHARGE = 1000V / 47000 = 21.3mA (71% of 30mA max safe for this battery)"
 RLED1,1,330Ω (0.33k),LED Current Limiting Resistor,0402,05-power,For charging status LED
 ,,,,,,
 --- LEDs ---,,,,,,

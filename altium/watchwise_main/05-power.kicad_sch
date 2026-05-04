@@ -3609,7 +3609,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "77ff6d63-dc62-497d-b535-1579f7acae1f")
-		(property "Reference" "R_PROG"
+		(property "Reference" "R_PROG1"
 			(at 116.078 85.598 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3673,7 +3673,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "R_PROG")
+					(reference "R_PROG1")
 					(unit 1)
 				)
 			)
