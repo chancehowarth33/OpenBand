@@ -2243,6 +2243,16 @@
 		(uuid "1457baf3-1515-47f7-8494-1dc34cd7ddef")
 	)
 	(label "BAT_OUT"
+		(at 163.83 128.27 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2b3eb30e-2b24-4878-a671-04efec2fc9ca")
+	)
+	(label "BAT_OUT"
 		(at 38.1 168.91 0)
 		(effects
 			(font
@@ -2788,7 +2798,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "24c7634f-8c6e-44a1-9904-3407cf504ae1")
-		(property "Reference" "P_GOOD1"
+		(property "Reference" "P_BATT"
 			(at 140.97 122.936 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2863,7 +2873,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "P_GOOD1")
+					(reference "P_BATT")
 					(unit 1)
 				)
 			)
@@ -4092,8 +4102,8 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "bee64fbb-bdff-4ab2-ab08-0532f2aff482")
-		(property "Reference" "D1"
-			(at 102.87 84.074 90)
+		(property "Reference" "P_CHAR"
+			(at 100.076 81.534 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4167,7 +4177,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "D1")
+					(reference "P_CHAR")
 					(unit 1)
 				)
 			)
@@ -4407,85 +4417,6 @@
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
 					(reference "#PWR042")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+3.3V")
-		(at 163.83 128.27 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "df7a30a7-a909-4bb1-b24d-5946faffbd09")
-		(property "Reference" "#PWR035"
-			(at 160.02 128.27 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+3.3V"
-			(at 167.64 128.2699 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 163.83 128.27 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 163.83 128.27 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
-			(at 163.83 128.27 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "a7c33781-b1b1-43f9-a221-b2f6830c2e35")
-		)
-		(instances
-			(project "watchwise_main"
-				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "#PWR035")
 					(unit 1)
 				)
 			)
