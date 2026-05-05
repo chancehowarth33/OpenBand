@@ -157,7 +157,7 @@
 		(descr "SOT, 5 Pin (https://home.jeita.or.jp/tsc/std-pdf/ED-7500A.pdf#page=171, JEDEC MO-203, variant AA, https://www.jedec.org/document_search?search_api_views_fulltext=MO-203)")
 		(tags "SOT TO_SOT_SMD SC-88A SOT-353 SC-70-5")
 		(property "Reference" "U5_1P8"
-			(at -1.95 -2.765 0)
+			(at -0.28002 2.015 90)
 			(layer "F.SilkS")
 			(uuid "332d9e66-b894-43de-9872-67813487883d")
 			(effects
@@ -719,7 +719,7 @@
 		(descr "SOT, 5 Pin (JEDEC MO-178 Var AA https://www.jedec.org/document_search?search_api_views_fulltext=MO-178)")
 		(tags "SOT TO_SOT_SMD")
 		(property "Reference" "U3_3P3"
-			(at -2.81 2.3025 180)
+			(at -0.35998 -2.42 270)
 			(layer "F.SilkS")
 			(uuid "1c289511-802a-439a-9bc0-ecd24176c894")
 			(effects
@@ -1281,7 +1281,7 @@
 		(descr "Through hole straight pin header, 1x02, 1.27mm pitch, single row")
 		(tags "Through hole pin header THT 1x02 1.27mm single row")
 		(property "Reference" "J2BATT1"
-			(at -1.71 -3.135 0)
+			(at -2.38002 0.52 0)
 			(layer "F.SilkS")
 			(uuid "5899a502-ed78-4f07-a5bf-e63a22534513")
 			(effects
@@ -1701,7 +1701,7 @@
 		(descr "SMD Crystal FC-135 https://support.epson.biz/td/api/doc_check.php?dl=brief_FC-135R_en.pdf")
 		(tags "SMD SMT Crystal")
 		(property "Reference" "RTC1"
-			(at -4.07 -0.74175 180)
+			(at -1.35998 -1.99 270)
 			(layer "F.SilkS")
 			(uuid "ebc77ba2-d48f-4c5b-b230-455274371b78")
 			(effects
@@ -3744,7 +3744,7 @@
 		(descr "Through hole straight pin header, 1x05, 2.54mm pitch, single row")
 		(tags "Through hole pin header THT 1x05 2.54mm single row")
 		(property "Reference" "JPROG1"
-			(at -2.675 10.00248 90)
+			(at -2.62 2.01998 90)
 			(layer "F.SilkS")
 			(uuid "ba2070dc-e522-4487-a7ba-ecc5f7a937f0")
 			(effects
@@ -4177,7 +4177,7 @@
 		(descr "Through hole straight pin header, 1x02, 1.27mm pitch, single row")
 		(tags "Through hole pin header THT 1x02 1.27mm single row")
 		(property "Reference" "J1CHAR1"
-			(at 1.81 2.26 0)
+			(at 1.95002 0.625 0)
 			(layer "F.SilkS")
 			(uuid "c1acd58f-07ba-4cf2-ac06-91f362bbf313")
 			(effects
@@ -4438,8 +4438,9 @@
 		(descr "LED SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf)")
 		(tags "LED")
 		(property "Reference" "P_CHAR1"
-			(at -0.19 -3.01 90)
+			(at -0.73752 -0.87 90)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "69bf8726-2677-465d-8911-285ceee2aaac")
 			(effects
 				(font
@@ -4781,7 +4782,7 @@
 		(descr "SOT, 5 Pin (JEDEC MO-178 Var AA https://www.jedec.org/document_search?search_api_views_fulltext=MO-178)")
 		(tags "SOT TO_SOT_SMD")
 		(property "Reference" "U4_CHAR1"
-			(at -5.52002 0.3125 0)
+			(at -2.19002 2.46 90)
 			(layer "F.SilkS")
 			(uuid "a3e29b8d-867b-46c0-a347-931c890fded0")
 			(effects
@@ -5979,9 +5980,9 @@
 		(descr "LED SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf)")
 		(tags "LED")
 		(property "Reference" "P_BATT1"
-			(at 2.0225 -0.61 0)
+			(at -0.35998 2.4 0)
 			(layer "F.SilkS")
-			(uuid "cf4020f9-b5b1-4449-a86c-7fc92c75062a")
+			(uuid "36b13057-4a0e-4e2b-88e9-0000c71f515b")
 			(effects
 				(font
 					(size 1 0.5)
@@ -5992,7 +5993,7 @@
 		(property "Value" "LED"
 			(at 0 1.17 90)
 			(layer "F.Fab")
-			(uuid "4daf6347-7676-48e9-805f-911060fe27ed")
+			(uuid "a54e11fc-23c9-431b-9f22-a7599d187ef4")
 			(effects
 				(font
 					(size 1 1)
@@ -6004,7 +6005,7 @@
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "f2a63d97-fc68-4048-95d9-690265e6a88f")
+			(uuid "8f557882-e173-41d1-9e9b-a3687180136f")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6015,7 +6016,7 @@
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "6c500630-d0d8-4e2f-8e57-9352ccb3a4e8")
+			(uuid "0e9d7e06-7995-4803-b332-9fa8519e51be")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7317,9 +7318,9 @@
 		(uuid "d03ab8f0-7c35-4e7c-b3e8-f91f2ce02b0e")
 		(at 120.9235 106.3096 90)
 		(property "Reference" "U1_IMU1"
-			(at -3.2075 0.13 0)
+			(at -0.04998 -2.39 90)
 			(layer "B.SilkS")
-			(uuid "06083eed-debf-4ab3-a1d0-4c18345f8154")
+			(uuid "5875487f-0fc0-4143-aa53-6557d2ee6634")
 			(effects
 				(font
 					(size 1 0.64)
@@ -7331,7 +7332,7 @@
 		(property "Value" "BMI270"
 			(at 2.4304 0.5 0)
 			(layer "B.Fab")
-			(uuid "a48fa8f1-66a8-432e-adb5-464e5146a967")
+			(uuid "a81e40f1-f55d-4445-b2ae-2893109bc291")
 			(effects
 				(font
 					(size 0.64 0.64)
@@ -7344,7 +7345,7 @@
 			(at 0 0 90)
 			(layer "B.Fab")
 			(hide yes)
-			(uuid "2c87d59b-28e2-4802-b1c0-7d9f4158c4cb")
+			(uuid "5d6c26e8-9fb2-4946-b9b3-7f08f82f4866")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7356,7 +7357,7 @@
 			(at 0 0 90)
 			(layer "B.Fab")
 			(hide yes)
-			(uuid "8f75dd50-2f10-4533-9058-63212849316f")
+			(uuid "549d25ff-53fd-4bc1-9ad0-96ff0c4cf100")
 			(effects
 				(font
 					(size 1.27 1.27)
