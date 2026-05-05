@@ -197,129 +197,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Connector:TestPoint"
-			(pin_numbers
-				(hide yes)
-			)
-			(pin_names
-				(offset 0.762)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "TP"
-				(at 0 6.858 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "TestPoint"
-				(at 0 5.08 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 5.08 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 5.08 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "test point"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "test point tp"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "Pin* Test*"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "TestPoint_0_1"
-				(circle
-					(center 0 3.302)
-					(radius 0.762)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "TestPoint_1_1"
-				(pin passive line
-					(at 0 0 90)
-					(length 2.54)
-					(name "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Connector_Generic:Conn_01x02"
 			(pin_names
 				(offset 1.016)
@@ -1906,24 +1783,6 @@
 		(uuid "26f133c2-f4a3-4908-91e3-41de03f4d1c3")
 	)
 	(junction
-		(at 152.4 168.91)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "2ebe5194-17cf-4987-b7d8-70dfda540d41")
-	)
-	(junction
-		(at 76.2 71.12)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "38cec0f1-4465-4204-a191-0e34ea9d301b")
-	)
-	(junction
-		(at 90.17 125.73)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "6a262e8b-6a02-40fa-b38a-54dec8b6900d")
-	)
-	(junction
 		(at 144.78 76.2)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1954,12 +1813,6 @@
 		(uuid "a4792c2d-3513-4672-bf8b-03503c4a9475")
 	)
 	(junction
-		(at 80.01 168.91)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "e538e18a-a5d1-4ea9-965a-a6d81c5e9705")
-	)
-	(junction
 		(at 147.32 168.91)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1974,16 +1827,6 @@
 			(type default)
 		)
 		(uuid "04d9c479-02e7-4632-ada1-d5a05e037ecf")
-	)
-	(wire
-		(pts
-			(xy 76.2 71.12) (xy 76.2 74.93)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "05699d93-eec7-4728-a0f9-292b9fcb1d18")
 	)
 	(wire
 		(pts
@@ -2037,7 +1880,7 @@
 	)
 	(wire
 		(pts
-			(xy 147.32 168.91) (xy 152.4 168.91)
+			(xy 147.32 168.91) (xy 156.21 168.91)
 		)
 		(stroke
 			(width 0)
@@ -2064,16 +1907,6 @@
 			(type default)
 		)
 		(uuid "2e83118f-4467-4b2c-9fe4-362f6911c2e7")
-	)
-	(wire
-		(pts
-			(xy 152.4 168.91) (xy 152.4 173.99)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "31024bc7-0066-4338-ba87-0d46666f3069")
 	)
 	(wire
 		(pts
@@ -2127,26 +1960,6 @@
 	)
 	(wire
 		(pts
-			(xy 90.17 125.73) (xy 90.17 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "55f56256-1214-4955-9358-8ba63ee14e29")
-	)
-	(wire
-		(pts
-			(xy 90.17 124.46) (xy 90.17 125.73)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "59657606-a4a9-4278-a60a-ee576c304712")
-	)
-	(wire
-		(pts
 			(xy 107.95 87.63) (xy 107.95 100.33)
 		)
 		(stroke
@@ -2167,23 +1980,13 @@
 	)
 	(wire
 		(pts
-			(xy 74.93 168.91) (xy 80.01 168.91)
+			(xy 74.93 168.91) (xy 81.28 168.91)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "66864f41-202e-4792-aa11-c3863c750d6a")
-	)
-	(wire
-		(pts
-			(xy 90.17 125.73) (xy 86.36 125.73)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "78019ce5-1306-4185-bac8-75c804b3732f")
 	)
 	(wire
 		(pts
@@ -2317,16 +2120,6 @@
 	)
 	(wire
 		(pts
-			(xy 80.01 168.91) (xy 80.01 173.99)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "be279ec1-ac95-45ba-8314-dfdb039d037b")
-	)
-	(wire
-		(pts
 			(xy 160.02 128.27) (xy 163.83 128.27)
 		)
 		(stroke
@@ -2334,16 +2127,6 @@
 			(type default)
 		)
 		(uuid "bed7015c-8786-4166-9ea8-89e334c29f32")
-	)
-	(wire
-		(pts
-			(xy 152.4 168.91) (xy 156.21 168.91)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bfd67485-8a1b-461e-8702-58bf468916fc")
 	)
 	(wire
 		(pts
@@ -2407,23 +2190,13 @@
 	)
 	(wire
 		(pts
-			(xy 76.2 71.12) (xy 74.93 71.12)
+			(xy 74.93 71.12) (xy 78.74 71.12)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "d5c62a32-299f-4266-954a-68f6fd9d219d")
-	)
-	(wire
-		(pts
-			(xy 78.74 71.12) (xy 76.2 71.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d5ee42b0-c5c6-456a-bf1e-d4d26762a5e2")
 	)
 	(wire
 		(pts
@@ -2434,16 +2207,6 @@
 			(type default)
 		)
 		(uuid "dc8bcfcf-745e-4aa2-8ef3-1c126f736fe6")
-	)
-	(wire
-		(pts
-			(xy 80.01 168.91) (xy 81.28 168.91)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ecf1c1ce-71c7-49eb-b6d1-4395daddc279")
 	)
 	(wire
 		(pts
@@ -2536,7 +2299,7 @@
 		(uuid "9a4fb66a-e2b9-4510-aba8-3c32a7e32f39")
 	)
 	(label "BAT_OUT"
-		(at 86.36 125.73 180)
+		(at 90.17 124.46 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3357,85 +3120,6 @@
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
 					(reference "#PWR036")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 152.4 173.99 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "3a7755ed-8636-47e7-a35c-07278b313694")
-		(property "Reference" "1P8"
-			(at 154.94 176.0219 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 154.94 178.5619 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 147.32 173.99 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 147.32 173.99 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 152.4 173.99 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "ccc09006-5398-42dd-bf14-afb7d3103480")
-		)
-		(instances
-			(project "watchwise_main"
-				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "1P8")
 					(unit 1)
 				)
 			)
@@ -4504,85 +4188,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 76.2 74.93 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "c228769f-0a36-4abd-adeb-2194537953a6")
-		(property "Reference" "GND1"
-			(at 78.74 76.9619 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 78.74 79.5019 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 71.12 74.93 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 71.12 74.93 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 76.2 74.93 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "6b1d1ecb-a7bb-484b-b176-7780623ec052")
-		)
-		(instances
-			(project "watchwise_main"
-				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "GND1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 147.32 157.48 180)
 		(unit 1)
@@ -4737,85 +4342,6 @@
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
 					(reference "C13")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 90.17 127 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "c9aa8aa4-83a3-4c1a-a0a0-690af61abe0d")
-		(property "Reference" "BAT_OUT1"
-			(at 92.71 129.0319 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 92.71 131.5719 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 85.09 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 85.09 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 90.17 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "dd9bf0ec-8edc-4256-a0fc-2118f353aea9")
-		)
-		(instances
-			(project "watchwise_main"
-				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "BAT_OUT1")
 					(unit 1)
 				)
 			)
@@ -5222,85 +4748,6 @@
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
 					(reference "#PWR038")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 80.01 173.99 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "fe799e22-5cf7-44bb-829b-2fb61da454bc")
-		(property "Reference" "3P3"
-			(at 82.55 176.0219 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 82.55 178.5619 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 74.93 173.99 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 74.93 173.99 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 80.01 173.99 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "0ab3f4d2-4eb0-423a-9da6-bab0e6acc554")
-		)
-		(instances
-			(project "watchwise_main"
-				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "3P3")
 					(unit 1)
 				)
 			)
