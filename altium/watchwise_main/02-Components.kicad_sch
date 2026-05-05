@@ -17670,7 +17670,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "055522fd-000a-4388-83ff-0a0070e2abde")
-		(property "Reference" "#PWR015"
+		(property "Reference" "#PWR012"
 			(at 100.33 93.98 0)
 			(hide yes)
 			(show_name no)
@@ -17730,7 +17730,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "#PWR015")
+					(reference "#PWR012")
 					(unit 1)
 				)
 			)
@@ -17748,7 +17748,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "05aa5866-3ef2-4002-a941-765ea10b020d")
-		(property "Reference" "#PWR013"
+		(property "Reference" "#PWR07"
 			(at 92.71 154.94 0)
 			(hide yes)
 			(show_name no)
@@ -17808,7 +17808,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "#PWR013")
+					(reference "#PWR07")
 					(unit 1)
 				)
 			)
@@ -17983,7 +17983,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "2b9ccb39-b50a-49d3-bbbb-df7e00cc7cec")
-		(property "Reference" "C9"
+		(property "Reference" "C1"
 			(at 88.138 41.148 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -18045,7 +18045,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "C9")
+					(reference "C1")
 					(unit 1)
 				)
 			)
@@ -18063,7 +18063,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2c7173b0-414a-49c1-8c8c-0cf365f7df1b")
-		(property "Reference" "U1"
+		(property "Reference" "U1_IMU1"
 			(at 77.47 41.91 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -18295,7 +18295,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "U1")
+					(reference "U1_IMU1")
 					(unit 1)
 				)
 			)
@@ -18313,7 +18313,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2d617db2-4a2b-4b90-aa7b-76a643756e6f")
-		(property "Reference" "#PWR07"
+		(property "Reference" "#PWR01"
 			(at 39.37 181.61 0)
 			(hide yes)
 			(show_name no)
@@ -18373,7 +18373,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "#PWR07")
+					(reference "#PWR01")
 					(unit 1)
 				)
 			)
@@ -18391,7 +18391,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2e167599-1a7e-4c46-9806-a3eedb5e2329")
-		(property "Reference" "#PWR011"
+		(property "Reference" "#PWR09"
 			(at 96.52 114.3 0)
 			(hide yes)
 			(show_name no)
@@ -18451,7 +18451,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "#PWR011")
+					(reference "#PWR09")
 					(unit 1)
 				)
 			)
@@ -18468,7 +18468,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "45313e22-cefe-45bc-8232-d7c016b193a3")
-		(property "Reference" "C0"
+		(property "Reference" "C2"
 			(at 104.902 37.592 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -18530,7 +18530,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "C0")
+					(reference "C2")
 					(unit 1)
 				)
 			)
@@ -18548,7 +18548,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "4e63c99f-2157-4e07-aa0a-49c9fdb28918")
-		(property "Reference" "#PWR014"
+		(property "Reference" "#PWR02"
 			(at 49.53 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -18608,7 +18608,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "#PWR014")
+					(reference "#PWR02")
 					(unit 1)
 				)
 			)
@@ -18626,7 +18626,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "51e8ffbe-7441-4de0-952e-202f26336543")
-		(property "Reference" "#PWR010"
+		(property "Reference" "#PWR05"
 			(at 71.12 181.61 0)
 			(hide yes)
 			(show_name no)
@@ -18686,7 +18686,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "#PWR010")
+					(reference "#PWR05")
 					(unit 1)
 				)
 			)
@@ -18703,7 +18703,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "63fc51b4-4713-4ea6-8a10-590a8a93e034")
-		(property "Reference" "C7"
+		(property "Reference" "C3"
 			(at 104.902 113.792 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -18765,7 +18765,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "C7")
+					(reference "C3")
 					(unit 1)
 				)
 			)
@@ -18782,7 +18782,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "6b4f3714-2ad9-4f4d-a5cc-ba027fe49c34")
-		(property "Reference" "#PWR032"
+		(property "Reference" "#PWR08"
 			(at 95.25 39.37 0)
 			(hide yes)
 			(show_name no)
@@ -18842,7 +18842,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "#PWR032")
+					(reference "#PWR08")
 					(unit 1)
 				)
 			)
@@ -18859,7 +18859,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "6c062663-c7d9-473e-b512-62589830580b")
-		(property "Reference" "#PWR012"
+		(property "Reference" "#PWR010"
 			(at 96.52 154.94 0)
 			(hide yes)
 			(show_name no)
@@ -18919,7 +18919,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "#PWR012")
+					(reference "#PWR010")
 					(unit 1)
 				)
 			)
@@ -19019,7 +19019,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8c16b452-452a-4715-aef9-050dc353e7ce")
-		(property "Reference" "#PWR017"
+		(property "Reference" "#PWR04"
 			(at 52.07 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -19080,7 +19080,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "#PWR017")
+					(reference "#PWR04")
 					(unit 1)
 				)
 			)
@@ -19179,7 +19179,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "bb57e0b3-0459-48b4-af3c-de93c692c598")
-		(property "Reference" "#PWR016"
+		(property "Reference" "#PWR011"
 			(at 97.79 36.83 0)
 			(hide yes)
 			(show_name no)
@@ -19239,7 +19239,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "#PWR016")
+					(reference "#PWR011")
 					(unit 1)
 				)
 			)
@@ -19257,7 +19257,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "bdb32965-806e-474a-b91d-bd240fa8eae7")
-		(property "Reference" "#PWR044"
+		(property "Reference" "#PWR014"
 			(at 115.57 119.38 0)
 			(hide yes)
 			(show_name no)
@@ -19318,7 +19318,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "#PWR044")
+					(reference "#PWR014")
 					(unit 1)
 				)
 			)
@@ -19336,7 +19336,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c795bfad-8cb7-4a0e-a924-e6a32f442bc6")
-		(property "Reference" "U2"
+		(property "Reference" "U2_MAX1"
 			(at 77.47 116.84 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -19538,7 +19538,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "U2")
+					(reference "U2_MAX1")
 					(unit 1)
 				)
 			)
@@ -19637,7 +19637,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "dbdcd4d0-8257-4c79-a918-e34b6e10d677")
-		(property "Reference" "#PWR08"
+		(property "Reference" "#PWR015"
 			(at 109.22 165.1 0)
 			(hide yes)
 			(show_name no)
@@ -19697,7 +19697,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "#PWR08")
+					(reference "#PWR015")
 					(unit 1)
 				)
 			)
@@ -19715,7 +19715,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "df189652-95ba-4d3a-92fe-055a868c649e")
-		(property "Reference" "#PWR09"
+		(property "Reference" "#PWR03"
 			(at 55.88 181.61 0)
 			(hide yes)
 			(show_name no)
@@ -19775,7 +19775,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "#PWR09")
+					(reference "#PWR03")
 					(unit 1)
 				)
 			)
@@ -19793,7 +19793,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "ea855972-07cc-44d4-b2c8-8d83be2795a6")
-		(property "Reference" "#PWR019"
+		(property "Reference" "#PWR013"
 			(at 114.3 39.37 0)
 			(hide yes)
 			(show_name no)
@@ -19854,7 +19854,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "#PWR019")
+					(reference "#PWR013")
 					(unit 1)
 				)
 			)
@@ -19872,7 +19872,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "fc145761-a5f4-4320-be66-9d13792d002d")
-		(property "Reference" "#PWR018"
+		(property "Reference" "#PWR06"
 			(at 78.74 39.37 0)
 			(hide yes)
 			(show_name no)
@@ -19933,7 +19933,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "#PWR018")
+					(reference "#PWR06")
 					(unit 1)
 				)
 			)
@@ -19950,7 +19950,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "fd50f996-7fa1-4c8e-89ae-dafcdb101d0f")
-		(property "Reference" "C8"
+		(property "Reference" "C4"
 			(at 104.902 120.65 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20012,7 +20012,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "C8")
+					(reference "C4")
 					(unit 1)
 				)
 			)

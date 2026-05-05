@@ -197,6 +197,129 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Connector:TestPoint"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.762)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "TP"
+				(at 0 6.858 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "TestPoint"
+				(at 0 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 5.08 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 5.08 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "test point"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "test point tp"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "Pin* Test*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "TestPoint_0_1"
+				(circle
+					(center 0 3.302)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "TestPoint_1_1"
+				(pin passive line
+					(at 0 0 90)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Connector_Generic:Conn_01x02"
 			(pin_names
 				(offset 1.016)
@@ -1744,7 +1867,7 @@
 	)
 	(text_box "DESIGN NOTE:\n\nMaximum Charge Voltage/Current: 4.25V/30mAh for battery so set R_PROG = 1000 / I_charge. \n\nI_charge = 1000 / 47,000 = 0.0213A = 21.3mA. That's 71% of the battery's 30mA max safe margin but can go higher."
 		(exclude_from_sim no)
-		(at 55.88 78.5386 0)
+		(at 130.81 38.61 0)
 		(size 43.18 22.35)
 		(margins 0.9525 0.9525 0.9525 0.9525)
 		(stroke
@@ -1771,16 +1894,34 @@
 		(uuid "08b8c207-ec44-496b-8a42-84ea7781809c")
 	)
 	(junction
-		(at 77.47 168.91)
+		(at 74.93 168.91)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "1812d2ad-4034-429f-a0ed-122c3134871b")
 	)
 	(junction
-		(at 149.86 168.91)
+		(at 72.39 168.91)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "53cfff17-6ffe-4663-b1c2-119d81709249")
+		(uuid "26f133c2-f4a3-4908-91e3-41de03f4d1c3")
+	)
+	(junction
+		(at 152.4 168.91)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2ebe5194-17cf-4987-b7d8-70dfda540d41")
+	)
+	(junction
+		(at 76.2 71.12)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "38cec0f1-4465-4204-a191-0e34ea9d301b")
+	)
+	(junction
+		(at 90.17 125.73)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6a262e8b-6a02-40fa-b38a-54dec8b6900d")
 	)
 	(junction
 		(at 144.78 76.2)
@@ -1812,6 +1953,18 @@
 		(color 0 0 0 0)
 		(uuid "a4792c2d-3513-4672-bf8b-03503c4a9475")
 	)
+	(junction
+		(at 80.01 168.91)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e538e18a-a5d1-4ea9-965a-a6d81c5e9705")
+	)
+	(junction
+		(at 147.32 168.91)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ec1b7ef4-e6be-4bd0-913b-cd1e38c9e95a")
+	)
 	(wire
 		(pts
 			(xy 128.27 86.36) (xy 128.27 91.44)
@@ -1821,6 +1974,16 @@
 			(type default)
 		)
 		(uuid "04d9c479-02e7-4632-ada1-d5a05e037ecf")
+	)
+	(wire
+		(pts
+			(xy 76.2 71.12) (xy 76.2 74.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "05699d93-eec7-4728-a0f9-292b9fcb1d18")
 	)
 	(wire
 		(pts
@@ -1844,7 +2007,7 @@
 	)
 	(wire
 		(pts
-			(xy 77.47 165.1) (xy 77.47 168.91)
+			(xy 74.93 165.1) (xy 74.93 168.91)
 		)
 		(stroke
 			(width 0)
@@ -1874,7 +2037,7 @@
 	)
 	(wire
 		(pts
-			(xy 149.86 168.91) (xy 153.67 168.91)
+			(xy 147.32 168.91) (xy 152.4 168.91)
 		)
 		(stroke
 			(width 0)
@@ -1894,13 +2057,23 @@
 	)
 	(wire
 		(pts
-			(xy 142.24 168.91) (xy 149.86 168.91)
+			(xy 142.24 168.91) (xy 147.32 168.91)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "2e83118f-4467-4b2c-9fe4-362f6911c2e7")
+	)
+	(wire
+		(pts
+			(xy 152.4 168.91) (xy 152.4 173.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "31024bc7-0066-4338-ba87-0d46666f3069")
 	)
 	(wire
 		(pts
@@ -1934,16 +2107,6 @@
 	)
 	(wire
 		(pts
-			(xy 86.36 124.46) (xy 86.36 125.73)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4e9270b3-9405-4880-8485-f070eaf17e2b")
-	)
-	(wire
-		(pts
 			(xy 139.7 128.27) (xy 142.24 128.27)
 		)
 		(stroke
@@ -1964,6 +2127,26 @@
 	)
 	(wire
 		(pts
+			(xy 90.17 125.73) (xy 90.17 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "55f56256-1214-4955-9358-8ba63ee14e29")
+	)
+	(wire
+		(pts
+			(xy 90.17 124.46) (xy 90.17 125.73)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "59657606-a4a9-4278-a60a-ee576c304712")
+	)
+	(wire
+		(pts
 			(xy 107.95 87.63) (xy 107.95 100.33)
 		)
 		(stroke
@@ -1974,7 +2157,7 @@
 	)
 	(wire
 		(pts
-			(xy 149.86 165.1) (xy 149.86 168.91)
+			(xy 147.32 165.1) (xy 147.32 168.91)
 		)
 		(stroke
 			(width 0)
@@ -1984,7 +2167,7 @@
 	)
 	(wire
 		(pts
-			(xy 77.47 168.91) (xy 81.28 168.91)
+			(xy 74.93 168.91) (xy 80.01 168.91)
 		)
 		(stroke
 			(width 0)
@@ -1994,13 +2177,33 @@
 	)
 	(wire
 		(pts
-			(xy 92.71 124.46) (xy 86.36 124.46)
+			(xy 90.17 125.73) (xy 86.36 125.73)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "78019ce5-1306-4185-bac8-75c804b3732f")
+	)
+	(wire
+		(pts
+			(xy 92.71 124.46) (xy 90.17 124.46)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "7a5e401f-7929-4cbc-b4f5-12bcf14d2135")
+	)
+	(wire
+		(pts
+			(xy 72.39 168.91) (xy 74.93 168.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7cdae54f-0109-46d7-9a6e-f084b34fbfbf")
 	)
 	(wire
 		(pts
@@ -2064,7 +2267,7 @@
 	)
 	(wire
 		(pts
-			(xy 72.39 168.91) (xy 77.47 168.91)
+			(xy 69.85 168.91) (xy 72.39 168.91)
 		)
 		(stroke
 			(width 0)
@@ -2114,6 +2317,16 @@
 	)
 	(wire
 		(pts
+			(xy 80.01 168.91) (xy 80.01 173.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "be279ec1-ac95-45ba-8314-dfdb039d037b")
+	)
+	(wire
+		(pts
 			(xy 160.02 128.27) (xy 163.83 128.27)
 		)
 		(stroke
@@ -2121,6 +2334,16 @@
 			(type default)
 		)
 		(uuid "bed7015c-8786-4166-9ea8-89e334c29f32")
+	)
+	(wire
+		(pts
+			(xy 152.4 168.91) (xy 156.21 168.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bfd67485-8a1b-461e-8702-58bf468916fc")
 	)
 	(wire
 		(pts
@@ -2184,7 +2407,17 @@
 	)
 	(wire
 		(pts
-			(xy 78.74 71.12) (xy 74.93 71.12)
+			(xy 76.2 71.12) (xy 74.93 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d5c62a32-299f-4266-954a-68f6fd9d219d")
+	)
+	(wire
+		(pts
+			(xy 78.74 71.12) (xy 76.2 71.12)
 		)
 		(stroke
 			(width 0)
@@ -2201,6 +2434,16 @@
 			(type default)
 		)
 		(uuid "dc8bcfcf-745e-4aa2-8ef3-1c126f736fe6")
+	)
+	(wire
+		(pts
+			(xy 80.01 168.91) (xy 81.28 168.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ecf1c1ce-71c7-49eb-b6d1-4395daddc279")
 	)
 	(wire
 		(pts
@@ -2314,7 +2557,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "095f5464-6b9f-4970-9736-c8d8ca713241")
-		(property "Reference" "J2"
+		(property "Reference" "J2BATT1"
 			(at 100.33 121.9199 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2378,7 +2621,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "J2")
+					(reference "J2BATT1")
 					(unit 1)
 				)
 			)
@@ -2396,7 +2639,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0b5b2151-d900-48de-85c2-d2a407c908e8")
-		(property "Reference" "#PWR04"
+		(property "Reference" "#PWR035"
 			(at 120.65 151.13 0)
 			(hide yes)
 			(show_name no)
@@ -2456,7 +2699,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "#PWR04")
+					(reference "#PWR035")
 					(unit 1)
 				)
 			)
@@ -2474,7 +2717,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "1342901d-13b7-4102-b3cb-c3258d694a8f")
-		(property "Reference" "#PWR02"
+		(property "Reference" "#PWR028"
 			(at 50.8 151.13 0)
 			(hide yes)
 			(show_name no)
@@ -2534,7 +2777,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "#PWR02")
+					(reference "#PWR028")
 					(unit 1)
 				)
 			)
@@ -2552,7 +2795,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "17c2f8d6-b0d9-4d2b-9ca4-bc6326aecef1")
-		(property "Reference" "U4"
+		(property "Reference" "U5_1P8"
 			(at 134.62 162.56 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2624,7 +2867,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "U4")
+					(reference "U5_1P8")
 					(unit 1)
 				)
 			)
@@ -2710,7 +2953,7 @@
 	)
 	(symbol
 		(lib_id "power:+1V8")
-		(at 153.67 168.91 270)
+		(at 156.21 168.91 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2720,8 +2963,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "1cb6e5cd-6afb-4de2-ae1d-845e28b369d5")
-		(property "Reference" "#PWR021"
-			(at 149.86 168.91 0)
+		(property "Reference" "#PWR041"
+			(at 152.4 168.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2732,7 +2975,7 @@
 			)
 		)
 		(property "Value" "+1V8"
-			(at 157.48 168.9099 90)
+			(at 160.02 168.9099 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2743,7 +2986,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 153.67 168.91 0)
+			(at 156.21 168.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2754,7 +2997,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 153.67 168.91 0)
+			(at 156.21 168.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2765,7 +3008,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+1V8\""
-			(at 153.67 168.91 0)
+			(at 156.21 168.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2781,7 +3024,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "#PWR021")
+					(reference "#PWR041")
 					(unit 1)
 				)
 			)
@@ -2798,7 +3041,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "24c7634f-8c6e-44a1-9904-3407cf504ae1")
-		(property "Reference" "P_BATT"
+		(property "Reference" "P_BATT1"
 			(at 140.97 122.936 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2873,7 +3116,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "P_BATT")
+					(reference "P_BATT1")
 					(unit 1)
 				)
 			)
@@ -2962,7 +3205,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 77.47 161.29 0)
+		(at 74.93 161.29 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2972,8 +3215,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2870f6d1-6af7-417d-ae9c-67918780151d")
-		(property "Reference" "C2"
-			(at 81.28 160.0199 0)
+		(property "Reference" "C12"
+			(at 78.74 160.0199 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2984,7 +3227,7 @@
 			)
 		)
 		(property "Value" "1uF"
-			(at 81.28 162.5599 0)
+			(at 78.74 162.5599 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2995,7 +3238,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
-			(at 78.4352 165.1 0)
+			(at 75.8952 165.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3006,7 +3249,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 77.47 161.29 0)
+			(at 74.93 161.29 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3017,7 +3260,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 77.47 161.29 0)
+			(at 74.93 161.29 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3036,7 +3279,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "C2")
+					(reference "C12")
 					(unit 1)
 				)
 			)
@@ -3053,7 +3296,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "34002fb5-f149-4b2d-a070-010fc19eb256")
-		(property "Reference" "#PWR038"
+		(property "Reference" "#PWR036"
 			(at 128.27 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -3113,7 +3356,86 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "#PWR038")
+					(reference "#PWR036")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 152.4 173.99 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "3a7755ed-8636-47e7-a35c-07278b313694")
+		(property "Reference" "1P8"
+			(at 154.94 176.0219 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 154.94 178.5619 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
+			(at 147.32 173.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 147.32 173.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 152.4 173.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "ccc09006-5398-42dd-bf14-afb7d3103480")
+		)
+		(instances
+			(project "watchwise_main"
+				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
+					(reference "1P8")
 					(unit 1)
 				)
 			)
@@ -3131,7 +3453,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "3bdfd79b-8892-4387-aebf-340999d988fa")
-		(property "Reference" "#PWR037"
+		(property "Reference" "#PWR033"
 			(at 82.55 121.92 0)
 			(hide yes)
 			(show_name no)
@@ -3192,7 +3514,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "#PWR037")
+					(reference "#PWR033")
 					(unit 1)
 				)
 			)
@@ -3210,7 +3532,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "63849111-e455-430f-af07-b686a9eb3f1a")
-		(property "Reference" "C1"
+		(property "Reference" "C11"
 			(at 54.61 160.0199 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3274,7 +3596,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "C1")
+					(reference "C11")
 					(unit 1)
 				)
 			)
@@ -3292,7 +3614,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "63eac2fb-4535-4fce-8a71-f73559ea2322")
-		(property "Reference" "#PWR040"
+		(property "Reference" "#PWR034"
 			(at 115.57 72.39 0)
 			(hide yes)
 			(show_name no)
@@ -3352,7 +3674,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "#PWR040")
+					(reference "#PWR034")
 					(unit 1)
 				)
 			)
@@ -3370,7 +3692,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "652c3669-f0a5-4bec-9a37-6fbf4bab3416")
-		(property "Reference" "U3"
+		(property "Reference" "U3_3P3"
 			(at 64.77 162.56 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3441,7 +3763,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "U3")
+					(reference "U3_3P3")
 					(unit 1)
 				)
 			)
@@ -3449,7 +3771,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 149.86 161.29 0)
+		(at 147.32 161.29 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3459,8 +3781,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "663879c0-a0bd-439b-8df1-d2292cfcf36f")
-		(property "Reference" "C4"
-			(at 153.67 160.0199 0)
+		(property "Reference" "C16"
+			(at 151.13 160.0199 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3471,7 +3793,7 @@
 			)
 		)
 		(property "Value" "1uF"
-			(at 153.67 162.5599 0)
+			(at 151.13 162.5599 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3482,7 +3804,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
-			(at 150.8252 165.1 0)
+			(at 148.2852 165.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3493,7 +3815,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 149.86 161.29 0)
+			(at 147.32 161.29 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3504,7 +3826,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 149.86 161.29 0)
+			(at 147.32 161.29 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3523,7 +3845,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "C4")
+					(reference "C16")
 					(unit 1)
 				)
 			)
@@ -3541,7 +3863,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6efccc49-459e-40f7-aafd-a9601b84f42e")
-		(property "Reference" "#PWR020"
+		(property "Reference" "#PWR032"
 			(at 77.47 168.91 0)
 			(hide yes)
 			(show_name no)
@@ -3602,7 +3924,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "#PWR020")
+					(reference "#PWR032")
 					(unit 1)
 				)
 			)
@@ -3701,7 +4023,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "79230129-2e97-4f99-bf3b-121d3a8df317")
-		(property "Reference" "C13"
+		(property "Reference" "C15"
 			(at 148.59 71.1199 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3765,7 +4087,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "C13")
+					(reference "C15")
 					(unit 1)
 				)
 			)
@@ -3783,26 +4105,24 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "7da52f78-cf3e-4470-9cd2-d99d39d9e899")
-		(property "Reference" "J3"
-			(at 67.31 71.1201 0)
+		(property "Reference" "J1CHAR1"
+			(at 69.85 62.23 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Value" "J3 Charging"
-			(at 67.31 68.5801 0)
+			(at 69.85 64.77 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Footprint" "Connector_PinHeader_1.27mm:PinHeader_1x02_P1.27mm_Vertical"
@@ -3847,7 +4167,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "J3")
+					(reference "J1CHAR1")
 					(unit 1)
 				)
 			)
@@ -3855,7 +4175,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 77.47 157.48 180)
+		(at 74.93 157.48 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3865,8 +4185,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9ce14774-7d88-4333-a62b-bee13fbf74b3")
-		(property "Reference" "#PWR03"
-			(at 77.47 151.13 0)
+		(property "Reference" "#PWR030"
+			(at 74.93 151.13 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3877,7 +4197,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 77.47 152.4 0)
+			(at 74.93 152.4 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3887,7 +4207,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 77.47 157.48 0)
+			(at 74.93 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3898,7 +4218,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 77.47 157.48 0)
+			(at 74.93 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3909,7 +4229,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 77.47 157.48 0)
+			(at 74.93 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3925,7 +4245,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "#PWR03")
+					(reference "#PWR030")
 					(unit 1)
 				)
 			)
@@ -3943,7 +4263,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b67c45a7-84b2-4e1c-ab01-326961c9b911")
-		(property "Reference" "#PWR06"
+		(property "Reference" "#PWR037"
 			(at 134.62 190.5 0)
 			(hide yes)
 			(show_name no)
@@ -4003,7 +4323,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "#PWR06")
+					(reference "#PWR037")
 					(unit 1)
 				)
 			)
@@ -4021,7 +4341,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b747548b-948e-4f6e-a44e-b4487d760c87")
-		(property "Reference" "C3"
+		(property "Reference" "C14"
 			(at 124.46 160.0199 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4085,7 +4405,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "C3")
+					(reference "C14")
 					(unit 1)
 				)
 			)
@@ -4102,7 +4422,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "bee64fbb-bdff-4ab2-ab08-0532f2aff482")
-		(property "Reference" "P_CHAR"
+		(property "Reference" "P_CHAR1"
 			(at 100.076 81.534 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4177,15 +4497,15 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "P_CHAR")
+					(reference "P_CHAR1")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 149.86 157.48 180)
+		(lib_id "Connector:TestPoint")
+		(at 76.2 74.93 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4194,30 +4514,31 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "c7a861b4-29b0-46a8-a0a4-b76f4a9699f9")
-		(property "Reference" "#PWR05"
-			(at 149.86 151.13 0)
-			(hide yes)
+		(uuid "c228769f-0a36-4abd-adeb-2194537953a6")
+		(property "Reference" "GND1"
+			(at 78.74 76.9619 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify right)
 			)
 		)
-		(property "Value" "GND"
-			(at 149.86 152.4 0)
+		(property "Value" "TestPoint"
+			(at 78.74 79.5019 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify right)
 			)
 		)
-		(property "Footprint" ""
-			(at 149.86 157.48 0)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
+			(at 71.12 74.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4228,7 +4549,85 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 149.86 157.48 0)
+			(at 71.12 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 76.2 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "6b1d1ecb-a7bb-484b-b176-7780623ec052")
+		)
+		(instances
+			(project "watchwise_main"
+				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
+					(reference "GND1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 147.32 157.48 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c7a861b4-29b0-46a8-a0a4-b76f4a9699f9")
+		(property "Reference" "#PWR040"
+			(at 147.32 151.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 147.32 152.4 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 147.32 157.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 147.32 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4239,7 +4638,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 149.86 157.48 0)
+			(at 147.32 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4255,7 +4654,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "#PWR05")
+					(reference "#PWR040")
 					(unit 1)
 				)
 			)
@@ -4273,7 +4672,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c835b276-a4a3-4625-b724-e95813da8eb1")
-		(property "Reference" "C14"
+		(property "Reference" "C13"
 			(at 119.38 60.9599 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4337,7 +4736,86 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "C14")
+					(reference "C13")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 90.17 127 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c9aa8aa4-83a3-4c1a-a0a0-690af61abe0d")
+		(property "Reference" "BAT_OUT1"
+			(at 92.71 129.0319 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 92.71 131.5719 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
+			(at 85.09 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 85.09 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 90.17 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "dd9bf0ec-8edc-4256-a0fc-2118f353aea9")
+		)
+		(instances
+			(project "watchwise_main"
+				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
+					(reference "BAT_OUT1")
 					(unit 1)
 				)
 			)
@@ -4355,7 +4833,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d5de787f-1413-4c61-83f5-f55df32f43b5")
-		(property "Reference" "#PWR042"
+		(property "Reference" "#PWR031"
 			(at 85.09 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -4416,7 +4894,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "#PWR042")
+					(reference "#PWR031")
 					(unit 1)
 				)
 			)
@@ -4433,7 +4911,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "e6fe80b7-6c14-41c9-a7ff-3c88cd0ad38b")
-		(property "Reference" "U5"
+		(property "Reference" "U4_CHAR1"
 			(at 133.096 71.882 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4508,7 +4986,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "U5")
+					(reference "U4_CHAR1")
 					(unit 1)
 				)
 			)
@@ -4605,7 +5083,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "eefd804e-f05c-402b-a45d-8195c331a908")
-		(property "Reference" "#PWR01"
+		(property "Reference" "#PWR029"
 			(at 64.77 187.96 0)
 			(hide yes)
 			(show_name no)
@@ -4665,7 +5143,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "#PWR01")
+					(reference "#PWR029")
 					(unit 1)
 				)
 			)
@@ -4683,7 +5161,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "f32d455b-42cf-4009-b8f5-3e0d6893b1d1")
-		(property "Reference" "#PWR034"
+		(property "Reference" "#PWR038"
 			(at 133.35 128.27 0)
 			(hide yes)
 			(show_name no)
@@ -4743,7 +5221,86 @@
 		(instances
 			(project "watchwise_main"
 				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
-					(reference "#PWR034")
+					(reference "#PWR038")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 80.01 173.99 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "fe799e22-5cf7-44bb-829b-2fb61da454bc")
+		(property "Reference" "3P3"
+			(at 82.55 176.0219 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 82.55 178.5619 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
+			(at 74.93 173.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 74.93 173.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 80.01 173.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "0ab3f4d2-4eb0-423a-9da6-bab0e6acc554")
+		)
+		(instances
+			(project "watchwise_main"
+				(path "/afdf4e11-c018-4838-8bbc-a78e7271db46"
+					(reference "3P3")
 					(unit 1)
 				)
 			)

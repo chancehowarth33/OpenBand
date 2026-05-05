@@ -13318,7 +13318,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "3f3f5a5d-43fc-40c3-838b-3010752926d3")
-		(property "Reference" "#PWR030"
+		(property "Reference" "#PWR026"
 			(at 66.04 160.02 0)
 			(hide yes)
 			(show_name no)
@@ -13379,7 +13379,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/62e3c630-bd63-47c6-9963-364c5adf6400"
-					(reference "#PWR030")
+					(reference "#PWR026")
 					(unit 1)
 				)
 			)
@@ -13397,7 +13397,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "60046ac1-85f5-427f-b811-ba27f2043029")
-		(property "Reference" "#PWR031"
+		(property "Reference" "#PWR027"
 			(at 55.88 162.56 0)
 			(hide yes)
 			(show_name no)
@@ -13458,7 +13458,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/62e3c630-bd63-47c6-9963-364c5adf6400"
-					(reference "#PWR031")
+					(reference "#PWR027")
 					(unit 1)
 				)
 			)
@@ -13476,7 +13476,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "763f1838-7488-4071-bdbf-4c8e60054e0a")
-		(property "Reference" "#PWR045"
+		(property "Reference" "#PWR025"
 			(at 33.02 172.72 0)
 			(hide yes)
 			(show_name no)
@@ -13536,7 +13536,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/62e3c630-bd63-47c6-9963-364c5adf6400"
-					(reference "#PWR045")
+					(reference "#PWR025")
 					(unit 1)
 				)
 			)
@@ -13554,7 +13554,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "abdf2be2-d3ed-4872-ac0a-e3dc12b305e1")
-		(property "Reference" "R8"
+		(property "Reference" "R4"
 			(at 35.56 171.4499 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13618,7 +13618,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/62e3c630-bd63-47c6-9963-364c5adf6400"
-					(reference "R8")
+					(reference "R4")
 					(unit 1)
 				)
 			)
@@ -13635,7 +13635,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "e6388040-f0f9-45ae-97da-2b6ff26fb2ec")
-		(property "Reference" "J1"
+		(property "Reference" "JPROG1"
 			(at 53.086 145.034 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13706,7 +13706,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/62e3c630-bd63-47c6-9963-364c5adf6400"
-					(reference "J1")
+					(reference "JPROG1")
 					(unit 1)
 				)
 			)
