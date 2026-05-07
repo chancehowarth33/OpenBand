@@ -1,4 +1,0 @@
-(sym_lib_table
-	(version 7)
-	(lib (name "uw-madison-parts") (type "Altium") (uri "${KIPRJMOD}/uw-madison-parts.SchLib") (options "") (descr ""))
-)
