@@ -13633,7 +13633,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(in_pos_files yes)
-		(dnp no)
+		(dnp yes)
 		(uuid "e6388040-f0f9-45ae-97da-2b6ff26fb2ec")
 		(property "Reference" "JPROG1"
 			(at 53.086 145.034 0)
