@@ -353,7 +353,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "power:+3.3V"
+		(symbol "power:+1V8"
 			(power global)
 			(pin_numbers
 				(hide yes)
@@ -378,7 +378,7 @@
 					)
 				)
 			)
-			(property "Value" "+3.3V"
+			(property "Value" "+1V8"
 				(at 0 3.556 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -410,7 +410,7 @@
 					)
 				)
 			)
-			(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+			(property "Description" "Power symbol creates a global label with name \"+1V8\""
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -432,7 +432,7 @@
 					)
 				)
 			)
-			(symbol "+3.3V_0_1"
+			(symbol "+1V8_0_1"
 				(polyline
 					(pts
 						(xy -0.762 1.27) (xy 0 2.54)
@@ -470,7 +470,7 @@
 					)
 				)
 			)
-			(symbol "+3.3V_1_1"
+			(symbol "+1V8_1_1"
 				(pin power_in line
 					(at 0 0 90)
 					(length 0)
@@ -19408,6 +19408,84 @@
 		)
 	)
 	(symbol
+		(lib_id "power:+1V8")
+		(at 119.38 154.94 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "1159db90-f49c-408b-b55d-2a776848d10f")
+		(property "Reference" "#PWR021"
+			(at 119.38 158.75 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+1V8"
+			(at 119.38 149.86 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 119.38 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 119.38 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+1V8\""
+			(at 119.38 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "648c4c87-8edd-476f-8ded-4470c8899788")
+		)
+		(instances
+			(project "watchwise_main"
+				(path "/9d88fbd1-5e5a-4353-ba44-7f94f89d5ff8"
+					(reference "#PWR021")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "uw-madison-parts:root_0_IC_CYBLE-416045-02_uw-madison-parts.SchLib")
 		(at 106.68 50.8 90)
 		(unit 1)
@@ -19419,7 +19497,7 @@
 		(dnp no)
 		(uuid "17842d45-8e29-4e0d-9a83-5ad29e9eb470")
 		(property "Reference" "CYBLE1"
-			(at 111.76 48.26 90)
+			(at 112.776 46.228 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -20274,85 +20352,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+3.3V")
-		(at 119.38 154.94 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "4a95a164-7233-41aa-a524-d02c421cda69")
-		(property "Reference" "#PWR022"
-			(at 119.38 158.75 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+3.3V"
-			(at 119.38 149.86 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 119.38 154.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 119.38 154.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
-			(at 119.38 154.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "b726c674-f3e7-4ae6-8822-c7dd929ef38d")
-		)
-		(instances
-			(project "watchwise_main"
-				(path "/9d88fbd1-5e5a-4353-ba44-7f94f89d5ff8"
-					(reference "#PWR022")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+3.3V")
+		(lib_id "power:+1V8")
 		(at 99.06 48.26 0)
 		(unit 1)
 		(body_style 1)
@@ -20362,7 +20362,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "4c77b72f-0fb2-45b0-a9a3-9b2a12cd8ecc")
+		(uuid "4b99e9b4-6c22-4c3c-9b07-8fbbcb9c3324")
 		(property "Reference" "#PWR018"
 			(at 99.06 52.07 0)
 			(hide yes)
@@ -20374,7 +20374,7 @@
 				)
 			)
 		)
-		(property "Value" "+3.3V"
+		(property "Value" "+1V8"
 			(at 99.06 43.18 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20406,7 +20406,7 @@
 				)
 			)
 		)
-		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+		(property "Description" "Power symbol creates a global label with name \"+1V8\""
 			(at 99.06 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -20418,7 +20418,7 @@
 			)
 		)
 		(pin "1"
-			(uuid "358de124-2bb3-4a6a-aaa6-ed060daba8f3")
+			(uuid "256750db-d9b2-4d4d-8305-fd20dca92d0e")
 		)
 		(instances
 			(project "watchwise_main"
@@ -20667,7 +20667,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+3.3V")
+		(lib_id "power:+1V8")
 		(at 105.41 48.26 0)
 		(unit 1)
 		(body_style 1)
@@ -20677,8 +20677,8 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "9880c850-76b8-4bae-8267-68bc8ddfd86a")
-		(property "Reference" "#PWR021"
+		(uuid "8b88d584-118c-44fb-ab2c-5306ac519161")
+		(property "Reference" "#PWR010"
 			(at 105.41 52.07 0)
 			(hide yes)
 			(show_name no)
@@ -20689,7 +20689,7 @@
 				)
 			)
 		)
-		(property "Value" "+3.3V"
+		(property "Value" "+1V8"
 			(at 105.41 43.18 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20721,7 +20721,7 @@
 				)
 			)
 		)
-		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+		(property "Description" "Power symbol creates a global label with name \"+1V8\""
 			(at 105.41 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -20733,19 +20733,19 @@
 			)
 		)
 		(pin "1"
-			(uuid "69a178e5-ac81-4d57-a3e6-a22aee1647c3")
+			(uuid "2f385ccb-f5d0-4ea0-848b-3d3961f811a1")
 		)
 		(instances
 			(project "watchwise_main"
 				(path "/9d88fbd1-5e5a-4353-ba44-7f94f89d5ff8"
-					(reference "#PWR021")
+					(reference "#PWR010")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "power:+3.3V")
+		(lib_id "power:+1V8")
 		(at 104.14 154.94 0)
 		(unit 1)
 		(body_style 1)
@@ -20755,7 +20755,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "cd7ef473-68c0-4793-87e4-16e4bdf93844")
+		(uuid "b831f7b7-9541-4b37-9e8f-1eb84900ddf4")
 		(property "Reference" "#PWR019"
 			(at 104.14 158.75 0)
 			(hide yes)
@@ -20767,7 +20767,7 @@
 				)
 			)
 		)
-		(property "Value" "+3.3V"
+		(property "Value" "+1V8"
 			(at 104.14 149.86 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20799,7 +20799,7 @@
 				)
 			)
 		)
-		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+		(property "Description" "Power symbol creates a global label with name \"+1V8\""
 			(at 104.14 154.94 0)
 			(hide yes)
 			(show_name no)
@@ -20811,7 +20811,7 @@
 			)
 		)
 		(pin "1"
-			(uuid "1ffd23ec-f8ab-4135-8071-678a357b3155")
+			(uuid "55d04ff0-2505-454d-b929-90921832f73f")
 		)
 		(instances
 			(project "watchwise_main"

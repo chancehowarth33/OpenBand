@@ -502,7 +502,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "power:+3.3V"
+		(symbol "power:+1V8"
 			(power global)
 			(pin_numbers
 				(hide yes)
@@ -527,7 +527,7 @@
 					)
 				)
 			)
-			(property "Value" "+3.3V"
+			(property "Value" "+1V8"
 				(at 0 3.556 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -559,7 +559,7 @@
 					)
 				)
 			)
-			(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+			(property "Description" "Power symbol creates a global label with name \"+1V8\""
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -581,7 +581,7 @@
 					)
 				)
 			)
-			(symbol "+3.3V_0_1"
+			(symbol "+1V8_0_1"
 				(polyline
 					(pts
 						(xy -0.762 1.27) (xy 0 2.54)
@@ -619,7 +619,7 @@
 					)
 				)
 			)
-			(symbol "+3.3V_1_1"
+			(symbol "+1V8_1_1"
 				(pin power_in line
 					(at 0 0 90)
 					(length 0)
@@ -928,8 +928,8 @@
 	)
 	(text_box "If you only need to program the MCU (no debug messages using the console) you can use a 5-pin header and replace KitProg3 part with a standard 5-pin, 2.54mm spaced rectangular connector.  The connections must match J4.1-J4.5"
 		(exclude_from_sim no)
-		(at 139.7 154.94 0)
-		(size -43.18 17.78)
+		(at 96.52 154.94 0)
+		(size 43.18 17.78)
 		(margins 0.9525 0.9525 0.9525 0.9525)
 		(stroke
 			(width 0)
@@ -13386,7 +13386,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+3.3V")
+		(lib_id "power:+1V8")
 		(at 59.69 162.56 270)
 		(unit 1)
 		(body_style 1)
@@ -13396,8 +13396,8 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "60046ac1-85f5-427f-b811-ba27f2043029")
-		(property "Reference" "#PWR027"
+		(uuid "63d0bed2-f4a3-4d2a-a708-f2b74dafc2aa")
+		(property "Reference" "#PWR025"
 			(at 55.88 162.56 0)
 			(hide yes)
 			(show_name no)
@@ -13408,7 +13408,7 @@
 				)
 			)
 		)
-		(property "Value" "+3.3V"
+		(property "Value" "+1V8"
 			(at 63.5 162.5599 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13441,7 +13441,7 @@
 				)
 			)
 		)
-		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+		(property "Description" "Power symbol creates a global label with name \"+1V8\""
 			(at 59.69 162.56 0)
 			(hide yes)
 			(show_name no)
@@ -13453,19 +13453,19 @@
 			)
 		)
 		(pin "1"
-			(uuid "b19bb472-60a1-4ffb-8bb8-ccc758510308")
+			(uuid "d172f745-49f7-47de-b3ba-283a599958b4")
 		)
 		(instances
 			(project "watchwise_main"
 				(path "/62e3c630-bd63-47c6-9963-364c5adf6400"
-					(reference "#PWR027")
+					(reference "#PWR025")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "power:+3.3V")
+		(lib_id "power:+1V8")
 		(at 33.02 168.91 0)
 		(unit 1)
 		(body_style 1)
@@ -13475,8 +13475,8 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "763f1838-7488-4071-bdbf-4c8e60054e0a")
-		(property "Reference" "#PWR025"
+		(uuid "79b09209-85fd-40bf-85bb-b876425ba441")
+		(property "Reference" "#PWR022"
 			(at 33.02 172.72 0)
 			(hide yes)
 			(show_name no)
@@ -13487,7 +13487,7 @@
 				)
 			)
 		)
-		(property "Value" "+3.3V"
+		(property "Value" "+1V8"
 			(at 33.02 163.83 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13519,7 +13519,7 @@
 				)
 			)
 		)
-		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+		(property "Description" "Power symbol creates a global label with name \"+1V8\""
 			(at 33.02 168.91 0)
 			(hide yes)
 			(show_name no)
@@ -13531,12 +13531,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "3f187b9b-f955-4785-b92a-5eb31d1bdcb6")
+			(uuid "eb89630c-59f4-4a3f-a06a-f92a4f0e5382")
 		)
 		(instances
 			(project "watchwise_main"
 				(path "/62e3c630-bd63-47c6-9963-364c5adf6400"
-					(reference "#PWR025")
+					(reference "#PWR022")
 					(unit 1)
 				)
 			)
@@ -13655,7 +13655,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical"
+		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x05_P1.00mm_Vertical"
 			(at 48.26 157.48 0)
 			(hide yes)
 			(show_name no)
