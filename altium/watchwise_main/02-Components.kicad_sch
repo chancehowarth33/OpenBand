@@ -17565,7 +17565,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "055522fd-000a-4388-83ff-0a0070e2abde")
-		(property "Reference" "#PWR012"
+		(property "Reference" "#PWR011"
 			(at 100.33 93.98 0)
 			(hide yes)
 			(show_name no)
@@ -17625,7 +17625,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "#PWR012")
+					(reference "#PWR011")
 					(unit 1)
 				)
 			)
@@ -18761,7 +18761,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9cffd1b9-0cf6-45fc-895e-922bcf6a254a")
-		(property "Reference" "#PWR011"
+		(property "Reference" "#PWR010"
 			(at 100.33 36.83 0)
 			(hide yes)
 			(show_name no)
@@ -18821,7 +18821,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "#PWR011")
+					(reference "#PWR010")
 					(unit 1)
 				)
 			)
@@ -18921,7 +18921,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "bdb32965-806e-474a-b91d-bd240fa8eae7")
-		(property "Reference" "#PWR014"
+		(property "Reference" "#PWR013"
 			(at 115.57 119.38 0)
 			(hide yes)
 			(show_name no)
@@ -18982,7 +18982,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "#PWR014")
+					(reference "#PWR013")
 					(unit 1)
 				)
 			)
@@ -19457,7 +19457,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "dbdcd4d0-8257-4c79-a918-e34b6e10d677")
-		(property "Reference" "#PWR015"
+		(property "Reference" "#PWR014"
 			(at 115.57 133.35 0)
 			(hide yes)
 			(show_name no)
@@ -19517,7 +19517,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "#PWR015")
+					(reference "#PWR014")
 					(unit 1)
 				)
 			)
@@ -19613,7 +19613,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "ea855972-07cc-44d4-b2c8-8d83be2795a6")
-		(property "Reference" "#PWR013"
+		(property "Reference" "#PWR012"
 			(at 114.3 39.37 0)
 			(hide yes)
 			(show_name no)
@@ -19674,7 +19674,7 @@
 		(instances
 			(project "watchwise_main"
 				(path "/0938a53f-5d53-44ec-90ad-4ffdf9288872"
-					(reference "#PWR013")
+					(reference "#PWR012")
 					(unit 1)
 				)
 			)
