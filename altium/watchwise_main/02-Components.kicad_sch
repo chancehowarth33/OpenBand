@@ -17809,7 +17809,7 @@
 				)
 			)
 		)
-		(property "Value" "0.1uf"
+		(property "Value" "0.1uF"
 			(at 105.41 137.668 90)
 			(show_name no)
 			(do_not_autoplace no)

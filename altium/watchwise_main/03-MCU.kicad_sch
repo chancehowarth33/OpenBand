@@ -20882,7 +20882,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10uf"
+		(property "Value" "10uF"
 			(at 108.712 165.354 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -21435,7 +21435,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100nf"
+		(property "Value" "100nF"
 			(at 123.19 165.0999 0)
 			(show_name no)
 			(do_not_autoplace no)
