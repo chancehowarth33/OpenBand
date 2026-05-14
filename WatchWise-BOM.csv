@@ -1,20 +1,24 @@
-,Comment,Footprint,LCSC,Quantity,Link,Checks
-0.1uF,"C1,C2,C4,C6,C10",C_0402_1005Metric,C141382,5,https://www.digikey.com/en/products/detail/samsung-electro-mechanics/CL05B104KP5NNNC/3886660,
-0.47k,RLED1,R_0402_1005Metric,C25104,1,https://www.digikey.com/en/products/detail/yageo/RC0402FR-07470RL/726619,
-10k,"R4,R_PWR1",R_0402_1005Metric,C25744,2,https://www.digikey.com/en/products/detail/yageo/RC0402FR-0710KL/726418,
-10uF,"C5, C9",C_0603_1608Metric,C19702,1,https://www.digikey.com/en/products/detail/walsin-technology-corporation/0603X106M100CT/15983159,
-1uF,"C14,C16",C_0402_1005Metric,C52923,2,https://www.digikey.com/en/products/detail/kemet/C0402C105K9PACTU/1090778,
-32.768KHZ,RTC1,Crystal_SMD_3215-2Pin_3.2x1.5mm,C32346,1,https://www.digikey.com/en/products/detail/ndk-nihon-dempa-kogyo-co-ltd/MU00525-32-768K/9172042,
-4.7k,"R1,R2,R3",R_0402_1005Metric,C25900,3,https://www.digikey.com/en/products/detail/yageo/RC0402JR-074K7L/726477,
-4.7uF,"C3, C13, C15",C_0402_1005Metric,C23733,3,https://www.digikey.com/en/products/detail/samsung-electro-mechanics/CL05A475MP5NRNC/3887140,
-47k,R_PROG1,R_0402_1005Metric,C25792,1,https://www.digikey.com/en/products/detail/yageo/RC0402FR-0747KL/726616,
-6pF,"C7,C8",C_0402_1005Metric,C30274,2,https://www.digikey.com/en/products/detail/murata-electronics/GJM1555C1H6R0CB01D/702297,
-BMI270,U1_IMU1,XDCR_BMI270,C2836813,1,https://www.digikey.com/en/products/detail/bosch-sensortec/BMI270/9974486,
-LED (Green),P_BATT1,LED_0402_1005Metric,C74338,1,https://www.digikey.com/en/products/detail/liteon/LTST-C281KGKT/3198722,
-LED (Yellow),P_CHAR1,LED_0402_1005Metric,C74341,1,https://www.digikey.com/en/products/detail/vishay-semiconductor-opto-division/VLMG1500-GS08/3504679,
-MAX30102EFD_T,U2_MAX1,XDCR_MAX30101EFD_,C6454833,1,https://www.digikey.com/en/products/detail/analog-devices-inc-maxim-integrated/MAX30102EFD-T/6188734?s=N4IgTCBcDaILYEMAeBmADARjWApgMwBMBqAFxAF0BfIA,
-MCP73831-2-OT,U4_CHAR1,SOT-23-5,C14879,1,https://www.digikey.com/en/products/detail/microchip-technology/MCP73831T-2ACI-OT/964301,
-TLV70018_SOT353,U5_1P8,SOT-353_SC-70-5,C79924,1,https://www.digikey.com/en/products/detail/texas-instruments/TLV70018DCKR/2232567,
-220k,RD1,R_0402_1005Metric,,1,https://www.digikey.com/en/products/detail/yageo/RC0402FR-07220KL/726564,
-CYBLE-416045-02,CYBLE1,CYBLE-416045-02,,1,https://www.digikey.com/en/products/detail/infineon-technologies/CYBLE-416045-02/9974635?gclsrc=aw.ds&gad_source=1&gad_campaignid=17922795960&gbraid=0AAAAADrbLlgYGT6ov2lDOmvv9AOP4Eks3&gclid=Cj0KCQjw8PDPBhCeARIsAOJwmWUEYomTcflT6wBP4T2N2hGTQp2ksZpS83SH8-RvbviV79KYhy2DTIAaApalEALw_wcB,
-100k,RD2,R_0402_1005Metric,,1,https://www.digikey.com/en/products/detail/yageo/RC0402FR-07100KL/726526,
+,Comment,Footprint,Quantity,Quanity x 3,Price per Pack,Link,Notes,Ordered
+0.1uF,"C1,C2,C4,C6,C10",C_0402_1005Metric,5,15,$0.25,CL05B104KP5NNNC Samsung Electro-Mechanics | Ceramic Capacitors | DigiKey,,Yes
+0.47k,RLED1,R_0402_1005Metric,1,3,$0.21,RC0402FR-07470RL YAGEO | Chip Resistor - Surface Mount | DigiKey,,yes
+10k,"R4,R_PWR1",R_0402_1005Metric,2,6,$0.19,https://www.digikey.com/en/products/detail/yageo/RC0402FR-0710KL/726418,,yes
+10uF,C9,C_0603_1608Metric,1,3,$0.43,0603X106M100CT Walsin Technology Corporation | Ceramic Capacitors | DigiKey,,yes
+10uF,C5,C_0805_1608Metric,1,3,$0.54,CL21A106KOQNNNE Samsung Electro-Mechanics | Ceramic Capacitors | DigiKey,Need to keep at 0805 to avoid detrailing since BAT_OUT runs between 3.7 - 4.2 V,yes
+1uF,"C11,C12",C_0402_1005Metric,2,6,$0.24,C0402C105K9PACTU KEMET | Ceramic Capacitors | DigiKey,,yes
+32.768KHZ,RTC1,Crystal_SMD_3215-2Pin_3.2x1.5mm,1,3,$5.49,"MU00525-32.768K NDK (NIHON DEMPA KOGYO CO., LTD) | Crystals | DigiKey",,yes
+4.7k,"R1,R2,R3",R_0402_1005Metric,3,9,$0.19,RC0402JR-074K7L YAGEO | Chip Resistor - Surface Mount | DigiKey,,yes
+4.7uF,C3,C_0402_1005Metric,1,3,$0.50,CL05A475MP5NRNC Samsung Electro-Mechanics | Ceramic Capacitors | DigiKey,Can stay at 0402 since not dealing with BAT_OUT,yes
+4.7uF,"C13, C14",C_0603_1608Metric,2,6,$0.37,CL10A475KP8NNNC Samsung Electro-Mechanics | Ceramic Capacitors | DigiKey,Need to keep at 0603 to avoid detrailing since BAT_OUT runs between 3.7 - 4.2 V,yes
+47k,R_PROG1,R_0402_1005Metric,1,3,$0.21,RC0402FR-0747KL YAGEO | Chip Resistor - Surface Mount | DigiKey,,yes
+6pF,"C7,C8",C_0402_1005Metric,2,6,$0.36,GJM1555C1H6R0CB01D Murata Electronics | Ceramic Capacitors | DigiKey,,yes
+BMI270,U1_IMU1,XDCR_BMI270,1,3,$17.35,BMI270 Bosch Sensortec | IMUs (Inertial Measurement Units) | DigiKey,,yes
+LED (Green),P_BATT1,LED_0402_1005Metric,1,3,$1.63,LTST-C281KGKT Lite-On Inc. | LED Indication - Discrete | DigiKey,,yes
+LED (Yellow),P_CHAR1,LED_0402_1005Metric,1,3,$1.77,VLMG1500-GS08 Vishay Semiconductor Opto Division | LED Indication - Discrete | DigiKey,,yes
+MAX30102EFD_T,U2_MAX1,XDCR_MAX30101EFD_,1,3,$54.68,MAX10 heartrate sensor,,yes
+MCP73831-2-OT,U4_CHAR1,SOT-23-5,1,3,$3.80,MCP73831T-2ACI/OT Microchip Technology | Battery Chargers | DigiKey,,yes
+TLV70018_SOT353,U5_1P8,SOT-353_SC-70-5,1,3,$1.70,"TLV70018DCKR Texas Instruments | Voltage Regulators - Linear, Low Drop Out (LDO) Regulators | DigiKey",,yes
+220k,RD2,R_0402_1005Metric,1,3,$0.21,RC0402FR-07220KL YAGEO | Chip Resistor - Surface Mount | DigiKey,,yes
+CYBLE-416045-02,U3_CYBLE1,CYBLE-416045-02,1,3,$41.19,CYBLE module,,yes
+100k,RD1,R_0402_1005Metric,1,3,$0.21,RC0402FR-07100KL YAGEO | Chip Resistor - Surface Mount | DigiKey,,yes
+TOTAL,,,31,93,$131.52,,,
+"Note: BMI270 price per pack is for 5 units. MAX is for 4 units, MCP is for 5, CYBLE is for 3 units. RTC is for 5 untis, The rest are for a pack of 10.",,,,,,,,
