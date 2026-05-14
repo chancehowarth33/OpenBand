@@ -1,12 +1,12 @@
 %TF.GenerationSoftware,KiCad,Pcbnew,10.0.1*%
-%TF.CreationDate,2026-05-14T00:17:25-05:00*%
+%TF.CreationDate,2026-05-14T15:45:46-05:00*%
 %TF.ProjectId,watchwise_main,77617463-6877-4697-9365-5f6d61696e2e,rev?*%
 %TF.SameCoordinates,Original*%
 %TF.FileFunction,Copper,L2,Bot*%
 %TF.FilePolarity,Positive*%
 %FSLAX46Y46*%
 G04 Gerber Fmt 4.6, Leading zero omitted, Abs format (unit mm)*
-G04 Created by KiCad (PCBNEW 10.0.1) date 2026-05-14 00:17:25*
+G04 Created by KiCad (PCBNEW 10.0.1) date 2026-05-14 15:45:46*
 %MOMM*%
 %LPD*%
 G01*
@@ -55,11 +55,11 @@ G04 Aperture macros list end*
 %TD*%
 G04 APERTURE END LIST*
 D10*
-%TO.P,J2BATT1,1,Pin_1_1*%
+%TO.P,BATT,1,Pin_1_1*%
 %TO.N,GND*%
 X348560000Y38945000D03*
 D11*
-%TO.P,J2BATT1,2,Pin_2_2*%
+%TO.P,BATT,2,Pin_2_2*%
 %TO.N,BAT_OUT*%
 X348560000Y40215000D03*
 %TD*%
@@ -82,11 +82,11 @@ X325180000Y45930000D03*
 X325180000Y44660000D03*
 %TD*%
 D10*
-%TO.P,J1CHAR1,1,Pin_1_1*%
+%TO.P,CHAR,1,Pin_1_1*%
 %TO.N,GND*%
 X348560000Y35305000D03*
 D11*
-%TO.P,J1CHAR1,2,Pin_2_2*%
+%TO.P,CHAR,2,Pin_2_2*%
 %TO.N,Net-(J1CHAR1-Pin_2)*%
 X348560000Y36575000D03*
 %TD*%
