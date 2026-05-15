@@ -6,6 +6,32 @@ A wearable health-tracking device designed to attach to the back of a watch. Wat
 
 WatchWise is a compact PCB module that mounts on the back of a standard watch. It uses a PSoC6 microcontroller (via the CYBLE-416045-02 BLE module) running FreeRTOS to collect and process data from an optical heart rate/SpO2 sensor and an IMU for motion tracking. The board includes onboard LiPo charging and battery level monitoring.
 
+## PCB Design
+
+WatchWise is a two-layer circular PCB (~38mm diameter) shaped to fit the back of a standard watch case, with a bottom cutout for the watch band and four mounting holes at the corners.
+
+### 3D Renders
+
+**Front side** — The CYBLE-416045-02 BLE module dominates the center of the board with its MIFA antenna exposed along the top edge (kept clear of copper pours for RF performance). The BMI270 IMU sits bottom-left, the 32.768 kHz RTC crystal is top-left, and the LiPo charger IC (U4_CHAR1), 1.8V LDO (U5_1P8), and all supporting passives are packed along the right edge. The SWD programming header (JPROG1) and battery/charger pads are on the left and bottom-right respectively.
+
+![3D Front](images/3D_front.png)
+
+**Back side** — The MAX30102 optical heart rate and SpO2 sensor (U2_MAX1) is mounted on the back of the board, facing down toward the skin when the module is worn. Placing it here keeps the optical window unobstructed and in direct contact with the wrist. Its decoupling capacitors are grouped immediately around it to minimize switching noise on the LED drive lines.
+
+![3D Back](images/3D_back.png)
+
+### PCB Routing
+
+**Front copper (F.Cu)** — Red traces carry the I2C bus (SDA/SCL) from the CYBLE module out to the BMI270 and down through vias to the MAX30102 on the back. The RTC lines route separately to avoid crosstalk. Power distribution fans out from the LDO and charger on the right side of the board.
+
+![Routing Front](images/routing_front.png)
+
+**Back copper (B.Cu)** — Blue traces on the back layer are kept minimal — primarily the I2C and power connections to the MAX30102 and the battery/charger connector fanout. The large copper-free region under the CYBLE module's antenna extends through both layers.
+
+![Routing Back](images/routing_back.png)
+
+---
+
 ## Repository Structure
 
 ```text

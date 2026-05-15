@@ -2493,7 +2493,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "ec98933e-acc9-4b24-ad54-74713ff3e700")
+			(uuid "db095240-fdd2-4b86-8c4f-c9ffa858c233")
 			(effects
 				(font
 					(size 1 1)
@@ -2922,7 +2922,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "db095240-fdd2-4b86-8c4f-c9ffa858c233")
+			(uuid "ec98933e-acc9-4b24-ad54-74713ff3e700")
 			(effects
 				(font
 					(size 1 1)
@@ -2934,15 +2934,6 @@
 		(path "/17842d45-8e29-4e0d-9a83-5ad29e9eb470")
 		(sheetname "/")
 		(sheetfile "03-MCU.kicad_sch")
-		(units
-			(unit
-				(name "A")
-				(pins "26" "43" "27" "15" "29" "1" "24" "30" "28" "35" "34" "32" "10"
-					"36" "11" "25" "8" "37" "7" "38" "33" "40" "12" "39" "13" "2" "20" "41"
-					"19" "6" "14" "5" "9" "21" "42" "18" "17" "16" "3" "31" "22" "4" "23"
-				)
-			)
-		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -3464,6 +3455,17 @@
 			(uuid "aaf3a4aa-088d-4ef2-b5c3-be59265dceb6")
 		)
 		(embedded_fonts no)
+		(model "/Users/chancehowarth/Documents/KiCad_shit/3D_modles/CYBLE-416045-02--3DModel-STEP-56544.STEP"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "Connector_PinHeader_1.27mm:PinHeader_1x05_P1.27mm_Vertical"
 		(layer "F.Cu")
