@@ -1,4 +1,17 @@
 .claude/
 
-altium/watchwise_main/watchwise_main-backups/
-altium/watchwise_main/.history/
+# Altium backup and history folders
+**/.history/
+**/watchwise_main-backups/
+**/*-backups/
+**/*.bak
+**/*.BAK
+
+# KiCad lock and temp files
+**/*.lck
+**/~*
+**/tmp_*.rpt
+**/tmp*.rpt
+
+# macOS
+.DS_Store
