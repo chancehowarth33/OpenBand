@@ -15,6 +15,7 @@
 #include "task_system_control.h"
 #include "task_max30102.h"
 #include "task_bmi270.h"
+#include "task_ble.h"
 #include "health_algo.h"
 
 #endif

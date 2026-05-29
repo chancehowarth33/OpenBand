@@ -11,6 +11,7 @@
 #include "task_system_control.h"
 #include "task_max30102.h"
 #include "task_bmi270.h"
+#include "task_ble.h"
 #include "health_algo.h"
 
 /* Shared I2C bus - SCB3: P6_5 SDA, P6_4 SCL                */
@@ -50,6 +51,7 @@ void system_control_initialize(void) {
     xTaskCreate(task_system_control, "SystemControl", configMINIMAL_STACK_SIZE,     NULL, tskIDLE_PRIORITY + 1, NULL);
     xTaskCreate(task_max30102,       "MAX30102",       configMINIMAL_STACK_SIZE * 2, NULL, tskIDLE_PRIORITY + 1, NULL);
     xTaskCreate(task_bmi270,         "BMI270",         configMINIMAL_STACK_SIZE * 2, NULL, tskIDLE_PRIORITY + 1, NULL);
+    ble_task_initialize();
 }
 
 
