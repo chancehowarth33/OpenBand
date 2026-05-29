@@ -2,4 +2,5 @@
 	(version 7)
 	(lib (name "BMI270") (type "KiCad") (uri "/Users/chancehowarth/Documents/KiCad_shit/BMI270/BMI270.kicad_sym") (options "") (descr ""))
 	(lib (name "MAX30102EFD_T") (type "KiCad") (uri "/Users/chancehowarth/Documents/KiCad_shit/MAX30102EFD_T/MAX30102EFD_T.kicad_sym") (options "") (descr ""))
+	(lib (name "BHI360") (type "KiCad") (uri "/Users/chancehowarth/Documents/KiCad_shit/BHI360/BHI360.kicad_sym") (options "") (descr ""))
 )
