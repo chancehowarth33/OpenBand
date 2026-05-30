@@ -27,6 +27,8 @@
 #define BMI270_REG_GYR_Y_MSB   0x15
 #define BMI270_REG_GYR_Z_LSB    0x16
 #define BMI270_REG_GYR_Z_MSB   0x17
+#define BMI270_REG_STEP_CNT_1   0x1E    /* Step count LSB (read directly, not via feature page) */
+#define BMI270_REG_STEP_CNT_2   0x1F    /* Step count MSB */
 #define BMI270_REG_ACC_CONF     0x40
 #define BMI270_REG_ACC_RANGE    0x41
 #define BMI270_REG_GYR_CONF     0x42

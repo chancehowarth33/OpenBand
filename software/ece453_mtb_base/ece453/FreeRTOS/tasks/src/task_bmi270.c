@@ -104,11 +104,11 @@ static cy_rslt_t bmi270_enable_step_counter(void)
     return CY_RSLT_SUCCESS;
 }
 
-/* Read 16-bit step count from feature page 0, bytes 0-1 */
+/* Read 16-bit step count from dedicated output registers 0x1E-0x1F */
 static uint16_t bmi270_read_step_count(void)
 {
     uint8_t data[2] = {0};
-    bmi270_read_feat_page(0, data, 2);
+    bmi270_read_reg(0x1E, data, 2);
     return (uint16_t)((uint16_t)data[1] << 8 | data[0]);
 }
 

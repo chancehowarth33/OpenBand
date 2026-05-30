@@ -55,6 +55,14 @@ void system_control_initialize(void) {
 }
 
 
+/* FreeRTOS hook — fires when pvPortMalloc() fails (heap exhausted) */
+void vApplicationMallocFailedHook(void)
+{
+    printf("[HEAP] pvPortMalloc FAILED — heap exhausted!\n");
+    taskDISABLE_INTERRUPTS();
+    CY_HALT();
+}
+
 void task_system_control(void *pvParameters) {
     while (1) {
         if (health_hr > 0) {

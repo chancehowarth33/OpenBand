@@ -34,6 +34,10 @@
 #include "cycfg_gatt_db.h"       /* gatt_database[], HDLC_* / HDLD_* handles */
 #include "cycfg_gap.h"           /* cy_bt_adv_packet_data[], cy_bt_device_address */
 
+/* BSP BT platform config — IPC channel config for CM0+ BLESS controller */
+#include "cybsp_bt_config.h"     /* cybsp_bt_platform_cfg */
+#include "cybt_platform_config.h"/* cybt_platform_config_init() */
+
 #include <string.h>
 #include <stdio.h>
 
@@ -68,6 +72,9 @@ static wiced_bt_dev_status_t app_bt_management_callback(
             if (p_event_data->enabled.status == WICED_BT_SUCCESS) {
                 wiced_bt_gatt_db_init(gatt_database, gatt_database_len, NULL);
                 wiced_bt_gatt_register(app_gatt_callback);
+                /* Set advertising payload (includes device name "WatchWise") */
+                wiced_bt_ble_set_raw_advertisement_data(CY_BT_ADV_PACKET_ELEM_COUNT,
+                                                        cy_bt_adv_packet_data);
                 wiced_bt_start_advertisements(BTM_BLE_ADVERT_UNDIRECTED_HIGH, 0, NULL);
                 printf("[BLE] Stack ready — advertising as \"WatchWise\"\n");
             } else {
@@ -232,12 +239,27 @@ static void app_send_notify(uint16_t handle, uint8_t *data, uint16_t len,
  * -------------------------------------------------------------------------- */
 void task_ble(void *pvParameters)
 {
-    /* Start WICED BT stack. BTM_ENABLED_EVT fires asynchronously when ready. */
-    wiced_bt_stack_init(app_bt_management_callback, &wiced_bt_cfg_settings);
+    printf("[BLE] Task started\n");
 
-    TickType_t last_notify = xTaskGetTickCount();
+    /* Configure IPC transport to CM0+ BLESS controller — must come first */
+    cybt_platform_config_init(&cybsp_bt_platform_cfg);
+    printf("[BLE] Platform config done\n");
+
+    /* Start WICED BT stack. BTM_ENABLED_EVT fires asynchronously when ready. */
+    wiced_result_t bt_init_result = wiced_bt_stack_init(app_bt_management_callback,
+                                                         &wiced_bt_cfg_settings);
+    printf("[BLE] wiced_bt_stack_init returned: %d\n", (int)bt_init_result);
+
+    TickType_t last_notify  = xTaskGetTickCount();
+    TickType_t last_alive   = xTaskGetTickCount();
 
     for (;;) {
+        /* Print a heartbeat every 5 s so we know the task loop is running */
+        if ((xTaskGetTickCount() - last_alive) >= pdMS_TO_TICKS(5000)) {
+            last_alive = xTaskGetTickCount();
+            printf("[BLE] loop alive, connected=%d\n", ble_connected);
+        }
+
         if ((xTaskGetTickCount() - last_notify) >= pdMS_TO_TICKS(2000)) {
             last_notify = xTaskGetTickCount();
 
@@ -269,7 +291,10 @@ void task_ble(void *pvParameters)
  * -------------------------------------------------------------------------- */
 void ble_task_initialize(void)
 {
+    /* WICED BT stack needs substantial stack: cybt_platform_config_init +
+     * wiced_bt_stack_init each make deep calls into the IPC/BT layer.
+     * 4096 words = 16 KB is the safe minimum for this board. */
     xTaskCreate(task_ble, "BLE",
-                configMINIMAL_STACK_SIZE * 8, NULL,
+                configMINIMAL_STACK_SIZE * 32, NULL,
                 tskIDLE_PRIORITY + 1, NULL);
 }
