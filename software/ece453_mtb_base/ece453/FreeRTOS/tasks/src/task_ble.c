@@ -37,9 +37,14 @@
 /* BSP BT platform config — IPC channel config for CM0+ BLESS controller */
 #include "cybsp_bt_config.h"     /* cybsp_bt_platform_cfg */
 #include "cybt_platform_config.h"/* cybt_platform_config_init() */
+#include "wiced_memory.h"        /* wiced_bt_get_buffer / wiced_bt_free_buffer */
+#include "gattdefs.h"            /* GATT_UUID_CHAR_DECLARE, IS_CHAR_DECLARATION_UUID */
 
 #include <string.h>
 #include <stdio.h>
+
+/* Callback type for freeing GATT response buffers */
+typedef void (*pfn_free_buffer_t)(uint8_t *);
 
 /* --------------------------------------------------------------------------
  * Runtime state
@@ -70,7 +75,10 @@ static wiced_bt_dev_status_t app_bt_management_callback(
     {
         case BTM_ENABLED_EVT:
             if (p_event_data->enabled.status == WICED_BT_SUCCESS) {
-                wiced_bt_gatt_db_init(gatt_database, gatt_database_len, NULL);
+                wiced_bt_gatt_status_t db_status =
+                    wiced_bt_gatt_db_init(gatt_database, gatt_database_len, NULL);
+                printf("[BLE] gatt_db_init status=%d db_len=%u\n",
+                       (int)db_status, gatt_database_len);
                 wiced_bt_gatt_register(app_gatt_callback);
                 /* Set advertising payload (includes device name "WatchWise") */
                 wiced_bt_ble_set_raw_advertisement_data(CY_BT_ADV_PACKET_ELEM_COUNT,
@@ -99,6 +107,20 @@ static wiced_bt_dev_status_t app_bt_management_callback(
 }
 
 /* --------------------------------------------------------------------------
+ * Lookup a handle in the BT Configurator ext-attr table.
+ * Returns pointer to entry, or NULL if not found.
+ * -------------------------------------------------------------------------- */
+static gatt_db_lookup_table_t *app_find_attr(uint16_t handle)
+{
+    for (uint16_t i = 0; i < app_gatt_db_ext_attr_tbl_size; i++) {
+        if (app_gatt_db_ext_attr_tbl[i].handle == handle) {
+            return &app_gatt_db_ext_attr_tbl[i];
+        }
+    }
+    return NULL;
+}
+
+/* --------------------------------------------------------------------------
  * GATT write handler
  * Intercepts CCCD writes to track when phone enables notifications.
  * -------------------------------------------------------------------------- */
@@ -108,20 +130,32 @@ static wiced_bt_gatt_status_t app_gatt_write_handler(
 {
     uint16_t handle = p_write->handle;
 
+    /* Try to find the attribute in the lookup table and update its backing store */
+    gatt_db_lookup_table_t *attr = app_find_attr(handle);
+    if (attr == NULL) {
+        return WICED_BT_GATT_WRITE_NOT_PERMIT;
+    }
+
+    uint16_t write_len = p_write->val_len;
+    if (write_len > attr->max_len) {
+        write_len = attr->max_len;
+    }
+    memcpy(attr->p_data, p_write->p_val, write_len);
+    attr->cur_len = write_len;
+
+    /* Mirror CCCDs into our shadow variables for the notification loop */
     if (handle == HDLD_WATCHWISE_HEALTH_SP02_CLIENT_CHAR_CONFIG) {
-        spo2_cccd = p_write->p_val[0] | ((uint16_t)p_write->p_val[1] << 8);
+        spo2_cccd = attr->p_data[0] | ((uint16_t)attr->p_data[1] << 8);
         printf("[BLE] SpO2 notifications %s\n",
                (spo2_cccd & GATT_CLIENT_CONFIG_NOTIFICATION) ? "ON" : "OFF");
     } else if (handle == HDLD_WATCHWISE_HEALTH_STEPCOUNT_CLIENT_CHAR_CONFIG) {
-        steps_cccd = p_write->p_val[0] | ((uint16_t)p_write->p_val[1] << 8);
+        steps_cccd = attr->p_data[0] | ((uint16_t)attr->p_data[1] << 8);
         printf("[BLE] Steps notifications %s\n",
                (steps_cccd & GATT_CLIENT_CONFIG_NOTIFICATION) ? "ON" : "OFF");
     } else if (handle == HDLD_HRS_HEART_RATE_MEASUREMENT_CLIENT_CHAR_CONFIG) {
-        hr_cccd = p_write->p_val[0] | ((uint16_t)p_write->p_val[1] << 8);
+        hr_cccd = attr->p_data[0] | ((uint16_t)attr->p_data[1] << 8);
         printf("[BLE] HR notifications %s\n",
                (hr_cccd & GATT_CLIENT_CONFIG_NOTIFICATION) ? "ON" : "OFF");
-    } else {
-        return WICED_BT_GATT_WRITE_NOT_PERMIT;
     }
 
     /* Acknowledge GATT_REQ_WRITE; no ack needed for GATT_CMD_WRITE */
@@ -133,50 +167,131 @@ static wiced_bt_gatt_status_t app_gatt_write_handler(
 
 /* --------------------------------------------------------------------------
  * GATT read handler
- * Returns live health values when the phone reads our characteristics.
+ * Uses the BT Configurator lookup table to handle ALL attribute reads.
+ * Live health values are written into the backing arrays before lookup.
  * -------------------------------------------------------------------------- */
 static wiced_bt_gatt_status_t app_gatt_read_handler(
     uint16_t conn_id, wiced_bt_gatt_opcode_t opcode,
     wiced_bt_gatt_read_t *p_read)
 {
-    uint8_t  val8;
-    uint32_t val32;
-    uint8_t  hr_pkt[2];
-    uint8_t *p_val  = NULL;
-    uint16_t val_len = 0;
+    uint16_t handle = p_read->handle;
 
-    switch (p_read->handle) {
-        case HDLC_WATCHWISE_HEALTH_SP02_VALUE:
-            val8    = health_spo2;
-            p_val   = &val8;
-            val_len = 1u;
-            break;
-        case HDLC_WATCHWISE_HEALTH_STEPCOUNT_VALUE:
-            val32   = health_steps;
-            p_val   = (uint8_t *)&val32;
-            val_len = (uint16_t)sizeof(val32);
-            break;
-        case HDLC_HRS_BODY_SENSOR_LOCATION_VALUE:
-            val8    = 0x04u;  /* 0x04 = Wrist */
-            p_val   = &val8;
-            val_len = 1u;
-            break;
-        case HDLC_HRS_HEART_RATE_MEASUREMENT_VALUE:
-            /* flags=0x00 (8-bit HR), then HR value */
-            hr_pkt[0] = 0x00u;
-            hr_pkt[1] = health_hr;
-            p_val   = hr_pkt;
-            val_len = 2u;
-            break;
-        default:
-            wiced_bt_gatt_server_send_error_rsp(conn_id, opcode,
-                p_read->handle, WICED_BT_GATT_ATTRIBUTE_NOT_FOUND);
-            return WICED_BT_GATT_ATTRIBUTE_NOT_FOUND;
+    /* Update dynamic backing arrays with live sensor data before lookup */
+    if (handle == HDLC_WATCHWISE_HEALTH_SP02_VALUE) {
+        app_watchwise_health_sp02[0] = health_spo2;
+    } else if (handle == HDLC_WATCHWISE_HEALTH_STEPCOUNT_VALUE) {
+        uint32_t steps = health_steps;
+        memcpy(app_watchwise_health_stepcount, &steps, sizeof(steps));
+    } else if (handle == HDLC_HRS_HEART_RATE_MEASUREMENT_VALUE) {
+        /* flags=0x00 (8-bit HR format), then BPM */
+        app_hrs_heart_rate_measurement[0] = 0x00u;
+        app_hrs_heart_rate_measurement[1] = health_hr;
+    }
+
+    /* Generic lookup — handles Device Name, Appearance, CCCDs, everything */
+    gatt_db_lookup_table_t *attr = app_find_attr(handle);
+    if (attr == NULL) {
+        wiced_bt_gatt_server_send_error_rsp(conn_id, opcode, handle,
+                                             WICED_BT_GATT_ATTRIBUTE_NOT_FOUND);
+        return WICED_BT_GATT_ATTRIBUTE_NOT_FOUND;
     }
 
     wiced_bt_gatt_server_send_read_handle_rsp(conn_id, opcode,
-        val_len, p_val, NULL);
+        attr->cur_len, attr->p_data, NULL);
     return WICED_BT_GATT_SUCCESS;
+}
+
+/* --------------------------------------------------------------------------
+ * GATT READ_BY_TYPE handler — characteristic discovery (opcode 0x08).
+ * In WICED BT v3.x the stack does not handle this internally; the app must
+ * walk the registered gatt_database[] and build the ATT response manually.
+ * -------------------------------------------------------------------------- */
+#define READ_BY_TYPE_RSP_MAX (21u * 20u)  /* 20 chars × 21 bytes (128-bit UUID) */
+
+static wiced_bt_gatt_status_t app_gatt_read_by_type_handler(
+    uint16_t conn_id,
+    wiced_bt_gatt_opcode_t opcode,
+    wiced_bt_gatt_read_by_type_t *p_rbt)
+{
+    uint16_t s_handle = p_rbt->s_handle;
+    uint16_t e_handle = p_rbt->e_handle;
+
+    printf("[GATT] READ_BY_TYPE s=0x%04X e=0x%04X uuid16=0x%04X\n",
+           s_handle, e_handle,
+           (p_rbt->uuid.len == 2u) ? p_rbt->uuid.uu.uuid16 : 0u);
+
+    /* Only handle characteristic discovery (UUID = 0x2803) */
+    if (!IS_CHAR_DECLARATION_UUID(p_rbt->uuid)) {
+        wiced_bt_gatt_server_send_error_rsp(conn_id, opcode, s_handle,
+                                             WICED_BT_GATT_ATTRIBUTE_NOT_FOUND);
+        return WICED_BT_GATT_ATTRIBUTE_NOT_FOUND;
+    }
+
+    uint8_t *p_rsp = wiced_bt_get_buffer(READ_BY_TYPE_RSP_MAX);
+    if (!p_rsp) {
+        wiced_bt_gatt_server_send_error_rsp(conn_id, opcode, s_handle,
+                                             WICED_BT_GATT_INSUF_RESOURCE);
+        return WICED_BT_GATT_INSUF_RESOURCE;
+    }
+
+    uint8_t  *p       = p_rsp;
+    uint16_t  total   = 0u;
+    uint8_t   pair_len = 0u;
+
+    const wiced_gattdb_entry_t     *p_entry = NULL;
+    wiced_bt_gatt_discovery_data_t  disc;
+
+    do {
+        p_entry = wiced_bt_gattdb_local_read_data_by_type(
+                      GATT_DISCOVER_CHARACTERISTICS, p_entry, &disc);
+        if (!p_entry) break;
+
+        wiced_bt_gatt_char_declaration_t *ch = &disc.characteristic_declaration;
+
+        if (ch->handle < s_handle) continue;   /* before range */
+        if (ch->handle > e_handle) break;      /* past range — stop */
+
+        uint8_t uuid_len      = ch->char_uuid.len;
+        uint8_t this_pair_len = 2u + 1u + 2u + uuid_len; /* decl_handle + props + val_handle + uuid */
+
+        if (pair_len == 0u) {
+            pair_len = this_pair_len;
+        } else if (this_pair_len != pair_len) {
+            /* UUID width changed — client must send a new request for the rest */
+            break;
+        }
+
+        if (total + pair_len > READ_BY_TYPE_RSP_MAX) break;
+
+        p[0] = (uint8_t)(ch->handle);
+        p[1] = (uint8_t)(ch->handle >> 8u);
+        p[2] = ch->characteristic_properties;
+        p[3] = (uint8_t)(ch->val_handle);
+        p[4] = (uint8_t)(ch->val_handle >> 8u);
+        if (uuid_len == 2u) {
+            p[5] = (uint8_t)(ch->char_uuid.uu.uuid16);
+            p[6] = (uint8_t)(ch->char_uuid.uu.uuid16 >> 8u);
+        } else {
+            memcpy(&p[5], ch->char_uuid.uu.uuid128, 16u);
+        }
+        p     += pair_len;
+        total += pair_len;
+
+    } while (p_entry);
+
+    if (total == 0u) {
+        wiced_bt_free_buffer(p_rsp);
+        wiced_bt_gatt_server_send_error_rsp(conn_id, opcode, s_handle,
+                                             WICED_BT_GATT_ATTRIBUTE_NOT_FOUND);
+        return WICED_BT_GATT_ATTRIBUTE_NOT_FOUND;
+    }
+
+    printf("[GATT] READ_BY_TYPE rsp: %u chars, pair_len=%u, total=%u\n",
+           total / pair_len, pair_len, total);
+
+    return wiced_bt_gatt_server_send_read_by_type_rsp(conn_id, opcode,
+               pair_len, total, p_rsp,
+               (wiced_bt_gatt_app_context_t)wiced_bt_free_buffer);
 }
 
 /* --------------------------------------------------------------------------
@@ -205,6 +320,18 @@ static wiced_bt_gatt_status_t app_gatt_callback(wiced_bt_gatt_evt_t event,
         case GATT_ATTRIBUTE_REQUEST_EVT: {
             wiced_bt_gatt_attribute_request_t *req = &p_data->attribute_request;
 
+            if (req->opcode == GATT_REQ_MTU) {
+                /* App must reply to MTU exchange — stack does not auto-respond */
+                printf("[GATT] MTU exchange: remote=%u, replying with %u\n",
+                       req->data.remote_mtu, CY_BT_RX_PDU_SIZE);
+                return wiced_bt_gatt_server_send_mtu_rsp(req->conn_id,
+                                                          req->data.remote_mtu,
+                                                          CY_BT_RX_PDU_SIZE);
+            }
+            if (req->opcode == GATT_REQ_READ_BY_TYPE) {
+                return app_gatt_read_by_type_handler(req->conn_id, req->opcode,
+                                                      &req->data.read_by_type);
+            }
             if (req->opcode == GATT_REQ_WRITE || req->opcode == GATT_CMD_WRITE) {
                 return app_gatt_write_handler(req->conn_id, req->opcode,
                                               &req->data.write_req);
@@ -212,6 +339,25 @@ static wiced_bt_gatt_status_t app_gatt_callback(wiced_bt_gatt_evt_t event,
             if (req->opcode == GATT_REQ_READ || req->opcode == GATT_REQ_READ_BLOB) {
                 return app_gatt_read_handler(req->conn_id, req->opcode,
                                              &req->data.read_req);
+            }
+            printf("[GATT] Unhandled opcode=0x%02X\n", (int)req->opcode);
+            break;
+        }
+
+        case GATT_GET_RESPONSE_BUFFER_EVT:
+            /* Stack needs a buffer to transmit a GATT response/notification.
+             * Allocate from the WICED BT heap; freed on GATT_APP_BUFFER_TRANSMITTED_EVT. */
+            p_data->buffer_request.buffer.p_app_rsp_buffer =
+                wiced_bt_get_buffer(p_data->buffer_request.len_requested);
+            p_data->buffer_request.buffer.p_app_ctxt =
+                (wiced_bt_gatt_app_context_t)wiced_bt_free_buffer;
+            break;
+
+        case GATT_APP_BUFFER_TRANSMITTED_EVT: {
+            pfn_free_buffer_t pfn_free =
+                (pfn_free_buffer_t)p_data->buffer_xmitted.p_app_ctxt;
+            if (pfn_free) {
+                pfn_free(p_data->buffer_xmitted.p_app_data);
             }
             break;
         }
@@ -237,9 +383,26 @@ static void app_send_notify(uint16_t handle, uint8_t *data, uint16_t len,
 /* --------------------------------------------------------------------------
  * BLE Task
  * -------------------------------------------------------------------------- */
+
+/* WICED BT heap — WICED_DEFAULT_HEAP is NULL by default so wiced_bt_get_buffer()
+ * always fails unless we create a heap and mark it as the default first.
+ * The stack uses this for every ATT response/notification packet it sends. */
+#define BT_HEAP_SIZE 4096
+static uint8_t bt_heap_buf[BT_HEAP_SIZE];
+
 void task_ble(void *pvParameters)
 {
     printf("[BLE] Task started\n");
+
+    /* Create WICED BT default heap from our static buffer.
+     * Must happen before cybt_platform_config_init / wiced_bt_stack_init
+     * so the stack can allocate from it during bring-up. */
+    wiced_bt_heap_t *p_heap = wiced_bt_create_heap("bt_heap",
+                                                     bt_heap_buf,
+                                                     BT_HEAP_SIZE,
+                                                     NULL,
+                                                     WICED_TRUE);
+    printf("[BLE] BT heap: %p (%d bytes)\n", (void *)p_heap, BT_HEAP_SIZE);
 
     /* Configure IPC transport to CM0+ BLESS controller — must come first */
     cybt_platform_config_init(&cybsp_bt_platform_cfg);
