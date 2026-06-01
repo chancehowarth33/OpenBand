@@ -56,6 +56,7 @@ static uint16_t ble_conn_id = 0;
 static uint16_t spo2_cccd  = 0;
 static uint16_t steps_cccd = 0;
 static uint16_t hr_cccd    = 0;
+static uint16_t bat_cccd   = 0;
 
 /* --------------------------------------------------------------------------
  * Forward declaration
@@ -84,7 +85,7 @@ static wiced_bt_dev_status_t app_bt_management_callback(
                 wiced_bt_ble_set_raw_advertisement_data(CY_BT_ADV_PACKET_ELEM_COUNT,
                                                         cy_bt_adv_packet_data);
                 wiced_bt_start_advertisements(BTM_BLE_ADVERT_UNDIRECTED_HIGH, 0, NULL);
-                printf("[BLE] Stack ready — advertising as \"WatchWise\"\n");
+                printf("[BLE] Stack ready — advertising as \"WatchWise2\"\n");
             } else {
                 printf("[BLE] Stack init FAILED: %d\n",
                        (int)p_event_data->enabled.status);
@@ -156,6 +157,10 @@ static wiced_bt_gatt_status_t app_gatt_write_handler(
         hr_cccd = attr->p_data[0] | ((uint16_t)attr->p_data[1] << 8);
         printf("[BLE] HR notifications %s\n",
                (hr_cccd & GATT_CLIENT_CONFIG_NOTIFICATION) ? "ON" : "OFF");
+    } else if (handle == HDLD_BAS_BATTERY_LEVEL_CLIENT_CHAR_CONFIG) {
+        bat_cccd = attr->p_data[0] | ((uint16_t)attr->p_data[1] << 8);
+        printf("[BLE] Battery notifications %s\n",
+               (bat_cccd & GATT_CLIENT_CONFIG_NOTIFICATION) ? "ON" : "OFF");
     }
 
     /* Acknowledge GATT_REQ_WRITE; no ack needed for GATT_CMD_WRITE */
@@ -186,6 +191,8 @@ static wiced_bt_gatt_status_t app_gatt_read_handler(
         /* flags=0x00 (8-bit HR format), then BPM */
         app_hrs_heart_rate_measurement[0] = 0x00u;
         app_hrs_heart_rate_measurement[1] = health_hr;
+    } else if (handle == HDLC_BAS_BATTERY_LEVEL_VALUE) {
+        app_bas_battery_level[0] = health_battery;
     }
 
     /* Generic lookup — handles Device Name, Appearance, CCCDs, everything */
@@ -312,6 +319,7 @@ static wiced_bt_gatt_status_t app_gatt_callback(wiced_bt_gatt_evt_t event,
                 spo2_cccd     = 0;
                 steps_cccd    = 0;
                 hr_cccd       = 0;
+                bat_cccd      = 0;
                 printf("[BLE] Disconnected — restarting advertisements\n");
                 wiced_bt_start_advertisements(BTM_BLE_ADVERT_UNDIRECTED_HIGH, 0, NULL);
             }
@@ -339,6 +347,11 @@ static wiced_bt_gatt_status_t app_gatt_callback(wiced_bt_gatt_evt_t event,
             if (req->opcode == GATT_REQ_READ || req->opcode == GATT_REQ_READ_BLOB) {
                 return app_gatt_read_handler(req->conn_id, req->opcode,
                                              &req->data.read_req);
+            }
+            /* 0x1B = notification transmitted, 0x1E = indication confirmed — no action */
+            if (req->opcode == GATT_HANDLE_VALUE_NOTIF ||
+                req->opcode == GATT_HANDLE_VALUE_CONF) {
+                return WICED_BT_GATT_SUCCESS;
             }
             printf("[GATT] Unhandled opcode=0x%02X\n", (int)req->opcode);
             break;
@@ -442,6 +455,11 @@ void task_ble(void *pvParameters)
                 app_send_notify(HDLC_WATCHWISE_HEALTH_STEPCOUNT_VALUE,
                                 (uint8_t *)&steps, (uint16_t)sizeof(steps),
                                 steps_cccd);
+
+                /* Battery level — 1 byte percent */
+                app_bas_battery_level[0] = health_battery;
+                app_send_notify(HDLC_BAS_BATTERY_LEVEL_VALUE,
+                                app_bas_battery_level, 1u, bat_cccd);
             }
         }
 

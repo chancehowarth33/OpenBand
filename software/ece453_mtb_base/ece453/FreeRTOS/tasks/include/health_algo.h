@@ -11,9 +11,10 @@
 #include <stdint.h>
 
 /* Results — read from any task */
-extern volatile uint8_t  health_hr;     /* heart rate, BPM   (0 = no finger / not ready) */
-extern volatile uint8_t  health_spo2;   /* SpO2, %           (0 = no finger / not ready) */
-extern volatile uint32_t health_steps;  /* cumulative steps                               */
+extern volatile uint8_t  health_hr;      /* heart rate, BPM   (0 = no finger / not ready) */
+extern volatile uint8_t  health_spo2;    /* SpO2, %           (0 = no finger / not ready) */
+extern volatile uint32_t health_steps;   /* cumulative steps                               */
+extern volatile uint8_t  health_battery; /* battery level, %  (0-100)                     */
 
 /* Called from task_max30102 for every FIFO sample */
 void health_algo_update_ppg(uint32_t red, uint32_t ir);
