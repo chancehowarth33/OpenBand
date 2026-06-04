@@ -1,0 +1,6 @@
+https://docs.nordicsemi.com/r/bundle/ps_nrf52840/page/ref_circuitry.html?section=unique_2046249930
+
+https://www.nordicsemi.com/Products/Development-hardware/nRF52840-DK/Download
+
+https://www.nordicsemi.com/Products/nRF52840/Compatible-downloads
+
