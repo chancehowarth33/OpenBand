@@ -19,6 +19,7 @@
  */
 
 #include "task_ble.h"
+#include "task_system_control.h"
 #include "health_algo.h"
 
 /* WICED BT stack headers (btstack library, pulled by btstack-integration) */
@@ -78,26 +79,26 @@ static wiced_bt_dev_status_t app_bt_management_callback(
             if (p_event_data->enabled.status == WICED_BT_SUCCESS) {
                 wiced_bt_gatt_status_t db_status =
                     wiced_bt_gatt_db_init(gatt_database, gatt_database_len, NULL);
-                printf("[BLE] gatt_db_init status=%d db_len=%u\n",
+                PRINTF("[BLE] gatt_db_init status=%d db_len=%u\n",
                        (int)db_status, gatt_database_len);
                 wiced_bt_gatt_register(app_gatt_callback);
                 /* Set advertising payload (includes device name "WatchWise") */
                 wiced_bt_ble_set_raw_advertisement_data(CY_BT_ADV_PACKET_ELEM_COUNT,
                                                         cy_bt_adv_packet_data);
                 wiced_bt_start_advertisements(BTM_BLE_ADVERT_UNDIRECTED_HIGH, 0, NULL);
-                printf("[BLE] Stack ready — advertising as \"WatchWise2\"\n");
+                PRINTF("[BLE] Stack ready — advertising as \"WatchWise2\"\n");
             } else {
-                printf("[BLE] Stack init FAILED: %d\n",
+                PRINTF("[BLE] Stack init FAILED: %d\n",
                        (int)p_event_data->enabled.status);
             }
             break;
 
         case BTM_DISABLED_EVT:
-            printf("[BLE] Stack disabled\n");
+            PRINTF("[BLE] Stack disabled\n");
             break;
 
         case BTM_BLE_ADVERT_STATE_CHANGED_EVT:
-            printf("[BLE] Advert state: %d\n",
+            PRINTF("[BLE] Advert state: %d\n",
                    (int)p_event_data->ble_advert_state_changed);
             break;
 
@@ -147,19 +148,19 @@ static wiced_bt_gatt_status_t app_gatt_write_handler(
     /* Mirror CCCDs into our shadow variables for the notification loop */
     if (handle == HDLD_WATCHWISE_HEALTH_SP02_CLIENT_CHAR_CONFIG) {
         spo2_cccd = attr->p_data[0] | ((uint16_t)attr->p_data[1] << 8);
-        printf("[BLE] SpO2 notifications %s\n",
+        PRINTF("[BLE] SpO2 notifications %s\n",
                (spo2_cccd & GATT_CLIENT_CONFIG_NOTIFICATION) ? "ON" : "OFF");
     } else if (handle == HDLD_WATCHWISE_HEALTH_STEPCOUNT_CLIENT_CHAR_CONFIG) {
         steps_cccd = attr->p_data[0] | ((uint16_t)attr->p_data[1] << 8);
-        printf("[BLE] Steps notifications %s\n",
+        PRINTF("[BLE] Steps notifications %s\n",
                (steps_cccd & GATT_CLIENT_CONFIG_NOTIFICATION) ? "ON" : "OFF");
     } else if (handle == HDLD_HRS_HEART_RATE_MEASUREMENT_CLIENT_CHAR_CONFIG) {
         hr_cccd = attr->p_data[0] | ((uint16_t)attr->p_data[1] << 8);
-        printf("[BLE] HR notifications %s\n",
+        PRINTF("[BLE] HR notifications %s\n",
                (hr_cccd & GATT_CLIENT_CONFIG_NOTIFICATION) ? "ON" : "OFF");
     } else if (handle == HDLD_BAS_BATTERY_LEVEL_CLIENT_CHAR_CONFIG) {
         bat_cccd = attr->p_data[0] | ((uint16_t)attr->p_data[1] << 8);
-        printf("[BLE] Battery notifications %s\n",
+        PRINTF("[BLE] Battery notifications %s\n",
                (bat_cccd & GATT_CLIENT_CONFIG_NOTIFICATION) ? "ON" : "OFF");
     }
 
@@ -223,7 +224,7 @@ static wiced_bt_gatt_status_t app_gatt_read_by_type_handler(
     uint16_t s_handle = p_rbt->s_handle;
     uint16_t e_handle = p_rbt->e_handle;
 
-    printf("[GATT] READ_BY_TYPE s=0x%04X e=0x%04X uuid16=0x%04X\n",
+    PRINTF("[GATT] READ_BY_TYPE s=0x%04X e=0x%04X uuid16=0x%04X\n",
            s_handle, e_handle,
            (p_rbt->uuid.len == 2u) ? p_rbt->uuid.uu.uuid16 : 0u);
 
@@ -293,7 +294,7 @@ static wiced_bt_gatt_status_t app_gatt_read_by_type_handler(
         return WICED_BT_GATT_ATTRIBUTE_NOT_FOUND;
     }
 
-    printf("[GATT] READ_BY_TYPE rsp: %u chars, pair_len=%u, total=%u\n",
+    PRINTF("[GATT] READ_BY_TYPE rsp: %u chars, pair_len=%u, total=%u\n",
            total / pair_len, pair_len, total);
 
     return wiced_bt_gatt_server_send_read_by_type_rsp(conn_id, opcode,
@@ -313,14 +314,14 @@ static wiced_bt_gatt_status_t app_gatt_callback(wiced_bt_gatt_evt_t event,
             if (p_data->connection_status.connected) {
                 ble_conn_id   = p_data->connection_status.conn_id;
                 ble_connected = true;
-                printf("[BLE] Connected  conn_id=%u\n", ble_conn_id);
+                PRINTF("[BLE] Connected  conn_id=%u\n", ble_conn_id);
             } else {
                 ble_connected = false;
                 spo2_cccd     = 0;
                 steps_cccd    = 0;
                 hr_cccd       = 0;
                 bat_cccd      = 0;
-                printf("[BLE] Disconnected — restarting advertisements\n");
+                PRINTF("[BLE] Disconnected — restarting advertisements\n");
                 wiced_bt_start_advertisements(BTM_BLE_ADVERT_UNDIRECTED_HIGH, 0, NULL);
             }
             break;
@@ -330,7 +331,7 @@ static wiced_bt_gatt_status_t app_gatt_callback(wiced_bt_gatt_evt_t event,
 
             if (req->opcode == GATT_REQ_MTU) {
                 /* App must reply to MTU exchange — stack does not auto-respond */
-                printf("[GATT] MTU exchange: remote=%u, replying with %u\n",
+                PRINTF("[GATT] MTU exchange: remote=%u, replying with %u\n",
                        req->data.remote_mtu, CY_BT_RX_PDU_SIZE);
                 return wiced_bt_gatt_server_send_mtu_rsp(req->conn_id,
                                                           req->data.remote_mtu,
@@ -353,7 +354,7 @@ static wiced_bt_gatt_status_t app_gatt_callback(wiced_bt_gatt_evt_t event,
                 req->opcode == GATT_HANDLE_VALUE_CONF) {
                 return WICED_BT_GATT_SUCCESS;
             }
-            printf("[GATT] Unhandled opcode=0x%02X\n", (int)req->opcode);
+            PRINTF("[GATT] Unhandled opcode=0x%02X\n", (int)req->opcode);
             break;
         }
 
@@ -405,7 +406,7 @@ static uint8_t bt_heap_buf[BT_HEAP_SIZE];
 
 void task_ble(void *pvParameters)
 {
-    printf("[BLE] Task started\n");
+    PRINTF("[BLE] Task started\n");
 
     /* Create WICED BT default heap from our static buffer.
      * Must happen before cybt_platform_config_init / wiced_bt_stack_init
@@ -415,16 +416,16 @@ void task_ble(void *pvParameters)
                                                      BT_HEAP_SIZE,
                                                      NULL,
                                                      WICED_TRUE);
-    printf("[BLE] BT heap: %p (%d bytes)\n", (void *)p_heap, BT_HEAP_SIZE);
+    PRINTF("[BLE] BT heap: %p (%d bytes)\n", (void *)p_heap, BT_HEAP_SIZE);
 
     /* Configure IPC transport to CM0+ BLESS controller — must come first */
     cybt_platform_config_init(&cybsp_bt_platform_cfg);
-    printf("[BLE] Platform config done\n");
+    PRINTF("[BLE] Platform config done\n");
 
     /* Start WICED BT stack. BTM_ENABLED_EVT fires asynchronously when ready. */
     wiced_result_t bt_init_result = wiced_bt_stack_init(app_bt_management_callback,
                                                          &wiced_bt_cfg_settings);
-    printf("[BLE] wiced_bt_stack_init returned: %d\n", (int)bt_init_result);
+    PRINTF("[BLE] wiced_bt_stack_init returned: %d\n", (int)bt_init_result);
 
     TickType_t last_notify  = xTaskGetTickCount();
     TickType_t last_alive   = xTaskGetTickCount();
@@ -433,7 +434,7 @@ void task_ble(void *pvParameters)
         /* Print a heartbeat every 5 s so we know the task loop is running */
         if ((xTaskGetTickCount() - last_alive) >= pdMS_TO_TICKS(5000)) {
             last_alive = xTaskGetTickCount();
-            printf("[BLE] loop alive, connected=%d\n", ble_connected);
+            PRINTF("[BLE] loop alive, connected=%d\n", ble_connected);
         }
 
         if ((xTaskGetTickCount() - last_notify) >= pdMS_TO_TICKS(2000)) {

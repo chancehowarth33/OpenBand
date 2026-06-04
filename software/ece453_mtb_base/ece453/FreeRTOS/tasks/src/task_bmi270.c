@@ -100,7 +100,7 @@ static cy_rslt_t bmi270_enable_step_counter(void)
     /* Restore page to 0 so regular feature output reads work */
     bmi270_write_reg(BMI270_REG_FEAT_PAGE, 0x00);
 
-    printf("[BMI270] Hardware step counter enabled\n");
+    PRINTF("[BMI270] Hardware step counter enabled\n");
     return CY_RSLT_SUCCESS;
 }
 
@@ -160,11 +160,11 @@ static cy_rslt_t bmi270_load_config(void)
     if (result != CY_RSLT_SUCCESS) return result;
 
     if ((status & 0x0F) != 0x01) {
-        printf("[BMI270] Config load failed, INTERNAL_STATUS=0x%02X\n", status);
+        PRINTF("[BMI270] Config load failed, INTERNAL_STATUS=0x%02X\n", status);
         return CY_RSLT_TYPE_ERROR;
     }
 
-    printf("[BMI270] Config loaded OK\n");
+    PRINTF("[BMI270] Config loaded OK\n");
     return CY_RSLT_SUCCESS;
 }
 
@@ -177,10 +177,10 @@ static cy_rslt_t bmi270_init(void)
 
     result = bmi270_read_reg(BMI270_REG_CHIP_ID, &chip_id, 1);
     if (result != CY_RSLT_SUCCESS || chip_id != 0x24) {
-        printf("[BMI270] ERROR: bad chip ID 0x%02X (expected 0x24)\n", chip_id);
+        PRINTF("[BMI270] ERROR: bad chip ID 0x%02X (expected 0x24)\n", chip_id);
         return CY_RSLT_TYPE_ERROR;
     }
-    printf("[BMI270] Found, chip ID: 0x%02X\n", chip_id);
+    PRINTF("[BMI270] Found, chip ID: 0x%02X\n", chip_id);
 
     result = bmi270_load_config();
     if (result != CY_RSLT_SUCCESS) return result;
@@ -195,7 +195,7 @@ static cy_rslt_t bmi270_init(void)
 
     result = bmi270_enable_step_counter();
     if (result != CY_RSLT_SUCCESS)
-        printf("[BMI270] Step counter enable failed (non-fatal)\n");
+        PRINTF("[BMI270] Step counter enable failed (non-fatal)\n");
 
     return CY_RSLT_SUCCESS;
 }
@@ -205,7 +205,7 @@ static cy_rslt_t bmi270_init(void)
 void task_bmi270(void *pvParameters)
 {
     if (bmi270_init() != CY_RSLT_SUCCESS) {
-        printf("[BMI270] Init failed, task exiting\n");
+        PRINTF("[BMI270] Init failed, task exiting\n");
         vTaskDelete(NULL);
     }
 

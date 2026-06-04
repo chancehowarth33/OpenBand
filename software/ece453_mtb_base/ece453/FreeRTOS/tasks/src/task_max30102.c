@@ -45,10 +45,10 @@ static cy_rslt_t max30102_init(void)
     result = max30102_read_reg(MAX30102_REG_PART_ID, &part_id, 1);
     if (result != CY_RSLT_SUCCESS || part_id != 0x15)
     {
-        printf("[MAX30102] ERROR: bad part ID 0x%02X (expected 0x15)\n", part_id);
+        PRINTF("[MAX30102] ERROR: bad part ID 0x%02X (expected 0x15)\n", part_id);
         return CY_RSLT_TYPE_ERROR;
     }
-    printf("[MAX30102] Found, part ID: 0x%02X\n", part_id);
+    PRINTF("[MAX30102] Found, part ID: 0x%02X\n", part_id);
 
     /* Reset */
     max30102_write_reg(MAX30102_REG_MODE_CONFIG, MAX30102_RESET);
@@ -78,7 +78,7 @@ void task_max30102(void *pvParameters)
 {
     if (max30102_init() != CY_RSLT_SUCCESS)
     {
-        printf("[MAX30102] Init failed, task exiting\n");
+        PRINTF("[MAX30102] Init failed, task exiting\n");
         vTaskDelete(NULL);
     }
 

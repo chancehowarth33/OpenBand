@@ -41,11 +41,16 @@ volatile uint8_t health_battery = 0;
 
 cyhal_i2c_t i2c_bus;
 SemaphoreHandle_t i2c_mutex;
+SemaphoreHandle_t print_mutex;
 
 void system_control_initialize(void) {
     /* Start retarget-io to enable printf */
     cy_retarget_io_init(P5_1, P5_0, 115200);
-    printf("\n\n=== WatchWise Boot ===\n");
+
+    print_mutex = xSemaphoreCreateMutex();
+    CY_ASSERT(print_mutex != NULL);
+
+    PRINTF("\n\n=== WatchWise Boot ===\n");
 
     cyhal_i2c_cfg_t i2c_cfg = {
         .is_slave        = false,
@@ -53,15 +58,15 @@ void system_control_initialize(void) {
         .frequencyhal_hz = I2C_FREQ_HZ
     };
 
-    printf("Initializing I2C bus...\n");
+    PRINTF("Initializing I2C bus...\n");
     cy_rslt_t result = cyhal_i2c_init(&i2c_bus, I2C_SDA_PIN, I2C_SCL_PIN, NULL);
     if (result != CY_RSLT_SUCCESS)
     {
-        printf("I2C bus init FAILED: 0x%08lX\n", result);
+        PRINTF("I2C bus init FAILED: 0x%08lX\n", result);
         return;
     }
     cyhal_i2c_configure(&i2c_bus, &i2c_cfg);
-    printf("I2C bus OK\n");
+    PRINTF("I2C bus OK\n");
 
     i2c_mutex = xSemaphoreCreateRecursiveMutex();
     CY_ASSERT(i2c_mutex != NULL);
@@ -74,9 +79,9 @@ void system_control_initialize(void) {
     };
     cyhal_adc_channel_init_diff(&bat_adc_ch, &bat_adc, BAT_ADC_PIN,
                                  CYHAL_ADC_VNEG, &adc_ch_cfg);
-    printf("Battery ADC on P10_0 OK\n");
+    PRINTF("Battery ADC on P10_0 OK\n");
 
-    printf("Starting tasks...\n");
+    PRINTF("Starting tasks...\n");
     xTaskCreate(task_system_control, "SystemControl", configMINIMAL_STACK_SIZE,     NULL, tskIDLE_PRIORITY + 1, NULL);
     xTaskCreate(task_max30102,       "MAX30102",       configMINIMAL_STACK_SIZE * 2, NULL, tskIDLE_PRIORITY + 1, NULL);
     xTaskCreate(task_bmi270,         "BMI270",         configMINIMAL_STACK_SIZE * 2, NULL, tskIDLE_PRIORITY + 1, NULL);
@@ -87,7 +92,7 @@ void system_control_initialize(void) {
 /* FreeRTOS hook — fires when pvPortMalloc() fails (heap exhausted) */
 void vApplicationMallocFailedHook(void)
 {
-    printf("[HEAP] pvPortMalloc FAILED — heap exhausted!\n");
+    PRINTF("[HEAP] pvPortMalloc FAILED — heap exhausted!\n");
     taskDISABLE_INTERRUPTS();
     CY_HALT();
 }
@@ -111,10 +116,10 @@ void task_system_control(void *pvParameters) {
         }
 
         if (health_hr > 0) {
-            printf("=== Health === HR: %u BPM | SpO2: %u%% | Steps: %u | Bat: %u%%\n",
+            PRINTF("=== Health === HR: %u BPM | SpO2: %u%% | Steps: %u | Bat: %u%%\n",
                    health_hr, health_spo2, (unsigned)health_steps, health_battery);
         } else {
-            printf("=== Health === No finger detected | Steps: %u | Bat: %u%%\n",
+            PRINTF("=== Health === No finger detected | Steps: %u | Bat: %u%%\n",
                    (unsigned)health_steps, health_battery);
         }
         vTaskDelay(pdMS_TO_TICKS(2000));

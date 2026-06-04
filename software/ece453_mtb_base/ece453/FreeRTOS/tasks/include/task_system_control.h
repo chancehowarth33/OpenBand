@@ -20,6 +20,15 @@ extern cyhal_i2c_t i2c_bus;
 /* Recursive mutex — must be held for the duration of any I2C transaction */
 extern SemaphoreHandle_t i2c_mutex;
 
+/* Mutex protecting printf/UART — take before any printf, give after */
+extern SemaphoreHandle_t print_mutex;
+
+#define PRINTF(...) do { \
+    xSemaphoreTake(print_mutex, portMAX_DELAY); \
+    printf(__VA_ARGS__); \
+    xSemaphoreGive(print_mutex); \
+} while(0)
+
 void system_control_initialize(void);
 void task_system_control(void *pvParameters);
 
