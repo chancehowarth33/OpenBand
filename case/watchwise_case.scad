@@ -84,7 +84,7 @@ mh_pos = [
 sensor_w  = 5.9;   sensor_ht = 3.6;
 batt_pos  = [10.32, -5.34];  batt_sz = [3.1, 3.55];
 char_pos  = [10.32, -8.98];  char_sz = [3.1, 3.55];
-prog_pos  = [-13.06,  4.82]; prog_sz = [4.0, 8.5];
+prog_pos  = [-13.06,  2.28]; prog_sz = [4.0, 8.5];
 
 module rect_slot(pos, sz, depth, rnd=0.2) {
     translate([pos[0], pos[1], -0.01])

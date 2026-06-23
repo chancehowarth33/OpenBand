@@ -35,28 +35,30 @@ $fn = 64;
 
 // ── Dimensions ───────────────────────────────────────────────
 case_od  = 38.0;
-wall_t   = 1.0;
-case_id  = case_od - 2 * wall_t;
+wall_t   = 0.85;                   // thinned from 1.0 to widen interior, OD unchanged
+case_id  = case_od - 2 * wall_t;   // 36.3mm — +0.3 for PCB clearance (0.15mm/side)
 
-pcb_t    = 0.41;
+pcb_t    = 1.0;   // board body thickness (held in back pocket); components add 2mm on front
 bot_face = 1.0;
-bot_gap  = 0.6;
-top_gap  = 1.9;
-top_face = 0.4;
+bot_gap  = 1.2;   // back pocket depth — board body + 0402 clearance near MAX30
+top_gap  = 2.0;   // front pocket depth — 2mm component clearance
+top_face = 0.8;   // thickened from 0.4 to hide screw tips on smooth outer face
 
-bot_h = bot_face + bot_gap;   // 1.6mm
-top_h = top_gap  + top_face;  // 2.3mm
+bot_h = bot_face + bot_gap;   // 2.2mm
+top_h = top_gap  + top_face;  // 2.4mm   → external total 4.6mm
 
 // ── M1.6 × 4mm flat-head self-tapping ───────────────────────
+// Screw enters from wrist (bottom) face: clearance through bottom,
+// self-taps into the top piece's bosses.
 csk_top_d = 3.2;
 csk_h     = 0.6;
 screw_d   = 1.9;
 
 // ── Screw boss ───────────────────────────────────────────────
-boss_od  = 2.8;
-boss_h   = top_gap;
-pilot_d  = 1.25;
-pilot_h  = 1.8;
+boss_od  = 4.0;    // post outer dia → ~1.2mm wall around the 1.55mm pilot
+boss_h   = 2.0;    // post height — flush with front rim (top_gap); board sits on top
+pilot_d  = 1.55;   // self-tap pilot for M1.6 — slightly wider, easier to drive screw
+pilot_h  = 1.5;    // pilot bore depth — leaves 0.5mm solid under bore in the 2mm post
 
 // ── PCB mounting hole positions ──────────────────────────────
 mh_pos = [
@@ -67,10 +69,10 @@ mh_pos = [
 ];
 
 // ── Wrist-face openings ──────────────────────────────────────
-sensor_w  = 5.9;   sensor_ht = 3.6;
+sensor_w  = 6.2;   sensor_ht = 3.9;   // MAX30 window — shrunk a bit (was 6.6 × 4.2)
 batt_pos  = [10.32, -5.34];  batt_sz = [3.1, 3.55];
 char_pos  = [10.32, -8.98];  char_sz = [3.1, 3.55];
-prog_pos  = [-13.06,  4.82]; prog_sz = [4.0, 8.5];
+prog_pos  = [-13.06,  2.28]; prog_sz = [4.0, 8.5];
 
 // ── Lug / band slot parameters ───────────────────────────────
 band_slot_w = 23.0;  // slot width in y  (22mm band + 0.5mm each side)
@@ -84,7 +86,7 @@ slit_lip    = 0.9;   // solid material at wrist / strap face (z)
 // two slots is what the strap wraps around (the "spring bar" equivalent).
 //
 slot_bar_x    = 2.4;  // x-length (opening) of each slot — band thickness clearance
-slot_edge_off = 0.9;  // solid material between a slot and the disc edge / lug tip
+slot_edge_off = 1.6;  // solid material between a slot and the disc edge / lug tip (was 0.9, was flimsy)
 //
 // Assembled slot height = (bot_h−slit_lip) + pcb_t + (top_h−slit_lip)
 //                       = 0.7 + 0.41 + 1.4 = 2.51mm
@@ -126,24 +128,30 @@ module tab_half(piece_h) {
 
 // ── BOTTOM PIECE (wrist side) ────────────────────────────────
 module bottom_piece() {
-    union() {
-        difference() {
-            cylinder(h=bot_h, d=case_od);
-            translate([0, 0, bot_face])
-                cylinder(h=bot_h, d=case_id);
-            rect_slot([0,0], [sensor_w, sensor_ht], bot_face, rnd=0.15);
-            rect_slot(batt_pos, batt_sz, bot_face);
-            rect_slot(char_pos, char_sz, bot_face);
-            rect_slot(prog_pos, prog_sz, bot_face);
-            for (p = mh_pos)
-                translate([p[0], p[1], 0]) {
-                    cylinder(h=csk_h, d1=csk_top_d, d2=screw_d, $fn=32);
-                    translate([0, 0, csk_h])
-                        cylinder(h=bot_face - csk_h + 0.01, d=screw_d, $fn=32);
-                }
+    difference() {
+        union() {
+            difference() {
+                cylinder(h=bot_h, d=case_od);
+                translate([0, 0, bot_face])
+                    cylinder(h=bot_h, d=case_id);
+                rect_slot([0,0], [sensor_w, sensor_ht], bot_face, rnd=0.15);
+                rect_slot(batt_pos, batt_sz, bot_face);
+                rect_slot(char_pos, char_sz, bot_face);
+                rect_slot(prog_pos, prog_sz, bot_face);
+                for (p = mh_pos)
+                    translate([p[0], p[1], 0]) {
+                        cylinder(h=csk_h, d1=csk_top_d, d2=screw_d, $fn=32);
+                        translate([0, 0, csk_h])
+                            cylinder(h=bot_face - csk_h + 0.01, d=screw_d, $fn=32);
+                    }
+            }
+            tab_half(bot_h);                  // 3 o'clock
+            mirror([1,0,0]) tab_half(bot_h);  // 9 o'clock
         }
-        tab_half(bot_h);                  // 3 o'clock
-        mirror([1,0,0]) tab_half(bot_h);  // 9 o'clock
+        // Re-cut interior to a PERFECT circle so lug overlap can't intrude
+        // on the PCB cavity (lug slabs union past the inner wall otherwise).
+        translate([0, 0, bot_face])
+            cylinder(h=bot_h, d=case_id);
     }
 }
 
@@ -160,15 +168,23 @@ module screw_boss() {
 module top_piece() {
     union() {
         difference() {
-            cylinder(h=top_h, d=case_od);
+            union() {
+                difference() {
+                    cylinder(h=top_h, d=case_od);
+                    translate([0, 0, top_face])
+                        cylinder(h=top_h, d=case_id);
+                }
+                tab_half(top_h);                  // 3 o'clock
+                mirror([1,0,0]) tab_half(top_h);  // 9 o'clock
+            }
+            // Re-cut interior to a PERFECT circle (lug overlap removed)
             translate([0, 0, top_face])
                 cylinder(h=top_h, d=case_id);
         }
+        // Bosses added AFTER the cavity re-cut so they remain solid
         for (p = mh_pos)
             translate([p[0], p[1], top_face])
                 screw_boss();
-        tab_half(top_h);                  // 3 o'clock
-        mirror([1,0,0]) tab_half(top_h);  // 9 o'clock
     }
 }
 

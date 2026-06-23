@@ -1,0 +1,12 @@
+V1:
+
+
+need to make the interior a perfect circle to fit the board, the mounts for the band are getting in the way so the PCB doesnt fit fully insode the case
+
+MAX30 sensor window in the back needs to be a tad larger
+
+Holes that screws go into need to be larger so the screw can fit into the hole and thread. I am using M1.6 x 4mm screws. 
+
+Programing opeing on the abck doesnt line up with the pins, fix coords of that opening
+
+Make outer wall of the band slot thicker, it is very flimsy
