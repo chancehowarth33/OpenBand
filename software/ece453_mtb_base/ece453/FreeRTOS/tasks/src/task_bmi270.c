@@ -84,7 +84,11 @@ static cy_rslt_t bmi270_write_feat_page(uint8_t page, const uint8_t *data)
 
 /* ── Feature engine: step counter ──────────────────────────────────── */
 
-/* Enable the hardware step detector + counter (page 6, byte 3, bits 3-4) */
+/* Enable the hardware step detector + counter.
+ * SC_1 register = page 6 bytes[2..3] (little-endian), per BMI270 spec:
+ *   bits 9:0  watermark_level   bit 11  en_detector   bit 12  en_counter
+ * Setting byte 3 |= 0x18 turns on both the detector and the counter. The
+ * live count is read back from the feature-engine output on page 0. */
 static cy_rslt_t bmi270_enable_step_counter(void)
 {
     uint8_t feat[16] = {0};
@@ -104,11 +108,13 @@ static cy_rslt_t bmi270_enable_step_counter(void)
     return CY_RSLT_SUCCESS;
 }
 
-/* Read 16-bit step count from dedicated output registers 0x1E-0x1F */
+/* Read 16-bit step count from the feature-engine output on feature page 0,
+ * bytes 0-1. This is where THIS config blob publishes the live count — NOT
+ * register 0x1E (that read was a regression that always returned 0). */
 static uint16_t bmi270_read_step_count(void)
 {
     uint8_t data[2] = {0};
-    bmi270_read_reg(0x1E, data, 2);
+    bmi270_read_feat_page(0, data, 2);
     return (uint16_t)((uint16_t)data[1] << 8 | data[0]);
 }
 
@@ -182,13 +188,32 @@ static cy_rslt_t bmi270_init(void)
     }
     PRINTF("[BMI270] Found, chip ID: 0x%02X\n", chip_id);
 
-    result = bmi270_load_config();
-    if (result != CY_RSLT_SUCCESS) return result;
+    /* The 8KB config blob load over I2C is flaky (it's the most demanding
+     * transfer on the bus); a single bad load reports a junk INTERNAL_STATUS
+     * and would otherwise kill the whole IMU task. Retry with a soft reset
+     * between attempts so boot is reliable. */
+    result = CY_RSLT_TYPE_ERROR;
+    for (int attempt = 1; attempt <= 5; attempt++) {
+        result = bmi270_load_config();
+        if (result == CY_RSLT_SUCCESS) {
+            if (attempt > 1)
+                PRINTF("[BMI270] Config load OK on attempt %d\n", attempt);
+            break;
+        }
+        PRINTF("[BMI270] Config load attempt %d failed — soft reset & retry\n",
+               attempt);
+        bmi270_write_reg(BMI270_REG_CMD, 0xB6);   /* soft reset */
+        vTaskDelay(pdMS_TO_TICKS(5));             /* >2ms post-reset settle */
+    }
+    if (result != CY_RSLT_SUCCESS) {
+        PRINTF("[BMI270] Config load failed after 5 attempts\n");
+        return result;
+    }
 
     bmi270_write_reg(BMI270_REG_PWR_CTRL, 0x0E);   /* acc + gyr + temp */
     vTaskDelay(pdMS_TO_TICKS(50));
 
-    bmi270_write_reg(BMI270_REG_ACC_CONF,  0x28);   /* 100 Hz, normal avg */
+    bmi270_write_reg(BMI270_REG_ACC_CONF,  0x28);   /* 100 Hz, normal avg (known-working breadboard value) */
     bmi270_write_reg(BMI270_REG_ACC_RANGE, 0x00);   /* ±2 g */
     bmi270_write_reg(BMI270_REG_GYR_CONF,  0x28);   /* 100 Hz, normal mode */
     bmi270_write_reg(BMI270_REG_GYR_RANGE, 0x00);   /* ±2000 °/s */
