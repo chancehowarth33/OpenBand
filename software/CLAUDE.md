@@ -21,6 +21,19 @@ make clean        # Remove build artifacts
 make erase        # Erase device flash
 ```
 
+### Build Flags (`DEFINES=`)
+
+Optional compile-time flags select board/power variants. They are independent and composable, and **change nothing when omitted** (default `make program` is byte-identical):
+
+```bash
+make program DEFINES=LOW_POWER                       # low-power profile
+make program DEFINES=SW_STEP_COUNTER                 # software pedometer (dead-feature-engine board)
+make program DEFINES="LOW_POWER SW_STEP_COUNTER"     # both
+```
+
+- **`LOW_POWER`** — see "Low-Power Profile" below.
+- **`SW_STEP_COUNTER`** — see "BMI270 Step Counter — Hardware Fault & Software Fallback".
+
 There is no test framework. Linting is via clangd (configured in `.clangd`).
 
 ## Debug Output
@@ -104,7 +117,40 @@ Do NOT use `bluetooth-freertos` (HCI UART only, for external AIROC chips) or `bl
 
 ### BMI270 Initialization
 
-The BMI270 requires loading a large firmware blob (`bmi270_config_file[]` in `bmi270_config.h`, ~8 KB) over I2C at startup before the feature engine (step counter) becomes available. Step count is read from feature page 6, byte 3.
+The BMI270 requires loading a large firmware blob (`bmi270_config_file[]` in `bmi270_config.h`, ~8 KB) over I2C at startup before the feature engine (step counter) becomes available. The step counter is **enabled** by setting bits 3–4 of feature page 6, byte 3 (`SC_1.en_detector`/`en_counter`); the live count is **read** from the feature-engine output on **feature page 0, bytes 0–1** (NOT register `0x1E` — that read was a regression that always returned 0).
+
+The 8 KB config-blob load over I2C is flaky (it's the most demanding bus transfer); a single bad load reports a junk `INTERNAL_STATUS` and would kill the IMU task. `bmi270_load_config()` is therefore wrapped in a **retry loop** (soft reset `CMD=0xB6` + retry, up to 5×).
+
+### BMI270 Step Counter — Hardware Fault & Software Fallback
+
+One board (PCB #1) has a **dead BMI270 feature engine**: the accelerometer, gyro, I2C, and config-load all work and the config blob loads byte-identical to a good board, but the on-die feature engine never produces output (step-activity output frozen at `0x00` through sustained motion). That block is internal silicon with no external pin, so it can't be fixed in firmware or by reflow — the chip needs replacing. Diagnosis notes are in `software/debug.txt`.
+
+As a stopgap to keep that board usable without a spare chip, there is a **software pedometer** selected by a build flag:
+
+```bash
+make program                            # normal: hardware step counter (good boards)
+make program DEFINES=SW_STEP_COUNTER    # workaround: software pedometer (PCB #1)
+```
+
+- Implemented entirely in `sw_step_counter.c`/`.h`; **`task_bmi270.c` is untouched**. The only existing-file change is a `#ifdef SW_STEP_COUNTER`-gated spawn in `task_system_control.c`.
+- When the flag is set it runs a FreeRTOS task that reads accel directly over I2C at ~50 Hz (its own transactions on the shared `i2c_mutex`), runs a magnitude → DC-removal → peak-detect algorithm (refractory period + 4-step warm-up to reject non-gait motion), and writes the cumulative count into `health_steps`, overriding the always-0 hardware read.
+- The whole file compiles to nothing without the flag — normal builds are byte-for-byte unaffected.
+- Thresholds (`SWS_TH_HIGH`, refractory, warm-up) are tunable in `sw_step_counter.c` and may need adjusting to how the watch is worn.
+
+### Low-Power Profile (`DEFINES=LOW_POWER`)
+
+Reduces current draw for the "always track steps, measure HR/SpO2 only on demand" usage model. Baseline draw is ~10–15 mA (≈5 h on the 60 mAh cell); these changes target the easy wins (≈+50% runtime) without the deep-sleep plumbing. All changes are `#ifdef LOW_POWER`-gated; the default build is unaffected.
+
+| Area | File | Change when `LOW_POWER` |
+|------|------|--------------------------|
+| Gyro | `task_bmi270.c` | `PWR_CTRL=0x04` (accel only). Gyro is unused and draws ~0.9 mA; the step counter runs on accel. |
+| PPG | `task_max30102.c` | The LEDs are the biggest analog drain, so: (a) **HR-only** — Red LED off, IR only (~half the LED power; SpO2 output is invalid in this build); (b) **lower current** — IR at ~3–5 mA vs ~7 mA; (c) **lower rate / shorter pulse** — `SPO2_CONFIG=0x41` (50 sps, 118 µs / 16-bit); (d) **finger-presence gating** — idle the IR LED at a low ~3.2 mA "detect" level and ramp to ~5 mA only when skin contact raises the IR level (hysteresis `LP_FINGER_ON/OFF`, all tunable). |
+| BLE advertising | `task_ble.c` | Advertise at the cfg low-duty interval (`BTM_BLE_ADVERT_UNDIRECTED_LOW`, ~1 s) instead of high-duty 30 ms, via the `WW_ADV_MODE` macro. |
+| BLE connection | `task_ble.c` | On connect, request slow link params (`wiced_bt_l2cap_update_ble_conn_params`): ~400–500 ms interval, slave latency 4, 6 s supervision — radio idles between the 2 s notifications. |
+
+**Not yet included (the big multiplier):** FreeRTOS tickless idle + PSoC6 deep sleep (`Cy_SysPm_DeepSleep`). That takes idle from ~mA to ~µA (3–5×) and is what makes the BLE controller sleep between events, but it needs careful integration/testing (deep sleep can break in-flight I2C/UART/BLE) — a separate effort, not a flag flip.
+
+**Future:** true on-demand HR/SpO2 (a writable BLE characteristic triggering a measurement) instead of the firmware duty-cycle; that needs a GATT DB change in BT Configurator.
 
 ### Header Abstractions
 
@@ -122,6 +168,7 @@ The BMI270 requires loading a large firmware blob (`bmi270_config_file[]` in `bm
 | `ece453/FreeRTOS/tasks/src/task_bmi270.c` | BMI270 6-axis + step counter driver |
 | `ece453/FreeRTOS/tasks/src/task_ble.c` | WICED BT stack init, GAP/GATT callbacks, SpO2+Steps notify loop |
 | `ece453/FreeRTOS/tasks/src/health_algo.c` | HR/SpO2 signal processing |
+| `ece453/FreeRTOS/tasks/src/sw_step_counter.c` | Software pedometer fallback (built only with `DEFINES=SW_STEP_COUNTER`) |
 | `ece453/FreeRTOS/tasks/include/task_ble.h` | BLE task public interface; exposes `ble_connected` |
 | `ece453/FreeRTOS/tasks/include/bmi270_config.h` | BMI270 firmware blob (~8 KB array) |
 | `ece453/FreeRTOS/FreeRTOSConfig.h` | FreeRTOS kernel configuration |

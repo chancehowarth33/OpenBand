@@ -1,0 +1,42 @@
+WatchWise PCB Assembly Notes
+=============================
+
+## Hotplate Reflow Profile (full board front-side components)
+
+| Phase   | Temp      | Time      |
+|---------|-----------|-----------|
+| Preheat | 150°C     | 60–90s    |
+| Soak    | 180°C     | 45–60s    |
+| Reflow  | 235–245°C | 20–30s    |
+| Cool    | Off       | natural   |
+
+## Hot Air Settings
+
+- IMU (BMI270) placement:     320°C nozzle
+- MAX30102 placement:         320°C nozzle
+- Rework / component removal: 320°C nozzle
+
+Notes:
+- Nozzle temp is not board surface temp — 320°C nozzle targets ~240–250°C at the joint
+- Keep airflow low to avoid disturbing neighboring 0402s
+- MAX30102 optical window faces up — avoid prolonged direct air on the lens
+- Chip surface must not exceed 260°C (JEDEC J-STD-020 limit)
+
+## R_PROG1 — Charge Current Resistor (SAFETY)
+
+Battery max charge current is 30 mA (0.5C on a 60mAh cell).
+R_PROG1 must be >= 33 kΩ. Do NOT go lower.
+
+Formula: I_charge = 1000 / R_PROG_ohms
+
+| R_PROG  | Current | Status                     |
+|---------|---------|----------------------------|
+| 20 kΩ   | 50 mA   | DO NOT USE — over limit    |
+| 22 kΩ   | 45 mA   | DO NOT USE — over limit    |
+| 33 kΩ   | 30 mA   | OK — fastest safe charge   |
+| 39 kΩ   | 26 mA   | OK — gentler               |
+| 47 kΩ   | 21 mA   | OK — current board value   |
+
+Recommended swap: 47 kΩ → 33 kΩ for ~2 hr charge time (down from ~3 hr).
+Charger IC (MCP73831-2) regulates to 4.20 V — no change needed there.
+If 33 kΩ not available, series resistors work: e.g. 20 kΩ + 13 kΩ = 33 kΩ.

@@ -29,6 +29,9 @@
 #include "wiced_bt_ble.h"
 #include "wiced_bt_cfg.h"
 #include "wiced_bt_types.h"
+#ifdef LOW_POWER
+#include "wiced_bt_l2c.h"          /* wiced_bt_l2cap_update_ble_conn_params */
+#endif
 
 /* BT Configurator generated output */
 #include "cycfg_bt_settings.h"   /* wiced_bt_cfg_settings */
@@ -46,6 +49,14 @@
 
 /* Callback type for freeing GATT response buffers */
 typedef void (*pfn_free_buffer_t)(uint8_t *);
+
+/* Advertising duty. LOW_POWER builds advertise at the cfg low-duty interval
+ * (~1 s) instead of high-duty 30 ms — a big radio saving while disconnected. */
+#ifdef LOW_POWER
+#define WW_ADV_MODE  BTM_BLE_ADVERT_UNDIRECTED_LOW
+#else
+#define WW_ADV_MODE  BTM_BLE_ADVERT_UNDIRECTED_HIGH
+#endif
 
 /* --------------------------------------------------------------------------
  * Runtime state
@@ -85,7 +96,7 @@ static wiced_bt_dev_status_t app_bt_management_callback(
                 /* Set advertising payload (includes device name "WatchWise") */
                 wiced_bt_ble_set_raw_advertisement_data(CY_BT_ADV_PACKET_ELEM_COUNT,
                                                         cy_bt_adv_packet_data);
-                wiced_bt_start_advertisements(BTM_BLE_ADVERT_UNDIRECTED_HIGH, 0, NULL);
+                wiced_bt_start_advertisements(WW_ADV_MODE, 0, NULL);
                 PRINTF("[BLE] Stack ready — advertising as \"WatchWise2\"\n");
             } else {
                 PRINTF("[BLE] Stack init FAILED: %d\n",
@@ -98,6 +109,11 @@ static wiced_bt_dev_status_t app_bt_management_callback(
             break;
 
         case BTM_BLE_ADVERT_STATE_CHANGED_EVT:
+            /* Log only. Re-arming on timeout is handled in the task loop via
+             * wiced_bt_ble_get_current_advert_mode(), which avoids a race: on
+             * connect this event's ADVERT_OFF fires BEFORE GATT_CONNECTION_STATUS
+             * sets ble_connected, so restarting advertising here would kick off
+             * a fresh advertisement mid-handshake and disrupt the connection. */
             PRINTF("[BLE] Advert state: %d\n",
                    (int)p_event_data->ble_advert_state_changed);
             break;
@@ -315,6 +331,17 @@ static wiced_bt_gatt_status_t app_gatt_callback(wiced_bt_gatt_evt_t event,
                 ble_conn_id   = p_data->connection_status.conn_id;
                 ble_connected = true;
                 PRINTF("[BLE] Connected  conn_id=%u\n", ble_conn_id);
+#ifdef LOW_POWER
+                /* Request a slow, latency-tolerant link: ~400-500 ms interval,
+                 * skip 4 events, 6 s supervision. Lets the radio idle between
+                 * our ~2 s notifications instead of waking every 100 ms. */
+                wiced_bt_l2cap_update_ble_conn_params(
+                    p_data->connection_status.bd_addr,
+                    320,   /* min interval 400 ms (320 * 1.25 ms) */
+                    400,   /* max interval 500 ms */
+                    4,     /* slave latency (events skippable) */
+                    600);  /* supervision timeout 6 s (600 * 10 ms) */
+#endif
             } else {
                 ble_connected = false;
                 spo2_cccd     = 0;
@@ -322,7 +349,7 @@ static wiced_bt_gatt_status_t app_gatt_callback(wiced_bt_gatt_evt_t event,
                 hr_cccd       = 0;
                 bat_cccd      = 0;
                 PRINTF("[BLE] Disconnected — restarting advertisements\n");
-                wiced_bt_start_advertisements(BTM_BLE_ADVERT_UNDIRECTED_HIGH, 0, NULL);
+                wiced_bt_start_advertisements(WW_ADV_MODE, 0, NULL);
             }
             break;
 
@@ -429,12 +456,29 @@ void task_ble(void *pvParameters)
 
     TickType_t last_notify  = xTaskGetTickCount();
     TickType_t last_alive   = xTaskGetTickCount();
+    TickType_t last_adv     = xTaskGetTickCount();
 
     for (;;) {
         /* Print a heartbeat every 5 s so we know the task loop is running */
         if ((xTaskGetTickCount() - last_alive) >= pdMS_TO_TICKS(5000)) {
             last_alive = xTaskGetTickCount();
             PRINTF("[BLE] loop alive, connected=%d\n", ble_connected);
+        }
+
+        /* Re-arm advertising if it has timed out while disconnected. Polling
+         * here (rather than in the BTM_BLE_ADVERT_STATE_CHANGED event) reads the
+         * real advert state and a settled ble_connected, so it never restarts
+         * advertising during a connection handshake. Advertising in cycfg_gap.h
+         * is configured for 60s high + 60s low duty, then stops — without this
+         * the device disappears from scanners ~2 min after boot/disconnect. */
+        if ((xTaskGetTickCount() - last_adv) >= pdMS_TO_TICKS(1000)) {
+            last_adv = xTaskGetTickCount();
+            if (!ble_connected &&
+                wiced_bt_ble_get_current_advert_mode() == BTM_BLE_ADVERT_OFF) {
+                wiced_bt_start_advertisements(WW_ADV_MODE,
+                                              0, NULL);
+                PRINTF("[BLE] Advertising was off — re-armed\n");
+            }
         }
 
         if ((xTaskGetTickCount() - last_notify) >= pdMS_TO_TICKS(2000)) {

@@ -13,6 +13,7 @@
 #include "task_bmi270.h"
 #include "task_ble.h"
 #include "health_algo.h"
+#include "sw_step_counter.h"   /* software pedometer (only built/spawned with SW_STEP_COUNTER) */
 #include "cyhal.h"
 #include <stdlib.h>
 
@@ -85,6 +86,12 @@ void system_control_initialize(void) {
     xTaskCreate(task_system_control, "SystemControl", configMINIMAL_STACK_SIZE,     NULL, tskIDLE_PRIORITY + 1, NULL);
     xTaskCreate(task_max30102,       "MAX30102",       configMINIMAL_STACK_SIZE * 2, NULL, tskIDLE_PRIORITY + 1, NULL);
     xTaskCreate(task_bmi270,         "BMI270",         configMINIMAL_STACK_SIZE * 2, NULL, tskIDLE_PRIORITY + 1, NULL);
+#ifdef SW_STEP_COUNTER
+    /* Workaround board: BMI270 feature engine is dead, so run a software
+     * pedometer that overrides the (always-0) hardware step count.
+     * Enabled with: make program DEFINES=SW_STEP_COUNTER */
+    sw_step_counter_initialize();
+#endif
     ble_task_initialize();
 }
 

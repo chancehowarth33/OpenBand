@@ -84,6 +84,23 @@ static cy_rslt_t bmi270_write_feat_page(uint8_t page, const uint8_t *data)
 
 /* ── Feature engine: step counter ──────────────────────────────────── */
 
+/* [DEBUG] Dump all 8 feature pages (16 bytes each) — for board comparison. */
+static void bmi270_dump_feature_pages(void)
+{
+    for (uint8_t pg = 0; pg < 8; pg++) {
+        uint8_t b[16] = {0};
+        if (bmi270_read_feat_page(pg, b, 16) != CY_RSLT_SUCCESS) {
+            PRINTF("[BMI270][DUMP] page %u read FAILED\n", pg);
+            continue;
+        }
+        PRINTF("[BMI270][DUMP] pg%u: %02X %02X %02X %02X %02X %02X %02X %02X "
+               "%02X %02X %02X %02X %02X %02X %02X %02X\n", pg,
+               b[0],b[1],b[2],b[3],b[4],b[5],b[6],b[7],
+               b[8],b[9],b[10],b[11],b[12],b[13],b[14],b[15]);
+    }
+    bmi270_write_reg(BMI270_REG_FEAT_PAGE, 0x00);  /* restore */
+}
+
 /* Enable the hardware step detector + counter.
  * SC_1 register = page 6 bytes[2..3] (little-endian), per BMI270 spec:
  *   bits 9:0  watermark_level   bit 11  en_detector   bit 12  en_counter
@@ -95,11 +112,18 @@ static cy_rslt_t bmi270_enable_step_counter(void)
 
     cy_rslt_t result = bmi270_read_feat_page(6, feat, 16);
     if (result != CY_RSLT_SUCCESS) return result;
+    PRINTF("[BMI270][DBG] pg6 before: %02X %02X %02X %02X\n",
+           feat[0], feat[1], feat[2], feat[3]);
 
     feat[3] |= 0x18;   /* bit3 = step detector enable, bit4 = step counter enable */
 
     result = bmi270_write_feat_page(6, feat);
     if (result != CY_RSLT_SUCCESS) return result;
+
+    uint8_t verify[16] = {0};
+    bmi270_read_feat_page(6, verify, 16);
+    PRINTF("[BMI270][DBG] pg6 after:  %02X %02X %02X %02X  (byte3 wants bits 3&4 = 0x18 set)\n",
+           verify[0], verify[1], verify[2], verify[3]);
 
     /* Restore page to 0 so regular feature output reads work */
     bmi270_write_reg(BMI270_REG_FEAT_PAGE, 0x00);
@@ -210,6 +234,14 @@ static cy_rslt_t bmi270_init(void)
         return result;
     }
 
+#ifdef LOW_POWER
+    /* Gyro off — unused, and it draws ~0.9 mA. The step counter runs on the
+     * accelerometer's feature engine, so accel-only is fully functional. */
+    bmi270_write_reg(BMI270_REG_PWR_CTRL, 0x04);   /* acc only */
+    vTaskDelay(pdMS_TO_TICKS(50));
+    bmi270_write_reg(BMI270_REG_ACC_CONF,  0x28);   /* 100 Hz, normal avg */
+    bmi270_write_reg(BMI270_REG_ACC_RANGE, 0x00);   /* ±2 g */
+#else
     bmi270_write_reg(BMI270_REG_PWR_CTRL, 0x0E);   /* acc + gyr + temp */
     vTaskDelay(pdMS_TO_TICKS(50));
 
@@ -217,10 +249,25 @@ static cy_rslt_t bmi270_init(void)
     bmi270_write_reg(BMI270_REG_ACC_RANGE, 0x00);   /* ±2 g */
     bmi270_write_reg(BMI270_REG_GYR_CONF,  0x28);   /* 100 Hz, normal mode */
     bmi270_write_reg(BMI270_REG_GYR_RANGE, 0x00);   /* ±2000 °/s */
+#endif
 
     result = bmi270_enable_step_counter();
     if (result != CY_RSLT_SUCCESS)
         PRINTF("[BMI270] Step counter enable failed (non-fatal)\n");
+
+    /* [DEBUG] dump feature pages + register state for board comparison */
+    bmi270_dump_feature_pages();
+    uint8_t rb = 0;
+    bmi270_read_reg(BMI270_REG_PWR_CTRL, &rb, 1);
+    PRINTF("[BMI270][DBG] PWR_CTRL=0x%02X (want acc on: bit2)\n", rb);
+    bmi270_read_reg(BMI270_REG_ACC_CONF, &rb, 1);
+    PRINTF("[BMI270][DBG] ACC_CONF=0x%02X (want 0x28 = 100Hz)\n", rb);
+    bmi270_read_reg(BMI270_REG_PWR_CONF, &rb, 1);
+    PRINTF("[BMI270][DBG] PWR_CONF=0x%02X (adv_power_save = bit0)\n", rb);
+    bmi270_read_reg(BMI270_REG_ERR_REG, &rb, 1);
+    PRINTF("[BMI270][DBG] ERR_REG=0x%02X (0x00 = no error)\n", rb);
+    bmi270_read_reg(BMI270_REG_INTERNAL_STATUS, &rb, 1);
+    PRINTF("[BMI270][DBG] INTERNAL_STATUS=0x%02X (0x01 = init ok)\n", rb);
 
     return CY_RSLT_SUCCESS;
 }
@@ -253,7 +300,15 @@ void task_bmi270(void *pvParameters)
         /* Read hardware step count once per second (every 10 × 100 ms ticks) */
         if (++step_tick >= 10) {
             step_tick    = 0;
-            health_steps = bmi270_read_step_count();
+            uint8_t pg0[6] = {0};
+            bmi270_read_feat_page(0, pg0, 6);  /* bytes 0-3 = step count, byte 4 = activity */
+            health_steps = (uint16_t)((uint16_t)pg0[1] << 8 | pg0[0]);
+            /* act = step-activity output: 00=still 01=walking 02=running 03=unknown.
+             * If 'act' changes when you move -> feature engine IS running (motion
+             * just not seen as gait). If frozen at 00 during motion -> engine dead. */
+            PRINTF("[BMI270][DBG] STEP=%02X%02X act=%02X steps=%u  acc=%6d,%6d,%6d\n",
+                   pg0[1], pg0[0], pg0[4], health_steps,
+                   bmi270_acc_x, bmi270_acc_y, bmi270_acc_z);
         }
 
         vTaskDelay(pdMS_TO_TICKS(100));

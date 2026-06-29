@@ -172,5 +172,5 @@ Battery must be connected to power the +1V8 rail (VTARG) before programming.
 - **UART debug header:** Break out P5_1 (TX), P5_0 (RX), and GND to a 3-pin 1.27mm header. P5_1 and P5_0 are currently no-connects on the CYBLE module (pins 40 and 39). Without this header, getting serial output requires soldering directly to the 0.5mm castellated pad on the module.
 
 - **Skin temperature:** Add **TMP117MAIDRVR** (DSBGA-8) to the shared I2C bus. Runs natively at 1.8V (1.8V–5.5V supply), no level shifter needed. Default I2C address 0x48. One register read (0x00) returns 16-bit temp; multiply by 0.0078125 for °C.
-- **Charge rate for 60mAh battery:** Replace R_PROG1 with 33kΩ for 30.3mA (0.5C). Current 47kΩ gives 21.3mA (0.35C, ~3 hr charge).
+- **Charge rate for 60mAh battery:** Replace R_PROG1 with 33kΩ for 30mA (0.5C, ~2 hr). Current 47kΩ gives 21mA (~3 hr). **33kΩ is the minimum safe value — do not go lower.** Battery max charge current is 30mA; 20kΩ (50mA) and 22kΩ (45mA) both exceed this and risk heat, lithium plating, and swelling. Rule: R_PROG1 ≥ 33kΩ for this cell.
 - **Do not replace CYBLE module with bare CY8C6347BZI-BLD53 on prototype:** 0.4mm WLCSP requires stencil reflow, RF matching network design, and custom FCC certification. The module handles all of this pre-certified.

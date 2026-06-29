@@ -1,0 +1,178 @@
+================================================================
+ WatchWise — BMI270 step-counter debug log
+================================================================
+
+ISSUE
+-----
+PCB #1 (debug board): BMI270 accelerometer reads correctly (gravity on
+Z ~16500 = 1g at rest, responds to motion, chip ID 0x24, config "loaded
+OK"), but the hardware step counter NEVER increments — step output stays
+0 even on a real walk. This board "has had trouble before."
+
+PCB #2 (other board): SAME firmware, counts steps perfectly.
+
+=> Same code, one board works and one doesn't => hardware fault on PCB #1.
+
+Step-count output read is CONFIRMED correct in current firmware:
+  - read from feature page 0, byte 0 (BMI270_STEP_CNT_OUT_STRT_ADDR=0x00,
+    BMI2_PAGE_0), via bmi270_read_feat_page(0, data, 2).
+  - A prior regression (commit 3188f8b "BLE connected, no serivces tho")
+    had changed this to read register 0x1E — that was wrong for this
+    config blob and always returned 0. Now reverted to feature page 0.
+
+Config: ACC_CONF=0x28 (100Hz), PWR_CTRL=0x0E (acc+gyr+temp),
+enable = page6/byte3 |= 0x18 (en_detector bit11 + en_counter bit12).
+Config blob = standard Bosch bmi270_config_file (8192 bytes,
+starts c8 2e 00 2e 80 2e 3d b1).
+
+LEADING HARDWARE SUSPECT
+------------------------
+The step/feature engine depends on the full 8KB config blob loading
+byte-perfect over I2C (256-byte bursts @ 400kHz) AND on clean IMU power.
+Basic accel reads do NOT. So a marginal config-blob load (weak/cold I2C
+pull-ups, signal integrity, or marginal VDD/VDDIO decoupling on PCB #1)
+breaks step counting while leaving accel working. INTERNAL_STATUS=0x01
+only confirms the init handshake, not full blob integrity.
+
+NEXT TEST
+---------
+Flash PCB #2 (working board) with the SAME current firmware, capture its
+[DUMP] feature pages, and diff against PCB #1 below.
+  - Pages DIFFER  => config blob loads corrupted on PCB #1 => board-level
+                     I2C / power signal-integrity issue (reflow BMI270 +
+                     decoupling caps + I2C pull-ups; scope SDA/SCL & VDD).
+  - Pages IDENTICAL => blob loads fine => suspect the BMI270 die itself.
+
+================================================================
+ PCB #1 (BAD BOARD) — BASELINE DUMP   [firmware: feat-page-0 read,
+ ACC_CONF=0x28, enable 0x18]
+================================================================
+
+[BMI270] Found, chip ID: 0x24
+[BMI270] Config loaded OK
+[BMI270][DBG] pg6 before: 0E 00 00 00
+[BMI270][DBG] pg6 after:  0E 00 00 18   (byte3 = 0x18, enable bits set)
+[BMI270] Hardware step counter enabled
+
+[BMI270][DUMP] pg0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[BMI270][DUMP] pg1: 08 19 00 00 88 00 00 00 00 00 00 00 05 E0 AA 38
+[BMI270][DUMP] pg2: 05 E0 90 30 FA 00 96 00 4B 09 11 00 11 00 02 00
+[BMI270][DUMP] pg3: 2D 01 D4 7B 3B 01 DB 7A 04 00 3F 7B CD 6C C3 04
+[BMI270][DUMP] pg4: 85 09 C3 04 EC E6 0C 46 01 00 27 00 19 00 96 00
+[BMI270][DUMP] pg5: A0 00 01 00 0C 00 F0 3C 00 01 01 00 03 00 01 00
+[BMI270][DUMP] pg6: 0E 00 00 18 32 00 05 00 EE 06 04 00 C8 00 00 00
+[BMI270][DUMP] pg7: 04 00 A8 05 EE 06 00 04 BC 02 B3 00 85 07 00 00
+
+[BMI270][DBG] PWR_CTRL=0x0E   (acc on, bit2)
+[BMI270][DBG] ACC_CONF=0x28   (100 Hz)
+[BMI270][DBG] PWR_CONF=0x00   (adv_power_save off)
+[BMI270][DBG] ERR_REG=0x00    (no error)
+[BMI270][DBG] INTERNAL_STATUS=0x01  (init ok)
+
+Live (walking): STEP(pg0)=0000 the entire time; accel changes with motion.
+
+================================================================
+ PCB #2 (GOOD BOARD) — DUMP (same firmware)
+================================================================
+
+NOTE: first boot, config load FAILED (INTERNAL_STATUS=0x4E, invalid msg
+nibble 0xE). Task exited, no dump. Re-power succeeded on next boot =>
+the 8KB I2C config load is FLAKY (fails some boots, even on good board).
+
+[BMI270] Config loaded OK
+[BMI270][DBG] pg6 before: 0E 00 00 00
+[BMI270][DBG] pg6 after:  0E 00 00 18
+
+[BMI270][DUMP] pg0: 00 00 00 00 03 00 00 00 00 00 00 00 78 00 00 00
+[BMI270][DUMP] pg1: 08 19 00 00 88 00 00 00 00 00 00 00 05 E0 AA 38
+[BMI270][DUMP] pg2: 05 E0 90 30 FA 00 96 00 4B 09 11 00 11 00 02 00
+[BMI270][DUMP] pg3: 2D 01 D4 7B 3B 01 DB 7A 04 00 3F 7B CD 6C C3 04
+[BMI270][DUMP] pg4: 85 09 C3 04 EC E6 0C 46 01 00 27 00 19 00 96 00
+[BMI270][DUMP] pg5: A0 00 01 00 0C 00 F0 3C 00 01 01 00 03 00 01 00
+[BMI270][DUMP] pg6: 0E 00 00 18 32 00 05 00 EE 06 04 00 C8 00 00 00
+[BMI270][DUMP] pg7: 04 00 A8 05 EE 06 00 04 BC 02 B3 00 85 07 00 00
+
+[BMI270][DBG] PWR_CTRL=0x0E
+[BMI270][DBG] ACC_CONF=0x28
+[BMI270][DBG] PWR_CONF=0x00
+[BMI270][DBG] ERR_REG=0x04   <-- 0x04 here vs 0x00 on PCB #1
+[BMI270][DBG] INTERNAL_STATUS=0x01
+
+================================================================
+ DIFF RESULT  (PCB #1 baseline  vs  PCB #2 good)
+================================================================
+
+pg1..pg7: BYTE-FOR-BYTE IDENTICAL.
+  => 8KB config blob loads CORRECTLY on both boards.
+  => "config-load corruption on PCB #1" theory is REFUTED.
+
+pg0 (feature OUTPUT page) differs:
+  byte 4  (step-activity out): PCB#1=0x00 (still)  PCB#2=0x03 (unknown)
+  byte 12:                     PCB#1=0x00          PCB#2=0x78
+  *** CORRECTION: this is NOT a fault signature. byte4 is step-activity
+  (0x00=still, 0x03=moving); pg0 reflects MOTION STATE at dump time, not
+  board health. The KGB (good board) ALSO shows all-zero pg0 when sitting
+  still. So the dumps are effectively IDENTICAL => NO dump evidence that
+  PCB#1 is faulty. ***
+
+ERR_REG: PCB#1=0x00, PCB#2=0x04 (internal_err bits; on the GOOD board,
+  likely benign/transient).
+
+OPEN QUESTION / NEXT TEST
+------------------------
+Config is identical, so it's now EITHER:
+  (a) PCB#1 BMI270 silicon/solder fault (engine won't run), OR
+  (b) our firmware has a step-count bug and PCB#2 only ever counted on
+      its OLD resident firmware.
+DECIDER: walk PCB#2 (running THIS firmware) and watch STEP(pg0):
+  climbs  => code OK, PCB#1 hardware is the fault.
+  stays 0 => our firmware bug.
+
+>>> FIRMWARE CONFIRMED CORRECT: PCB#2 (KGB) on THIS firmware counted
+    0 -> 28 on a real walk (STEP(pg0): 0008..001C; Health "Steps: 28").
+
+>>> PCB#1 STATUS: HARDWARE FAULT CONFIRMED (feature engine dead).
+    Tested with CURRENT (fixed) firmware + live step-activity (pg0 byte4):
+      - During sustained motion (acc +/-7000 all axes), act stayed 0x00
+        ("still") the ENTIRE time. A live engine would show 01/03.
+      - => feature engine is NOT processing accel data.
+    Everything else works: accel, gyro, I2C, config blob loads identical
+    to good board, register state identical, bypass caps reflowed (no
+    change). The feature engine is an internal die block with no external
+    pin => fault is INSIDE the chip (partial silicon defect, consistent
+    with prior ESD/thermal damage on this board).
+    ACTION: REPLACE the BMI270 chip on PCB#1. Reflow won't help (tried);
+    not a board-level issue (board provides correct power+config, proven).
+    CONFIRM FIRST: run the act= build on the good board, move it, watch
+    act go 00 -> 01/03. Proves the diagnostic + that PCB#1's frozen act
+    is the difference.
+
+Separate robustness item: config load is flaky (0x4E seen on PCB#2 once).
+Add a retry loop to bmi270_load_config() regardless of the above. [DONE:
+soft-reset + retry up to 5x added to bmi270_load_config().]
+
+================================================================
+ RESOLVED  (root cause = COLD SOLDER JOINT, not a dead die)
+================================================================
+
+The "REPLACE the chip / internal die defect" conclusion above was WRONG
+on root cause. Re-placing (reflow/re-seating) the SAME BMI270 on PCB#1
+brought the feature engine back to life:
+  - pg0 byte4 (step-activity): 0x00 -> 0x03
+  - pg0 byte12:                0x00 -> 0x0D
+  - live act=:                 frozen 0x00 -> 0x03 (tracks motion)
+  - HARDWARE step counter climbed 0 -> 18 on movement (Health "Steps: 18")
+
+So a bad power/ground solder joint was starving the BMI270's digital
+feature engine while the more tolerant accel + I2C path still worked
+(that's why accel/gyro/config-load all looked fine). The chip itself was
+always good. Reflow DID fix it once properly re-seated — the earlier
+"reflow won't help" was a reflow that didn't fully remake the joint.
+
+OUTCOME:
+  - Both boards now count steps in HARDWARE. Use normal `make program`.
+  - SW_STEP_COUNTER software pedometer (sw_step_counter.c) is KEPT as a
+    fallback (and may be preferable anyway) but is not required.
+  - Lesson: a frozen step-activity output with working accel = suspect
+    the IMU's power/ground joints FIRST, reflow thoroughly, before
+    condemning the die.

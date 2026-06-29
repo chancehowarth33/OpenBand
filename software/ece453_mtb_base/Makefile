@@ -139,6 +139,12 @@ PREBUILD=
 # Custom post-build commands to run.
 POSTBUILD=
 
+# Widen the XRES reset pulse for KitProg3 program/erase. JPROG1 has an RC
+# filter on XRES_N (R4) that rounds off the stock 25us reset pulse, so the
+# acquire can miss the test-mode window when sleep-heavy BLE firmware is
+# running. 200us pulse + 500ms settle makes the reset reliably take.
+_MTB_RECIPE__OPENOCD_CUSTOM_COMMAND := adapter srst pulse_width 200; adapter srst delay 500; psoc6 allow_efuse_program off;
+
 
 ################################################################################
 # Paths
