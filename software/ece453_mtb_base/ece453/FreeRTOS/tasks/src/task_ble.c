@@ -76,6 +76,8 @@ static uint16_t bat_cccd   = 0;
  * -------------------------------------------------------------------------- */
 static wiced_bt_gatt_status_t app_gatt_callback(wiced_bt_gatt_evt_t event,
                                                   wiced_bt_gatt_event_data_t *p_data);
+static gatt_db_lookup_table_t *app_find_attr(uint16_t handle);
+static void app_set_dis_serial(uint64_t uid);
 
 /* --------------------------------------------------------------------------
  * BT management callback
@@ -109,11 +111,12 @@ static wiced_bt_dev_status_t app_bt_management_callback(
                 PRINTF("[BLE] gatt_db_init status=%d db_len=%u\n",
                        (int)db_status, gatt_database_len);
                 wiced_bt_gatt_register(app_gatt_callback);
+                app_set_dis_serial(uid);   /* fill DIS Serial Number from die ID */
                 /* Set advertising payload (includes device name "WatchWise") */
                 wiced_bt_ble_set_raw_advertisement_data(CY_BT_ADV_PACKET_ELEM_COUNT,
                                                         cy_bt_adv_packet_data);
                 wiced_bt_start_advertisements(WW_ADV_MODE, 0, NULL);
-                PRINTF("[BLE] Stack ready — advertising as \"WatchWise2\"\n");
+                PRINTF("[BLE] Stack ready — advertising as \"WatchWise\"\n");
             } else {
                 PRINTF("[BLE] Stack init FAILED: %d\n",
                        (int)p_event_data->enabled.status);
@@ -152,6 +155,40 @@ static gatt_db_lookup_table_t *app_find_attr(uint16_t handle)
         }
     }
     return NULL;
+}
+
+/* --------------------------------------------------------------------------
+ * Populate the Device Information Service "Serial Number" characteristic with
+ * this unit's unique ID (formatted from the PSoC6 factory die ID), so every
+ * WatchWise reports a distinct serial the app can read.
+ *
+ * This is GUARD-COMPILED: it only does anything once a Serial Number
+ * characteristic is added to the DIS in BT Configurator, which is what defines
+ * HDLC_DIS_SERIAL_NUMBER_VALUE. Until then it compiles to a no-op. After you
+ * add it and regenerate, set the characteristic's initial value to at least 12
+ * characters (e.g. "000000000000") so the backing buffer is big enough.
+ * -------------------------------------------------------------------------- */
+static void app_set_dis_serial(uint64_t uid)
+{
+#ifdef HDLC_DIS_SERIAL_NUMBER_STRING_VALUE
+    /* 12-hex-char serial, e.g. "1A2B3C4D5E6F" */
+    char serial[13];
+    snprintf(serial, sizeof(serial), "%04X%08lX",
+             (unsigned)((uid >> 32) & 0xFFFFu), (unsigned long)(uint32_t)uid);
+
+    gatt_db_lookup_table_t *attr = app_find_attr(HDLC_DIS_SERIAL_NUMBER_STRING_VALUE);
+    if (attr != NULL) {
+        uint16_t n = (uint16_t)strlen(serial);
+        if (n > attr->max_len) n = attr->max_len;
+        memcpy(attr->p_data, serial, n);
+        attr->cur_len = n;
+        PRINTF("[BLE] DIS serial number = %.*s\n", (int)n, (char *)attr->p_data);
+    } else {
+        PRINTF("[BLE] DIS serial: handle not found in ext-attr table\n");
+    }
+#else
+    (void)uid;   /* DIS Serial Number characteristic not in the GATT DB yet */
+#endif
 }
 
 /* --------------------------------------------------------------------------

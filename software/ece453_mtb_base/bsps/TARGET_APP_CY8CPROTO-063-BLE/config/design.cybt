@@ -46,9 +46,9 @@
                                         <Field>
                                             <FieldProperties>
                                                 <Property id="Name" value="Name"/>
-                                                <Property id="Value" value="WatchWise2"/>
+                                                <Property id="Value" value="WatchWise"/>
                                                 <Property id="Format" value="f_utf8s"/>
-                                                <Property id="ByteLength" value="10"/>
+                                                <Property id="ByteLength" value="9"/>
                                             </FieldProperties>
                                         </Field>
                                     </Fields>
@@ -117,7 +117,37 @@
                                 <Property id="EntityID" value="{35a7282b-1342-47db-8b3f-348e5a7dd805}"/>
                                 <Property id="ServiceDeclaration" value="Primary"/>
                             </ServiceProperties>
-                            <Characteristics/>
+                            <Characteristics>
+                                <Characteristic type="org.bluetooth.characteristic.serial_number_string">
+                                    <Fields>
+                                        <Field>
+                                            <FieldProperties>
+                                                <Property id="Name" value="Serial Number"/>
+                                                <Property id="Value" value="000000000000"/>
+                                                <Property id="Format" value="f_utf8s"/>
+                                                <Property id="ByteLength" value="12"/>
+                                            </FieldProperties>
+                                        </Field>
+                                    </Fields>
+                                    <Properties>
+                                        <BleProperty>
+                                            <Property id="PropertyType" value="Read"/>
+                                            <Property id="Present" value="true"/>
+                                            <Property id="Mandatory" value="true"/>
+                                        </BleProperty>
+                                    </Properties>
+                                    <Permission>
+                                        <Property id="Read" value="true"/>
+                                        <Property id="ReadAuthenticated" value="false"/>
+                                        <Property id="VariableLength" value="false"/>
+                                        <Property id="Write" value="false"/>
+                                        <Property id="WriteNoResponse" value="false"/>
+                                        <Property id="WriteReliable" value="false"/>
+                                        <Property id="WriteAuthenticated" value="false"/>
+                                    </Permission>
+                                    <Descriptors/>
+                                </Characteristic>
+                            </Characteristics>
                         </Service>
                         <Service type="org.bluetooth.service.custom" version="0.0.0">
                             <ServiceProperties>
@@ -690,7 +720,7 @@
         <General>
             <Property id="DeviceAddress" value="00A050-000000"/>
             <Property id="MacGeneratedAddress" value="false"/>
-            <Property id="DeviceName" value="WatchWise2"/>
+            <Property id="DeviceName" value="WatchWise"/>
             <Property id="Appearance" value="0"/>
             <Property id="HostTxPowerLevel" value="Pos_0"/>
             <Property id="EnableRpaTimeout" value="true"/>
