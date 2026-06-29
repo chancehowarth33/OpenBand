@@ -65,6 +65,8 @@ PSoC6/
 
 ## Bill of Materials
 
+📋 **[Open the interactive BOM →](https://htmlpreview.github.io/?https://github.com/chancehowarth33/watch_wise/blob/chance/pcb/watchwise_main_kicad/interactive_BOM.html)** — clickable board view with component highlighting (rendered via htmlpreview, since GitHub doesn't display HTML files directly). Source: [`pcb/watchwise_main_kicad/interactive_BOM.html`](pcb/watchwise_main_kicad/interactive_BOM.html).
+
 Total BOM cost: **~$131.52** (ordered qty ×3 for 3 boards).
 
 ### ICs & Modules
