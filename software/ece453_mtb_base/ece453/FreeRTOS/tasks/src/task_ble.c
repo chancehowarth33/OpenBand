@@ -39,6 +39,7 @@
 #include "cycfg_gap.h"           /* cy_bt_adv_packet_data[], cy_bt_device_address */
 
 /* BSP BT platform config — IPC channel config for CM0+ BLESS controller */
+#include "cy_syslib.h"           /* Cy_SysLib_GetUniqueId — per-device serial */
 #include "cybsp_bt_config.h"     /* cybsp_bt_platform_cfg */
 #include "cybt_platform_config.h"/* cybt_platform_config_init() */
 #include "wiced_memory.h"        /* wiced_bt_get_buffer / wiced_bt_free_buffer */
@@ -88,6 +89,21 @@ static wiced_bt_dev_status_t app_bt_management_callback(
     {
         case BTM_ENABLED_EVT:
             if (p_event_data->enabled.status == WICED_BT_SUCCESS) {
+                /* Give each unit a unique BLE address derived from the PSoC6's
+                 * factory die ID, so the app can tell multiple WatchWise devices
+                 * apart. (The BT-Configurator default has the low 3 bytes zeroed
+                 * — identical across boards — which would make them collide.)
+                 * The 6-byte address is the device's broadcast serial number. */
+                uint64_t uid = Cy_SysLib_GetUniqueId();
+                uint32_t h   = (uint32_t)uid ^ (uint32_t)(uid >> 24) ^ (uint32_t)(uid >> 40);
+                wiced_bt_device_address_t bda = {0x00, 0xA0, 0x50, 0x00, 0x00, 0x00};
+                bda[3] = (uint8_t)(h >> 16);
+                bda[4] = (uint8_t)(h >> 8);
+                bda[5] = (uint8_t)(h);
+                wiced_bt_set_local_bdaddr(bda, BLE_ADDR_PUBLIC);
+                PRINTF("[BLE] device serial/addr %02X:%02X:%02X:%02X:%02X:%02X\n",
+                       bda[0], bda[1], bda[2], bda[3], bda[4], bda[5]);
+
                 wiced_bt_gatt_status_t db_status =
                     wiced_bt_gatt_db_init(gatt_database, gatt_database_len, NULL);
                 PRINTF("[BLE] gatt_db_init status=%d db_len=%u\n",

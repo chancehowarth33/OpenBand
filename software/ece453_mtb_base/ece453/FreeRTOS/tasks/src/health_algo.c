@@ -42,6 +42,9 @@ static uint8_t  compute_timer = 0;
 static float hr_ema   = 0.0f;
 static float spo2_ema = 0.0f;
 
+static float last_perfusion = 0.0f;   /* AC/DC of IR, % — signal-quality metric */
+static int   spo2_enabled   = 1;      /* scheduler disables during IR-only HR    */
+
 volatile uint8_t  health_hr    = 0;
 volatile uint8_t  health_spo2  = 0;
 volatile uint32_t health_steps = 0;   /* written by task_bmi270 hardware counter */
@@ -79,8 +82,12 @@ static void compute_hr_spo2(void)
     float ac_ir_rms  = sqrtf(ac_ir_sq  / PPG_N);
     float ac_red_rms = sqrtf(ac_red_sq / PPG_N);
 
-    /* ── SpO2 ──────────────────────────────────────────────────────── */
-    if (ac_ir_rms > 1.0f) {
+    /* Perfusion index = AC/DC of IR, in %.  Signal-quality metric used for
+     * adaptive LED current and to gate weak/noisy readings. */
+    last_perfusion = (dc_ir > 1.0f) ? (ac_ir_rms / dc_ir) * 100.0f : 0.0f;
+
+    /* ── SpO2 (only when enabled — needs the Red LED on) ───────────── */
+    if (spo2_enabled && ac_ir_rms > 1.0f) {
         float R    = (ac_red_rms / dc_red) / (ac_ir_rms / dc_ir);
         float spo2 = -45.060f * R * R + 30.354f * R + 94.845f;
         if      (spo2 > 100.0f) spo2 = 100.0f;
@@ -104,53 +111,82 @@ static void compute_hr_spo2(void)
         smooth[i] = sum / cnt;
     }
 
-    /* ── Peak detection on smoothed signal ───────────────────────── */
-    /* Find the maximum positive excursion — threshold is 35% of it  */
+    /* ── Frequency-domain HR via autocorrelation ───────────────────
+     * Find the lag (heartbeat period) with the strongest self-similarity. At
+     * 25 Hz: 40 bpm = 37.5 samples, 200 bpm = 7.5 samples. Far more robust to
+     * noise than single-peak timing (the cheap stand-in for an FFT). */
+    float e0 = 0.0f;
+    for (int i = 0; i < PPG_N; i++) e0 += smooth[i] * smooth[i];
+
+    float best_corr = 0.0f;
+    int   best_lag  = 0;
+    for (int lag = 8; lag <= 37; lag++) {
+        float c = 0.0f;
+        for (int i = 0; i + lag < PPG_N; i++) c += smooth[i] * smooth[i + lag];
+        if (c > best_corr) { best_corr = c; best_lag = lag; }
+    }
+    float ac_quality = (e0 > 1.0f && best_lag > 0) ? (best_corr / e0) : 0.0f;
+    float hr_ac      = (best_lag > 0) ? (1500.0f / (float)best_lag) : 0.0f; /* 60*25/lag */
+
+    /* ── Time-domain HR via peak detection (fallback / cross-check) ── */
     float peak_max = 0.0f;
     for (int i = 0; i < PPG_N; i++)
         if (smooth[i] > peak_max) peak_max = smooth[i];
 
-    if (peak_max < 1.0f)
-        return;   /* flat signal — leave last valid HR in place */
-
-    float threshold = 0.35f * peak_max;
-
-    bool  above   = false;
-    float seg_max = 0.0f;
-    int   seg_idx = 0;
-    int   peaks[20];
-    int   n_peaks = 0;
-
-    for (int i = 0; i < PPG_N && n_peaks < 20; i++) {
-        if (smooth[i] > threshold) {
-            if (!above) {
-                above   = true;
-                seg_max = smooth[i];
-                seg_idx = i;
-            } else if (smooth[i] > seg_max) {
-                seg_max = smooth[i];
-                seg_idx = i;
+    float hr_peak = 0.0f;
+    if (peak_max >= 1.0f) {
+        float threshold = 0.35f * peak_max;
+        bool  above   = false;
+        float seg_max = 0.0f;
+        int   seg_idx = 0;
+        int   peaks[20];
+        int   n_peaks = 0;
+        for (int i = 0; i < PPG_N && n_peaks < 20; i++) {
+            if (smooth[i] > threshold) {
+                if (!above) { above = true; seg_max = smooth[i]; seg_idx = i; }
+                else if (smooth[i] > seg_max) { seg_max = smooth[i]; seg_idx = i; }
+            } else if (above) {
+                above = false;
+                if (n_peaks == 0 || (seg_idx - peaks[n_peaks - 1]) >= MIN_PEAK_GAP)
+                    peaks[n_peaks++] = seg_idx;
             }
-        } else if (above) {
-            above = false;
-            if (n_peaks == 0 || (seg_idx - peaks[n_peaks - 1]) >= MIN_PEAK_GAP)
-                peaks[n_peaks++] = seg_idx;
+        }
+        if (n_peaks >= 2) {
+            float avg_rr = (float)(peaks[n_peaks - 1] - peaks[0]) / (float)(n_peaks - 1);
+            if (avg_rr > 0.0f) hr_peak = 1500.0f / avg_rr;
         }
     }
 
-    /* Need ≥ 2 peaks to compute one RR interval */
-    if (n_peaks >= 2) {
-        float span   = (float)(peaks[n_peaks - 1] - peaks[0]);
-        float avg_rr = span / (float)(n_peaks - 1);
-        float hr     = 60.0f * 25.0f / avg_rr;   /* 25 Hz sample rate */
-
-        if (hr >= 40.0f && hr <= 200.0f) {
-            hr_ema    = (hr_ema < 1.0f) ? hr
-                      : (EMA_ALPHA * hr + (1.0f - EMA_ALPHA) * hr_ema);
-            health_hr = (uint8_t)(hr_ema + 0.5f);
-        }
+    /* ── Pick the best estimate, quality-gated ──────────────────────
+     * Trust the autocorrelation HR when it is confident; otherwise fall back to
+     * the peak detector. Require a minimum perfusion so a weak or motion-
+     * corrupted window holds the previous reading instead of reporting noise. */
+    float hr_est = 0.0f;
+    if (last_perfusion >= 0.05f) {
+        if (ac_quality > 0.35f && hr_ac >= 40.0f && hr_ac <= 200.0f)
+            hr_est = hr_ac;
+        else if (hr_peak >= 40.0f && hr_peak <= 200.0f)
+            hr_est = hr_peak;
     }
-    /* If no valid peaks this cycle, health_hr keeps its last value */
+
+    if (hr_est >= 40.0f && hr_est <= 200.0f) {
+        hr_ema    = (hr_ema < 1.0f) ? hr_est
+                  : (EMA_ALPHA * hr_est + (1.0f - EMA_ALPHA) * hr_ema);
+        health_hr = (uint8_t)(hr_ema + 0.5f);
+    }
+    /* else: hold last value */
+}
+
+/* ── Quality / control accessors ──────────────────────────────────────── */
+
+float health_algo_perfusion(void)
+{
+    return last_perfusion;
+}
+
+void health_algo_set_spo2_enabled(int enabled)
+{
+    spo2_enabled = enabled;
 }
 
 /* ── Public API ───────────────────────────────────────────────────────── */

@@ -8,6 +8,9 @@
 #include "task_max30102.h"
 #include "task_system_control.h"
 #include "health_algo.h"
+#include <math.h>
+#include "task_bmi270.h"   /* bmi270_acc_x/y/z — motion gating (LOW_POWER scheduler) */
+#include "task_ble.h"      /* ble_connected — "app open" trigger (LOW_POWER scheduler) */
 
 #define MAX30102_ADDR   0x57
 
@@ -63,12 +66,13 @@ static cy_rslt_t max30102_init(void)
     max30102_write_reg(MAX30102_REG_MODE_CONFIG, MAX30102_MODE_SPO2);
 
 #ifdef LOW_POWER
-    /* Lower rate + shorter pulse: 50 sps, 118us pulse (16-bit), 4096 ADC range. */
-    max30102_write_reg(MAX30102_REG_SPO2_CONFIG, 0x41);
-    /* HR-only: Red (LED1) OFF; IR (LED2) starts at the low finger-detect level.
-     * NOTE: SpO2 output is not valid in this build (no Red channel) — HR only. */
-    max30102_write_reg(MAX30102_REG_LED1_PA, 0x00);   /* Red off */
-    max30102_write_reg(MAX30102_REG_LED2_PA, 0x10);   /* IR ~3.2 mA (detect level) */
+    /* Shorter pulse (118us / 16-bit) for less LED energy, but KEEP 100 sps so the
+     * effective rate after 4x FIFO averaging stays 25 Hz — health_algo's HR math
+     * assumes 25 Hz, so dropping the sample rate here would halve the reported HR.
+     * The tiered scheduler manages mode/LEDs/SHDN at runtime; these are defaults. */
+    max30102_write_reg(MAX30102_REG_SPO2_CONFIG, 0x25);  /* 100 sps, 118 us, 4096 */
+    max30102_write_reg(MAX30102_REG_LED1_PA, 0x00);      /* Red off (scheduler enables for SpO2) */
+    max30102_write_reg(MAX30102_REG_LED2_PA, 0x18);      /* IR ~4.8 mA default */
 #else
     /* SpO2 config: 100 samples/sec, 411us pulse width, 4096 ADC range */
     max30102_write_reg(MAX30102_REG_SPO2_CONFIG, 0x27);
@@ -85,6 +89,87 @@ static cy_rslt_t max30102_init(void)
     return CY_RSLT_SUCCESS;
 }
 
+/* Drain all available FIFO samples into the globals + health_algo. */
+static void max30102_drain_fifo(void)
+{
+    uint8_t buf[6], wr_ptr, rd_ptr, intr1;
+    max30102_read_reg(MAX30102_REG_INTR_STATUS_1, &intr1, 1);
+    max30102_read_reg(MAX30102_REG_FIFO_WR_PTR, &wr_ptr, 1);
+    max30102_read_reg(MAX30102_REG_FIFO_RD_PTR, &rd_ptr, 1);
+
+    uint8_t num_samples = (wr_ptr - rd_ptr) & 0x1F;
+    for (uint8_t i = 0; i < num_samples; i++) {
+        max30102_read_reg(MAX30102_REG_FIFO_DATA, buf, 6);
+        max30102_red = ((uint32_t)(buf[0] & 0x03) << 16) | ((uint32_t)buf[1] << 8) | buf[2];
+        max30102_ir  = ((uint32_t)(buf[3] & 0x03) << 16) | ((uint32_t)buf[4] << 8) | buf[5];
+        health_algo_update_ppg(max30102_red, max30102_ir);
+    }
+}
+
+#ifdef LOW_POWER
+/* ── On-demand health scheduler (measures while the app is open) ─────────
+ * HR/SpO2 are only useful when the user is looking at the app, so the sensor is
+ * fully shut down (SHDN) while disconnected and only runs while a phone is
+ * connected: an immediate HR+SpO2 reading the moment the app opens, then a
+ * refresh on a cadence. Windows use IR-only for HR and add the Red LED for
+ * SpO2, with motion-gating + adaptive IR current. Steps keep counting in the
+ * BMI270 task regardless. All intervals/thresholds are tunable. */
+#define SCH_POLL_MS    2000u   /* poll for the BLE connection while idle        */
+#define SCH_IR_PA      0x18    /* ~4.8 mA IR drive (adaptive start)             */
+#define SCH_IR_PA_HIGH 0x2A    /* ~8.4 mA IR (bump if the pulse is weak)        */
+#define SCH_RED_PA     0x24    /* ~7 mA Red (SpO2)                              */
+#define SCH_PI_WEAK    0.10f   /* perfusion % below this -> raise IR drive      */
+
+/* HR/SpO2 only matter while the user is looking at the app, so the sensor runs
+ * CONTINUOUSLY (live data) while a phone is connected, and is fully shut down
+ * (SHDN) while disconnected. Steps keep counting in the BMI270 task either way.
+ * Continuous measurement means health_hr/health_spo2 actually change each ~1 s,
+ * so the BLE notify carries live values instead of repeating a stale one. */
+static void max30102_scheduler(void)
+{
+    bool measuring = false;
+    bool bumped    = false;
+
+    max30102_write_reg(MAX30102_REG_MODE_CONFIG, 0x80);   /* start shut down */
+    health_algo_set_spo2_enabled(0);
+
+    for (;;) {
+        bool conn = ble_connected;
+
+        if (conn && !measuring) {
+            /* App opened — wake for continuous live HR + SpO2 (Red + IR). */
+            max30102_write_reg(MAX30102_REG_MODE_CONFIG, MAX30102_MODE_SPO2);
+            max30102_write_reg(MAX30102_REG_LED1_PA, SCH_RED_PA);   /* Red on */
+            max30102_write_reg(MAX30102_REG_LED2_PA, SCH_IR_PA);    /* IR on  */
+            health_algo_set_spo2_enabled(1);
+            measuring = true; bumped = false;
+            PRINTF("[MAX30102] app open — live HR + SpO2\n");
+        } else if (!conn && measuring) {
+            /* App closed — shut the sensor down and drop stale readings. */
+            max30102_write_reg(MAX30102_REG_MODE_CONFIG, 0x80);     /* SHDN */
+            health_algo_set_spo2_enabled(0);
+            health_hr   = 0;
+            health_spo2 = 0;
+            measuring = false;
+            PRINTF("[MAX30102] app closed — PPG off\n");
+        }
+
+        if (measuring) {
+            max30102_drain_fifo();   /* continuous read -> live HR/SpO2 updates */
+            /* Adaptive IR: raise the drive once if the pulse comes up weak. */
+            float pi = health_algo_perfusion();
+            if (!bumped && pi > 0.0f && pi < SCH_PI_WEAK) {
+                max30102_write_reg(MAX30102_REG_LED2_PA, SCH_IR_PA_HIGH);
+                bumped = true;
+            }
+            vTaskDelay(pdMS_TO_TICKS(100));   /* ~10 Hz drain */
+        } else {
+            vTaskDelay(pdMS_TO_TICKS(SCH_POLL_MS));
+        }
+    }
+}
+#endif /* LOW_POWER */
+
 void task_max30102(void *pvParameters)
 {
     if (max30102_init() != CY_RSLT_SUCCESS)
@@ -93,62 +178,13 @@ void task_max30102(void *pvParameters)
         vTaskDelete(NULL);
     }
 
-    uint8_t buf[6];
-    uint8_t wr_ptr, rd_ptr;
-    uint8_t intr1;
-
 #ifdef LOW_POWER
-    /* Finger-presence gating: idle with the IR LED at a low "detect" current
-     * just watching for skin contact, and ramp to the full measurement current
-     * only when a finger/wrist is present (no point lighting the LED into open
-     * air). Red stays off the whole time (HR-only). Thresholds are raw IR counts
-     * and are tunable; hysteresis (ON > OFF) avoids chatter at the boundary. */
-    #define LP_FINGER_ON     8000u    /* raw IR above this -> finger present   */
-    #define LP_FINGER_OFF    4000u    /* raw IR below this -> finger gone      */
-    #define LP_IR_DETECT_PA  0x10     /* ~3.2 mA while watching for a finger   */
-    #define LP_IR_MEASURE_PA 0x19     /* ~5.0 mA while measuring HR            */
-    bool lp_measuring = false;
-#endif
-
-    while (1)
-    {
-        /* Clear interrupt flags */
-        max30102_read_reg(MAX30102_REG_INTR_STATUS_1, &intr1, 1);
-
-        /* Check how many samples are available */
-        max30102_read_reg(MAX30102_REG_FIFO_WR_PTR, &wr_ptr, 1);
-        max30102_read_reg(MAX30102_REG_FIFO_RD_PTR, &rd_ptr, 1);
-
-        uint8_t num_samples = (wr_ptr - rd_ptr) & 0x1F;
-
-        for (uint8_t i = 0; i < num_samples; i++)
-        {
-            /* Each sample = 3 bytes Red + 3 bytes IR */
-            max30102_read_reg(MAX30102_REG_FIFO_DATA, buf, 6);
-
-            max30102_red = ((uint32_t)(buf[0] & 0x03) << 16) |
-                           ((uint32_t)buf[1] << 8) |
-                            (uint32_t)buf[2];
-
-            max30102_ir  = ((uint32_t)(buf[3] & 0x03) << 16) |
-                           ((uint32_t)buf[4] << 8) |
-                            (uint32_t)buf[5];
-
-            health_algo_update_ppg(max30102_red, max30102_ir);
-        }
-#ifdef LOW_POWER
-        /* Ramp IR current up only when a finger is present; idle low otherwise,
-         * and poll slower while just watching for contact. */
-        if (!lp_measuring && max30102_ir > LP_FINGER_ON) {
-            max30102_write_reg(MAX30102_REG_LED2_PA, LP_IR_MEASURE_PA);
-            lp_measuring = true;
-        } else if (lp_measuring && max30102_ir < LP_FINGER_OFF) {
-            max30102_write_reg(MAX30102_REG_LED2_PA, LP_IR_DETECT_PA);
-            lp_measuring = false;
-        }
-        vTaskDelay(pdMS_TO_TICKS(lp_measuring ? 100 : 250));
+    PRINTF("[MAX30102] on-demand scheduler active (measures while app connected)\n");
+    max30102_scheduler();   /* never returns */
 #else
+    while (1) {
+        max30102_drain_fifo();
         vTaskDelay(pdMS_TO_TICKS(100));
-#endif
     }
+#endif
 }

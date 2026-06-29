@@ -144,7 +144,7 @@ Reduces current draw for the "always track steps, measure HR/SpO2 only on demand
 | Area | File | Change when `LOW_POWER` |
 |------|------|--------------------------|
 | Gyro | `task_bmi270.c` | `PWR_CTRL=0x04` (accel only). Gyro is unused and draws ~0.9 mA; the step counter runs on accel. |
-| PPG | `task_max30102.c` | The LEDs are the biggest analog drain, so: (a) **HR-only** — Red LED off, IR only (~half the LED power; SpO2 output is invalid in this build); (b) **lower current** — IR at ~3–5 mA vs ~7 mA; (c) **lower rate / shorter pulse** — `SPO2_CONFIG=0x41` (50 sps, 118 µs / 16-bit); (d) **finger-presence gating** — idle the IR LED at a low ~3.2 mA "detect" level and ramp to ~5 mA only when skin contact raises the IR level (hysteresis `LP_FINGER_ON/OFF`, all tunable). |
+| PPG | `task_max30102.c` | **Connection-gated live** (`max30102_scheduler`): sensor `SHDN` while disconnected; runs **continuously** (live HR+SpO2) while the app is connected (`ble_connected`), stops on disconnect. **Adaptive IR LED** (bumps current when perfusion weak), shorter 118 µs pulse at 100 sps (`SPO2_CONFIG=0x25`, keeps the 25 Hz effective rate). HR estimation (autocorrelation + quality gate) is in `health_algo.c` and applies to both builds. |
 | BLE advertising | `task_ble.c` | Advertise at the cfg low-duty interval (`BTM_BLE_ADVERT_UNDIRECTED_LOW`, ~1 s) instead of high-duty 30 ms, via the `WW_ADV_MODE` macro. |
 | BLE connection | `task_ble.c` | On connect, request slow link params (`wiced_bt_l2cap_update_ble_conn_params`): ~400–500 ms interval, slave latency 4, 6 s supervision — radio idles between the 2 s notifications. |
 

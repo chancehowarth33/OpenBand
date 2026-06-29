@@ -98,12 +98,15 @@ Outputs are `volatile` globals consumed by the system-control and BLE tasks: `he
 
 ## Health algorithm — `health_algo.c`
 
-Processes raw Red/IR FIFO samples:
-- 100-sample ring buffer (~4 s at effective 25 Hz)
-- DC removal → 5-sample moving average → threshold peak detection
-- Heart rate from RR intervals between peaks; SpO2 from Red/IR AC-to-DC ratio
-- EMA (α = 0.25) smoothing; IR DC mean < 20,000 → "no finger" state
+Processes raw Red/IR FIFO samples over a 100-sample ring buffer (~4 s at effective 25 Hz):
+- DC removal → 5-sample moving average.
+- **Heart rate (frequency-domain primary):** autocorrelation finds the heartbeat period (the strongest self-similarity lag in the 40–200 bpm band) — robust to noise. A threshold **peak detector** runs as a cross-check/fallback, and the estimate is **quality-gated** by the perfusion index so a weak/motion-corrupted window holds the last value instead of reporting noise.
+- **SpO2** from the Red/IR AC-to-DC ratio (ratio-of-ratios), gated by `health_algo_set_spo2_enabled()` (the scheduler disables it during IR-only HR windows).
+- **Perfusion index** (`health_algo_perfusion()`, AC/DC of IR in %) is exposed as a signal-quality metric, used for adaptive LED current and quality-gating.
+- EMA (α = 0.25) smoothing; IR DC mean < 20,000 → "no finger".
 - Outputs `health_hr`, `health_spo2`.
+
+These estimator improvements apply to **both** builds; the [tiered scheduling / motion-gating / adaptive-LED](#low-power-profile) parts are `LOW_POWER`-only.
 
 ---
 
@@ -150,10 +153,10 @@ If a board's BMI270 **feature engine is dead** (accel/gyro/I2C/config-load all w
 | Area | File | Change when `LOW_POWER` |
 |------|------|--------------------------|
 | **Gyro** | `task_bmi270.c` | `PWR_CTRL=0x04` (accel only). Gyro is unused and draws ~0.9 mA; the step counter runs on accel. |
-| **PPG — HR-only** | `task_max30102.c` | Red LED off, IR only (~half the LED power). *SpO2 output is invalid in this build.* |
-| **PPG — lower current** | `task_max30102.c` | IR at ~3–5 mA instead of ~7 mA. |
-| **PPG — lower rate/pulse** | `task_max30102.c` | `SPO2_CONFIG=0x41`: 50 sps, 118 µs (16-bit) vs 100 sps / 411 µs. |
-| **PPG — finger gating** | `task_max30102.c` | IR idles at ~3.2 mA watching for skin contact; ramps to ~5 mA and polls faster only when IR rises above `LP_FINGER_ON` (hysteresis with `LP_FINGER_OFF`). No point lighting the LED into open air. |
+| **PPG — connection-gated live** | `task_max30102.c` | HR/SpO2 only matter when the user is looking, so the sensor is fully `SHDN` while **disconnected**, and runs **continuously (live HR+SpO2)** while the **app is connected** (`ble_connected`) — so the values actually change each ~1 s and the BLE notify carries live data instead of repeating a stale value. On disconnect it shuts down and clears the readings. Steps keep counting regardless. No GATT change needed — the connection is the trigger. |
+| **PPG — motion gating** | `task_max30102.c` | A window only starts when the wrist is **still** (accelerometer magnitude variance below `SCH_MOTION_VAR`); otherwise it defers. Cleaner signal + no wasted LED energy during motion. |
+| **PPG — adaptive LED** | `task_max30102.c` | IR drive starts low (~4.8 mA) and bumps to ~8.4 mA only if the **perfusion index** (`health_algo_perfusion()`) shows a weak pulse — mirrors Apple "increase brightness when signal is low". |
+| **PPG — shorter pulse** | `task_max30102.c` | `SPO2_CONFIG=0x25`: 100 sps, 118 µs (16-bit) vs 411 µs — less LED energy. (Stays 100 sps so the post-FIFO-averaging rate remains 25 Hz, which `health_algo` assumes.) |
 | **BLE advertising** | `task_ble.c` | Advertise at the low-duty interval (`BTM_BLE_ADVERT_UNDIRECTED_LOW`, ~1 s) instead of high-duty 30 ms, via the `WW_ADV_MODE` macro. |
 | **BLE connection** | `task_ble.c` | On connect, request slow link params (`wiced_bt_l2cap_update_ble_conn_params`): ~400–500 ms interval, slave latency 4, 6 s supervision — the radio idles between the 2 s notifications. |
 
