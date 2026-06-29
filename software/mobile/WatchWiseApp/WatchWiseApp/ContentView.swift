@@ -183,6 +183,11 @@ struct DashboardView: View {
                         Text("Updated \(last.formatted(date: .omitted, time: .standard))")
                             .font(.footnote).foregroundStyle(.secondary)
                     }
+
+                    if let serial = ble.serialNumber {
+                        Text("Serial \(serial)")
+                            .font(.footnote).foregroundStyle(.secondary)
+                    }
                 }
                 .padding()
             }

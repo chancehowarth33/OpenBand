@@ -40,8 +40,12 @@ enum WW {
     static let spo2Char           = CBUUID(string: "F1F72B4B-1D76-43A3-ADB2-0E04905ACC8F")
     static let stepsChar          = CBUUID(string: "C36072C1-2706-41F1-8D28-E0619FE31FFA")
 
-    static let servicesToDiscover = [heartRateService, healthService, batteryService]
-    static let charsToDiscover    = [heartRateMeasure, spo2Char, stepsChar, batteryLevel]
+    // Device Information Service — Serial Number String (stable, cross-phone ID)
+    static let deviceInfoService  = CBUUID(string: "180A")
+    static let serialNumber       = CBUUID(string: "2A25")
+
+    static let servicesToDiscover = [heartRateService, healthService, batteryService, deviceInfoService]
+    static let charsToDiscover    = [heartRateMeasure, spo2Char, stepsChar, batteryLevel, serialNumber]
 }
 
 // MARK: - Discovered device model
@@ -80,6 +84,10 @@ final class BLEManager: NSObject, ObservableObject {
     @Published var statusMessage = "Ready"
     @Published var lastUpdate: Date?
 
+    /// Per-device serial from the Device Information Service — stable across
+    /// phones (unlike CBPeripheral.identifier). Use it to key stored history.
+    @Published var serialNumber: String?
+
     // Scan results, shown in the device picker.
     @Published var devices: [DiscoveredDevice] = []
     @Published var connectedDeviceName: String?
@@ -87,7 +95,12 @@ final class BLEManager: NSObject, ObservableObject {
     /// When on, automatically connect to a WatchWise (or last-used) device as
     /// soon as it appears in a scan. Persisted across launches.
     @Published var autoConnect: Bool {
-        didSet { UserDefaults.standard.set(autoConnect, forKey: Self.kAutoConnect) }
+        didSet {
+            UserDefaults.standard.set(autoConnect, forKey: Self.kAutoConnect)
+            // Turning the toggle on should connect right away to a visible
+            // WatchWise — not silently wait for the next scan callback.
+            if autoConnect && !oldValue { triggerAutoConnect() }
+        }
     }
     /// Name of the most recently connected device (shown as a hint in the picker).
     @Published private(set) var lastDeviceName: String?
@@ -179,6 +192,7 @@ final class BLEManager: NSObject, ObservableObject {
     private func resetValues() {
         heartRate = nil; spo2 = nil; steps = nil; battery = nil
         hrHistory = []; lastUpdate = nil
+        serialNumber = nil
     }
 
     // Remember a device so we can auto-reconnect to it next launch.
@@ -198,6 +212,23 @@ final class BLEManager: NSObject, ObservableObject {
         autoConnectAttempted = true
         statusMessage = "Auto-connecting to \(d.name)…"
         connect(to: d)
+    }
+
+    /// Act on auto-connect immediately — used when the user flips the toggle on.
+    /// Connects to an already-discovered WatchWise (or the remembered device) if
+    /// one is visible, otherwise starts a scan to go find one. Without this,
+    /// turning the toggle on does nothing until the next scan callback.
+    private func triggerAutoConnect() {
+        guard autoConnect, state != .connected, state != .connecting else { return }
+        autoConnectAttempted = false
+        if let target = devices.first(where: {
+            $0.isWatchWise || (lastDeviceID != nil && $0.id == lastDeviceID)
+        }) {
+            statusMessage = "Auto-connecting to \(target.name)…"
+            connect(to: target)
+        } else {
+            startScan()
+        }
     }
 
     // Insert/update a discovered device, keeping WatchWise devices on top.
@@ -223,14 +254,14 @@ final class BLEManager: NSObject, ObservableObject {
         statusMessage = "Scanning… (demo)"
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self, self.state == .scanning else { return }
-            let watch = DiscoveredDevice(id: UUID(), name: "WatchWise2",
+            let watch = DiscoveredDevice(id: UUID(), name: "WatchWise",
                                          rssi: -47, isWatchWise: true, peripheral: nil)
             self.upsert(watch)
             self.upsert(DiscoveredDevice(id: UUID(), name: "AirPods Pro",
                                          rssi: -63, isWatchWise: false, peripheral: nil))
             self.upsert(DiscoveredDevice(id: UUID(), name: "Living Room TV",
                                          rssi: -80, isWatchWise: false, peripheral: nil))
-            self.statusMessage = "Tap WatchWise2 to connect (demo)"
+            self.statusMessage = "Tap WatchWise to connect (demo)"
             self.maybeAutoConnect(watch)
         }
     }
@@ -241,6 +272,7 @@ final class BLEManager: NSObject, ObservableObject {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
             guard let self else { return }
             self.connectedDeviceName = device.name
+            self.serialNumber = "DEMO00000001"
             self.rememberDevice(id: device.id, name: device.name)
             self.state = .connected
             self.statusMessage = "Streaming live data (demo)"
@@ -381,22 +413,30 @@ extension BLEManager: CBPeripheralDelegate {
             } else {
                 bpm = bytes.count >= 3 ? Int(bytes[1]) | (Int(bytes[2]) << 8) : 0
             }
-            heartRate = bpm
+            // Firmware reports 0 while disconnected / before the signal locks —
+            // treat that as "no reading" (shows "—"/measuring), not "0 bpm".
+            heartRate = bpm > 0 ? bpm : nil
             if bpm > 0 {
                 hrHistory.append(bpm)
                 if hrHistory.count > hrHistoryMax { hrHistory.removeFirst() }
             }
 
         case WW.spo2Char:
-            spo2 = Int(bytes[0])
+            spo2 = bytes[0] > 0 ? Int(bytes[0]) : nil   // 0 = no reading yet
 
         case WW.stepsChar:
             var v: UInt32 = 0
             for (i, b) in bytes.prefix(4).enumerated() { v |= UInt32(b) << (8 * i) }
-            steps = Int(v)
+            steps = Int(v)   // cumulative — app computes "today" from history
 
         case WW.batteryLevel:
             battery = Int(bytes[0])
+
+        case WW.serialNumber:
+            // 12-hex-char ASCII string from the PSoC6 die ID, e.g. "1A2B3C4D5E6F"
+            serialNumber = String(decoding: data, as: UTF8.self)
+                .trimmingCharacters(in: .controlCharacters)
+            return   // device metadata, not a live-data update
 
         default:
             return
