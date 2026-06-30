@@ -77,8 +77,13 @@ final class BLEManager: NSObject, ObservableObject {
     // Live values (nil = "not received yet" / "—")
     @Published var heartRate: Int?
     @Published var spo2: Int?
-    @Published var steps: Int?
+    @Published var steps: Int?        // cumulative (since the watch's counter started)
+    @Published var stepsToday: Int?   // today's delta — Option A, computed by StepTracker
     @Published var battery: Int?
+
+    /// Computes "today's steps" from the cumulative count (Option A: app owns
+    /// the calendar). Republished into `stepsToday`.
+    let stepTracker = StepTracker()
 
     @Published var state: ConnectionState = .idle
     @Published var statusMessage = "Ready"
@@ -135,6 +140,7 @@ final class BLEManager: NSObject, ObservableObject {
         lastDeviceName = ud.string(forKey: Self.kLastName)
         if let s = ud.string(forKey: Self.kLastID) { lastDeviceID = UUID(uuidString: s) }
         super.init()
+        stepTracker.$today.assign(to: &$stepsToday)   // republish today's steps
         if isDemo {
             state = .idle
             statusMessage = "Demo mode — Simulator has no Bluetooth"
@@ -193,6 +199,7 @@ final class BLEManager: NSObject, ObservableObject {
         heartRate = nil; spo2 = nil; steps = nil; battery = nil
         hrHistory = []; lastUpdate = nil
         serialNumber = nil
+        stepTracker.sessionEnded()   // keep persisted daily total, clear session
     }
 
     // Remember a device so we can auto-reconnect to it next launch.
@@ -273,6 +280,7 @@ final class BLEManager: NSObject, ObservableObject {
             guard let self else { return }
             self.connectedDeviceName = device.name
             self.serialNumber = "DEMO00000001"
+            self.stepTracker.setSerial("DEMO00000001")
             self.rememberDevice(id: device.id, name: device.name)
             self.state = .connected
             self.statusMessage = "Streaming live data (demo)"
@@ -296,6 +304,7 @@ final class BLEManager: NSObject, ObservableObject {
         spo2 = Int.random(in: 96...99)
         demoSteps += Int.random(in: 0...6)
         steps = demoSteps
+        stepTracker.record(cumulative: demoSteps)   // drives today's-steps in demo
         if demoBattery > 1 && Int.random(in: 0...8) == 0 { demoBattery -= 1 }
         battery = demoBattery
         lastUpdate = Date()
@@ -427,15 +436,18 @@ extension BLEManager: CBPeripheralDelegate {
         case WW.stepsChar:
             var v: UInt32 = 0
             for (i, b) in bytes.prefix(4).enumerated() { v |= UInt32(b) << (8 * i) }
-            steps = Int(v)   // cumulative — app computes "today" from history
+            steps = Int(v)                       // cumulative
+            stepTracker.record(cumulative: Int(v))   // -> today's delta (Option A)
 
         case WW.batteryLevel:
             battery = Int(bytes[0])
 
         case WW.serialNumber:
             // 12-hex-char ASCII string from the PSoC6 die ID, e.g. "1A2B3C4D5E6F"
-            serialNumber = String(decoding: data, as: UTF8.self)
+            let s = String(decoding: data, as: UTF8.self)
                 .trimmingCharacters(in: .controlCharacters)
+            serialNumber = s
+            stepTracker.setSerial(s)   // keys today's-steps persistence by device
             return   // device metadata, not a live-data update
 
         default:

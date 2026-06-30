@@ -170,7 +170,7 @@ struct DashboardView: View {
                         MetricCard(title: "SpO₂", icon: "lungs.fill", tint: .blue,
                                    value: ble.spo2.map(String.init) ?? "—", unit: "%")
                         MetricCard(title: "Steps", icon: "figure.walk", tint: .green,
-                                   value: ble.steps.map { $0.formatted() } ?? "—", unit: "today")
+                                   value: ble.stepsToday.map { $0.formatted() } ?? "—", unit: "today")
                         MetricCard(title: "Battery", icon: batteryIcon, tint: batteryTint,
                                    value: ble.battery.map(String.init) ?? "—", unit: "%")
                     }
