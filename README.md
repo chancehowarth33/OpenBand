@@ -1,10 +1,10 @@
 # WatchWise
 
-A wearable health-tracking device designed to attach to the back of a watch. WatchWise tracks basic health statistics including step count, heart rate, and blood oxygen (SpO2) levels.
+A wearable health-tracking device that can either attach to the back of a standard watch or be worn on its own using the 3D-printed standalone case. WatchWise tracks basic health statistics including step count, heart rate, and blood oxygen (SpO2) levels.
 
 ## Project Overview
 
-WatchWise is a compact PCB module that mounts on the back of a standard watch. It uses a PSoC6 microcontroller (via the CYBLE-416045-02 BLE module) running FreeRTOS to collect and process data from an optical heart rate/SpO2 sensor and an IMU for motion tracking. The board includes onboard LiPo charging and battery level monitoring.
+WatchWise is a compact PCB module that mounts on the back of a standard watch, or drops into the included 3D-printed case to be worn on its own with a strap. It uses a PSoC6 microcontroller (via the CYBLE-416045-02 BLE module) running FreeRTOS to collect and process data from an optical heart rate/SpO2 sensor and an IMU for motion tracking. The board includes onboard LiPo charging and battery level monitoring.
 
 ## PCB Design
 
@@ -29,6 +29,44 @@ WatchWise is a two-layer circular PCB (~38mm diameter) shaped to fit the back of
 **Back copper (B.Cu)** — Blue traces on the back layer are kept minimal — primarily the I2C and power connections to the MAX30102 and the battery/charger connector fanout. The large copper-free region under the CYBLE module's antenna extends through both layers.
 
 ![Routing Back](images/routing_back.png)
+
+---
+
+## Assembled Hardware
+
+**Bring-up ("proof of life")** — The fully populated board powered from a LiPo cell on the bench, with the green status LED lit. This was the first power-on test confirming the CYBLE module, LDO, and charger all came up correctly before any firmware was flashed.
+
+![Proof of Life](images/proof_of_life.png)
+
+**Size in hand** — The bare ~38 mm board for scale, with the red/blue battery leads attached. The whole module sits comfortably in the palm.
+
+![Size in Hand](images/size_in_hand.png)
+
+**Assembled front** — The soldered board seated in its case. The CYBLE-416045-02 module and its gold MIFA antenna are at the top, the BMI270 IMU (U1_IMU1) and RTC crystal (RTC1) are on the left, the SWD header (JPROG1) is on the far left, and the 1.8 V LDO (U5_1P8) plus the battery (BATT) and charger (CHAR) pads run down the right side.
+
+![Assembled Front](images/assembled_front.png)
+
+**Assembled back** — The skin-facing side, dominated by the MAX30102 optical HR/SpO2 sensor (U2_MAX1) in the center. Its window sits flush against the wrist when worn.
+
+![Assembled Back](images/assembled_back.png)
+
+---
+
+## 3D-Printed Case (standalone wear)
+
+The case is a **standalone wearable** enclosure — it lets you wear WatchWise on its own with a strap, rather than mounting the bare module to the back of an existing watch. The board drops into the case and a strap threads through the two side slots.
+
+**Top** — The circular pocket holds the PCB, with a slot on each side for the watch strap to pass through.
+
+![Case Top](images/case_top.jpeg)
+
+**Bottom** — The board is retained by four screws. The central cutout exposes the MAX30102 optical window so the sensor makes direct contact with the wrist.
+
+![Case Bottom](images/case_bottom.jpeg)
+
+**On the wrist** — The assembled case worn with a black nylon strap threaded through the side slots, sitting against the wrist like a standard watch.
+
+![Wrist View](images/wrist_view.png)
 
 ---
 
