@@ -561,7 +561,11 @@ void task_ble(void *pvParameters)
             }
         }
 
-        vTaskDelay(pdMS_TO_TICKS(10));
+        /* The loop only does periodic work (notify ~2 s, advert re-arm ~1 s,
+         * heartbeat ~5 s) — GATT requests are handled in callbacks, not here.
+         * A 500 ms loop (vs 10 ms) lets the CPU deep-sleep between wakeups
+         * instead of spinning at 100 Hz; when off-wrist/idle, back off to 2 s. */
+        vTaskDelay(pdMS_TO_TICKS(ww_off_wrist ? 2000 : 500));
     }
 }
 

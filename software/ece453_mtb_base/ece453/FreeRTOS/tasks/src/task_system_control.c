@@ -14,6 +14,7 @@
 #include "task_ble.h"
 #include "health_algo.h"
 #include "sw_step_counter.h"   /* software pedometer (only built/spawned with SW_STEP_COUNTER) */
+#include "ww_rtc.h"            /* wall-clock RTC (WCO-backed) */
 #include "cyhal.h"
 #include <stdlib.h>
 
@@ -53,6 +54,17 @@ void system_control_initialize(void) {
 
     PRINTF("\n\n=== WatchWise Boot ===\n");
 
+#ifdef DEBUG_NO_SLEEP
+    /* Keep the high-frequency clocks up so the debug UART stays clean. Deep
+     * sleep scrambles UART output (clock transitions). Use this for firmware
+     * debugging: `make program DEFINES=DEBUG_NO_SLEEP`. Normal builds deep-sleep
+     * fully for battery life. */
+    cyhal_syspm_lock_deepsleep();
+    PRINTF("[PWR] deep sleep LOCKED (DEBUG_NO_SLEEP) — clean UART, higher power\n");
+#endif
+
+    ww_rtc_init();   /* wall clock (set later by the app over BLE) */
+
     cyhal_i2c_cfg_t i2c_cfg = {
         .is_slave        = false,
         .address         = 0,
@@ -63,7 +75,7 @@ void system_control_initialize(void) {
     cy_rslt_t result = cyhal_i2c_init(&i2c_bus, I2C_SDA_PIN, I2C_SCL_PIN, NULL);
     if (result != CY_RSLT_SUCCESS)
     {
-        PRINTF("I2C bus init FAILED: 0x%08lX\n", result);
+        PRINTF("I2C bus init FAILED: 0x%08lX\n", (unsigned long)result);
         return;
     }
     cyhal_i2c_configure(&i2c_bus, &i2c_cfg);

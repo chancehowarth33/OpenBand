@@ -21,6 +21,10 @@ volatile int16_t bmi270_gyr_x = 0;
 volatile int16_t bmi270_gyr_y = 0;
 volatile int16_t bmi270_gyr_z = 0;
 
+/* "Off-wrist"/idle: set after sustained no motion, cleared on any motion.
+ * Shared so other tasks can back off their poll loops (see task_system_control.h). */
+volatile bool ww_off_wrist = false;
+
 /* ── Low-level I2C helpers ─────────────────────────────────────────── */
 
 static cy_rslt_t bmi270_write_reg(uint8_t reg, uint8_t val)
@@ -244,7 +248,15 @@ void task_bmi270(void *pvParameters)
     }
 
     uint8_t  buf[12];
-    uint8_t  step_tick = 0;
+
+    /* Off-wrist / idle detection: if no axis moves by more than MOVE_DELTA for
+     * IDLE_AFTER_S seconds, declare "off-wrist" (also covers a worn-but-still
+     * wrist) — other tasks then back off so the CPU deep-sleeps longer. Any
+     * motion immediately returns to the active poll rate. */
+    #define MOVE_DELTA    1000   /* per-axis change (~0.06 g) that counts as motion */
+    #define IDLE_AFTER_S  30     /* seconds of no motion before going idle          */
+    int16_t  prev_x = 0, prev_y = 0, prev_z = 0;
+    uint32_t still_secs = 0;
 
     while (1)
     {
@@ -259,12 +271,28 @@ void task_bmi270(void *pvParameters)
             bmi270_gyr_z = (int16_t)((buf[11] << 8) | buf[10]);
         }
 
-        /* Read hardware step count once per second (every 10 × 100 ms ticks) */
-        if (++step_tick >= 10) {
-            step_tick    = 0;
-            health_steps = bmi270_read_step_count();
+        /* Motion test: any axis change above the threshold since last read. */
+        int dx = bmi270_acc_x - prev_x; if (dx < 0) dx = -dx;
+        int dy = bmi270_acc_y - prev_y; if (dy < 0) dy = -dy;
+        int dz = bmi270_acc_z - prev_z; if (dz < 0) dz = -dz;
+        prev_x = bmi270_acc_x; prev_y = bmi270_acc_y; prev_z = bmi270_acc_z;
+        bool moving = (dx > MOVE_DELTA || dy > MOVE_DELTA || dz > MOVE_DELTA);
+
+        uint32_t poll_ms = ww_off_wrist ? 4000u : 1000u;   /* current poll interval */
+        if (moving) {
+            still_secs = 0;
+            if (ww_off_wrist) { ww_off_wrist = false; PRINTF("[BMI270] motion — active\n"); }
+        } else {
+            still_secs += poll_ms / 1000u;
+            if (!ww_off_wrist && still_secs >= IDLE_AFTER_S) {
+                ww_off_wrist = true; PRINTF("[BMI270] no motion — idle/off-wrist\n");
+            }
         }
 
-        vTaskDelay(pdMS_TO_TICKS(100));
+        /* Hardware step counter accumulates on-chip, so a slow read is fine. */
+        health_steps = bmi270_read_step_count();
+
+        /* Slow down when idle so the CPU can deep-sleep in longer chunks. */
+        vTaskDelay(pdMS_TO_TICKS(ww_off_wrist ? 4000u : 1000u));
     }
 }

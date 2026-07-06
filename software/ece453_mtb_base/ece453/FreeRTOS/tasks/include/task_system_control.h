@@ -23,6 +23,11 @@ extern SemaphoreHandle_t i2c_mutex;
 /* Mutex protecting printf/UART — take before any printf, give after */
 extern SemaphoreHandle_t print_mutex;
 
+/* Set true by task_bmi270 after sustained no motion ("off-wrist"/idle), cleared
+ * on any motion. Other tasks slow their poll loops when true so the CPU can
+ * deep-sleep in longer chunks. */
+extern volatile bool ww_off_wrist;
+
 #define PRINTF(...) do { \
     xSemaphoreTake(print_mutex, portMAX_DELAY); \
     printf(__VA_ARGS__); \
