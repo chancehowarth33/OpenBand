@@ -1,5 +1,9 @@
-<h1 align="center">OpenBand</h1>
-
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="images/logo-dark.png">
+    <img src="images/logo.png" alt="OpenBand" width="480">
+  </picture>
+</p>
 
 <p align="center"><b>I built my own WHOOP.</b></p>
 
