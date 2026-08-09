@@ -1,6 +1,5 @@
 <h1 align="center">OpenBand</h1>
 
-<p align="center"><i>formerly WatchWise</i></p>
 
 <p align="center"><b>I built my own WHOOP.</b></p>
 
