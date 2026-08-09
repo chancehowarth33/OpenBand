@@ -3,6 +3,7 @@
 # Private, do not publish
 patent/
 .netlify/
+receipts/
 
 # Altium backup and history folders
 **/.history/
