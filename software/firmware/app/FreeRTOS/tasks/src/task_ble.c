@@ -10,12 +10,12 @@
  *   - wiced_bt_stack_init() starts the stack. BTM_ENABLED_EVT fires when ready.
  *
  * GATT services (defined via BT Configurator):
- *   OpenBand Custom Health Service (128-bit UUID)
+ *   WatchWise Custom Health Service (128-bit UUID)
  *     SpO2  characteristic (handle 0x000A) — notify, 1 byte %
  *     Steps characteristic (handle 0x000D) — notify, 4 bytes LE uint32
  *
- * Phone testing: nRF Connect → scan for "OpenBand" → Connect →
- * enable notifications on SP02 and StepCount in the OpenBand Custom Service.
+ * Phone testing: nRF Connect → scan for "WatchWise" → Connect →
+ * enable notifications on SP02 and StepCount in the WatchWise Custom Service.
  */
 
 #include "task_ble.h"
@@ -92,7 +92,7 @@ static wiced_bt_dev_status_t app_bt_management_callback(
         case BTM_ENABLED_EVT:
             if (p_event_data->enabled.status == WICED_BT_SUCCESS) {
                 /* Give each unit a unique BLE address derived from the PSoC6's
-                 * factory die ID, so the app can tell multiple OpenBand devices
+                 * factory die ID, so the app can tell multiple WatchWise devices
                  * apart. (The BT-Configurator default has the low 3 bytes zeroed
                  * — identical across boards — which would make them collide.)
                  * The 6-byte address is the device's broadcast serial number. */
@@ -112,11 +112,11 @@ static wiced_bt_dev_status_t app_bt_management_callback(
                        (int)db_status, gatt_database_len);
                 wiced_bt_gatt_register(app_gatt_callback);
                 app_set_dis_serial(uid);   /* fill DIS Serial Number from die ID */
-                /* Set advertising payload (includes device name "OpenBand") */
+                /* Set advertising payload (includes device name "WatchWise") */
                 wiced_bt_ble_set_raw_advertisement_data(CY_BT_ADV_PACKET_ELEM_COUNT,
                                                         cy_bt_adv_packet_data);
                 wiced_bt_start_advertisements(WW_ADV_MODE, 0, NULL);
-                PRINTF("[BLE] Stack ready — advertising as \"OpenBand\"\n");
+                PRINTF("[BLE] Stack ready — advertising as \"WatchWise\"\n");
             } else {
                 PRINTF("[BLE] Stack init FAILED: %d\n",
                        (int)p_event_data->enabled.status);
@@ -160,7 +160,7 @@ static gatt_db_lookup_table_t *app_find_attr(uint16_t handle)
 /* --------------------------------------------------------------------------
  * Populate the Device Information Service "Serial Number" characteristic with
  * this unit's unique ID (formatted from the PSoC6 factory die ID), so every
- * OpenBand reports a distinct serial the app can read.
+ * WatchWise reports a distinct serial the app can read.
  *
  * This is GUARD-COMPILED: it only does anything once a Serial Number
  * characteristic is added to the DIS in BT Configurator, which is what defines
@@ -215,11 +215,11 @@ static wiced_bt_gatt_status_t app_gatt_write_handler(
     attr->cur_len = write_len;
 
     /* Mirror CCCDs into our shadow variables for the notification loop */
-    if (handle == HDLD_OPENBAND_HEALTH_SP02_CLIENT_CHAR_CONFIG) {
+    if (handle == HDLD_WATCHWISE_HEALTH_SP02_CLIENT_CHAR_CONFIG) {
         spo2_cccd = attr->p_data[0] | ((uint16_t)attr->p_data[1] << 8);
         PRINTF("[BLE] SpO2 notifications %s\n",
                (spo2_cccd & GATT_CLIENT_CONFIG_NOTIFICATION) ? "ON" : "OFF");
-    } else if (handle == HDLD_OPENBAND_HEALTH_STEPCOUNT_CLIENT_CHAR_CONFIG) {
+    } else if (handle == HDLD_WATCHWISE_HEALTH_STEPCOUNT_CLIENT_CHAR_CONFIG) {
         steps_cccd = attr->p_data[0] | ((uint16_t)attr->p_data[1] << 8);
         PRINTF("[BLE] Steps notifications %s\n",
                (steps_cccd & GATT_CLIENT_CONFIG_NOTIFICATION) ? "ON" : "OFF");
@@ -252,11 +252,11 @@ static wiced_bt_gatt_status_t app_gatt_read_handler(
     uint16_t handle = p_read->handle;
 
     /* Update dynamic backing arrays with live sensor data before lookup */
-    if (handle == HDLC_OPENBAND_HEALTH_SP02_VALUE) {
-        app_openband_health_sp02[0] = health_spo2;
-    } else if (handle == HDLC_OPENBAND_HEALTH_STEPCOUNT_VALUE) {
+    if (handle == HDLC_WATCHWISE_HEALTH_SP02_VALUE) {
+        app_watchwise_health_sp02[0] = health_spo2;
+    } else if (handle == HDLC_WATCHWISE_HEALTH_STEPCOUNT_VALUE) {
         uint32_t steps = health_steps;
-        memcpy(app_openband_health_stepcount, &steps, sizeof(steps));
+        memcpy(app_watchwise_health_stepcount, &steps, sizeof(steps));
     } else if (handle == HDLC_HRS_HEART_RATE_MEASUREMENT_VALUE) {
         /* flags=0x00 (8-bit HR format), then BPM */
         app_hrs_heart_rate_measurement[0] = 0x00u;
@@ -545,12 +545,12 @@ void task_ble(void *pvParameters)
 
                 /* SpO2 — 1 byte percent */
                 uint8_t spo2 = health_spo2;
-                app_send_notify(HDLC_OPENBAND_HEALTH_SP02_VALUE,
+                app_send_notify(HDLC_WATCHWISE_HEALTH_SP02_VALUE,
                                 &spo2, 1u, spo2_cccd);
 
                 /* Step count — 4-byte little-endian uint32 */
                 uint32_t steps = health_steps;
-                app_send_notify(HDLC_OPENBAND_HEALTH_STEPCOUNT_VALUE,
+                app_send_notify(HDLC_WATCHWISE_HEALTH_STEPCOUNT_VALUE,
                                 (uint8_t *)&steps, (uint16_t)sizeof(steps),
                                 steps_cccd);
 

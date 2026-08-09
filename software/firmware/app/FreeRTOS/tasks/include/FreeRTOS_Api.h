@@ -1,7 +1,7 @@
 /**
  * @file FreeRTOS_Api.h
  * @author Chance Howarth
- * @brief Aggregates the FreeRTOS kernel headers used across the OpenBand tasks.
+ * @brief Aggregates the FreeRTOS kernel headers used across the WatchWise tasks.
  *
  * @copyright Copyright (c) 2026 Chance Howarth. MIT licensed, see LICENSE.
  */

@@ -1,6 +1,6 @@
 //
-//  OpenBandApp.swift
-//  OpenBandApp
+//  WatchWiseApp.swift
+//  WatchWiseApp
 //
 //  Entry point. Creates the single shared BLEManager and injects it into
 //  the SwiftUI environment so every view can observe live sensor data.
@@ -9,7 +9,7 @@
 import SwiftUI
 
 @main
-struct OpenBandApp: App {
+struct WatchWiseApp: App {
     @StateObject private var ble = BLEManager()
 
     var body: some Scene {

@@ -189,7 +189,7 @@ Full detail, including the low-power measurements and the complete BMI270 debugg
 
 | Service | Characteristics |
 |---------|-----------------|
-| OpenBand Health (custom 128-bit) | SpO2 (read + notify), StepCount (read + notify, uint32 LE) |
+| WatchWise Health (custom 128-bit) | SpO2 (read + notify), StepCount (read + notify, uint32 LE) |
 | Heart Rate (`0x180D`) | HR Measurement (`0x2A37`) |
 | Battery (`0x180F`) | Battery Level (`0x2A19`) |
 
@@ -197,7 +197,7 @@ Custom UUIDs: service `5E021176-5E66-483F-AE53-D3291D2CC787`, SpO2
 `F1F72B4B-1D76-43A3-ADB2-0E04905ACC8F`, StepCount `C36072C1-2706-41F1-8D28-E0619FE31FFA`.
 
 Heart rate and battery use the standard SIG-assigned services, so the device also works with any
-generic BLE tool (nRF Connect shows it as `OpenBand2`) if you would rather not build the app.
+generic BLE tool (nRF Connect shows it as `WatchWise2`) if you would rather not build the app.
 
 ---
 
@@ -217,7 +217,7 @@ whenever the device reboots, so "today's steps" cannot just be the raw value. `S
 tracks the counter's baseline and handles the reset case.
 
 Build and signing steps are in
-[`software/mobile/OpenBandApp/README.md`](software/mobile/OpenBandApp/README.md).
+[`software/mobile/WatchWiseApp/README.md`](software/mobile/WatchWiseApp/README.md).
 
 ---
 
@@ -243,7 +243,7 @@ OpenBand/
 │   │       ├── task_ble.c               # WICED BT stack, GATT, notifications
 │   │       ├── health_algo.c            # HR / SpO2 signal processing
 │   │       └── ww_rtc.c                 # RTC
-│   ├── mobile/OpenBandApp/         # SwiftUI + CoreBluetooth iOS app
+│   ├── mobile/WatchWiseApp/         # SwiftUI + CoreBluetooth iOS app
 │   └── BMI270_debug.txt             # Step-counter investigation log
 │
 ├── case/                            # OpenSCAD sources, STL, 3MF for the enclosure
@@ -254,7 +254,7 @@ OpenBand/
 │
 ├── images/                          # Renders and photos used in this README
 ├── receipts/                        # DigiKey and JLCPCB orders
-├── OpenBand-BOM.csv                # Bill of materials with DigiKey part numbers
+├── WatchWise-BOM.csv                # Bill of materials with DigiKey part numbers
 └── interactive_BOM.html             # Clickable board view with component highlighting
 ```
 
@@ -266,7 +266,7 @@ Total BOM cost: **~$131.52** for a qty-3 order, so roughly **$44 per unit** in p
 
 Open [`interactive_BOM.html`](interactive_BOM.html) in a browser for a clickable board view that
 highlights each component in place. The full part list with DigiKey numbers is in
-[`OpenBand-BOM.csv`](OpenBand-BOM.csv).
+[`WatchWise-BOM.csv`](WatchWise-BOM.csv).
 
 ### ICs & modules
 
@@ -325,16 +325,15 @@ highlights each component in place. The full part list with DigiKey numbers is i
 
 ## Build one
 
+> The project was originally called WatchWise, and the source files, board files, and BLE device
+> name still use that name. Only the project itself was renamed; nothing internal was touched.
+
 **Boards.** KiCad sources and JLCPCB fabrication outputs are in
 [`pcb/watchwise_main_kicad/`](pcb/watchwise_main_kicad); the Altium project is in
 [`pcb/altium_project/`](pcb/altium_project). Order parts from
-[`OpenBand-BOM.csv`](OpenBand-BOM.csv).
+[`WatchWise-BOM.csv`](WatchWise-BOM.csv).
 
-> The PCB files still carry the project's original name, WatchWise. The gerbers are the exact
-> set the fabricated boards were built from, so they are left untouched as a record of what was
-> actually manufactured.
-
-**Enclosure.** Print `openband_case_V2.stl` and `openband_case_strap.stl` from
+**Enclosure.** Print `watchwise_case_V2.stl` and `watchwise_case_strap.stl` from
 [`case/`](case). You will need four M1.6 x 4 mm screws and a standard strap.
 
 **Firmware.** From `software/firmware/`:
@@ -359,7 +358,7 @@ Debug output is on UART P5_0/P5_1 at 115200 baud over the KitProg3 USB COM port.
 > retry. JPROG1 has an RC filter on `XRES_N`, so the Makefile already widens the reset pulse; the
 > BLE firmware sleeps the chip, so the reset has to catch it.
 
-**Connect.** Open the iOS app, or scan with nRF Connect for `OpenBand2` and subscribe to the
+**Connect.** Open the iOS app, or scan with nRF Connect for `WatchWise2` and subscribe to the
 SpO2 and StepCount notifications.
 
 ---

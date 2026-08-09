@@ -1,21 +1,21 @@
 //
 //  BLEManager.swift
-//  OpenBandApp
+//  WatchWiseApp
 //
-//  CoreBluetooth client for the OpenBand PSoC6 wearable.
+//  CoreBluetooth client for the WatchWise PSoC6 wearable.
 //
 //  Flow: scan -> show discovered devices -> user taps one -> connect ->
 //  discover the four data characteristics -> subscribe to notifications.
 //
 //  DEMO MODE: the iOS Simulator has no Bluetooth radio, so when built for the
 //  Simulator this class bypasses CoreBluetooth entirely and fabricates a fake
-//  "OpenBand2" device plus realistic live data, so the full UI flow can be
+//  "WatchWise2" device plus realistic live data, so the full UI flow can be
 //  exercised on a laptop. On a real device it uses real BLE.
 //
 //  GATT layout (must match firmware task_ble.c / cycfg_gatt_db):
 //    Heart Rate Service          0x180D
 //      Heart Rate Measurement    0x2A37   notify   [flags(1), bpm(1)]  bpm = byte[1]
-//    OpenBand Health (custom)   5E021176-5E66-483F-AE53-D3291D2CC787
+//    WatchWise Health (custom)   5E021176-5E66-483F-AE53-D3291D2CC787
 //      SpO2                      F1F72B4B-1D76-43A3-ADB2-0E04905ACC8F  notify  uint8 %
 //      Step Count                C36072C1-2706-41F1-8D28-E0619FE31FFA  notify  uint32 LE
 //    Battery Service             0x180F
@@ -27,8 +27,8 @@ import CoreBluetooth
 
 // MARK: - UUID constants
 
-enum OB {
-    static let deviceNamePrefix = "OpenBand"
+enum WW {
+    static let deviceNamePrefix = "WatchWise"
 
     static let heartRateService   = CBUUID(string: "180D")
     static let heartRateMeasure   = CBUUID(string: "2A37")
@@ -54,7 +54,7 @@ struct DiscoveredDevice: Identifiable, Equatable {
     let id: UUID            // CBPeripheral.identifier (stable per device/host)
     var name: String
     var rssi: Int
-    var isOpenBand: Bool
+    var isWatchWise: Bool
     var peripheral: CBPeripheral?   // nil in demo mode
 
     static func == (a: DiscoveredDevice, b: DiscoveredDevice) -> Bool { a.id == b.id }
@@ -97,13 +97,13 @@ final class BLEManager: NSObject, ObservableObject {
     @Published var devices: [DiscoveredDevice] = []
     @Published var connectedDeviceName: String?
 
-    /// When on, automatically connect to a OpenBand (or last-used) device as
+    /// When on, automatically connect to a WatchWise (or last-used) device as
     /// soon as it appears in a scan. Persisted across launches.
     @Published var autoConnect: Bool {
         didSet {
             UserDefaults.standard.set(autoConnect, forKey: Self.kAutoConnect)
             // Turning the toggle on should connect right away to a visible
-            // OpenBand — not silently wait for the next scan callback.
+            // WatchWise — not silently wait for the next scan callback.
             if autoConnect && !oldValue { triggerAutoConnect() }
         }
     }
@@ -211,10 +211,10 @@ final class BLEManager: NSObject, ObservableObject {
         ud.set(name, forKey: Self.kLastName)
     }
 
-    // Auto-connect to a OpenBand (or the remembered) device, once per scan.
+    // Auto-connect to a WatchWise (or the remembered) device, once per scan.
     private func maybeAutoConnect(_ d: DiscoveredDevice) {
         guard autoConnect, state == .scanning, !autoConnectAttempted else { return }
-        let isTarget = d.isOpenBand || (lastDeviceID != nil && d.id == lastDeviceID)
+        let isTarget = d.isWatchWise || (lastDeviceID != nil && d.id == lastDeviceID)
         guard isTarget else { return }
         autoConnectAttempted = true
         statusMessage = "Auto-connecting to \(d.name)…"
@@ -222,14 +222,14 @@ final class BLEManager: NSObject, ObservableObject {
     }
 
     /// Act on auto-connect immediately — used when the user flips the toggle on.
-    /// Connects to an already-discovered OpenBand (or the remembered device) if
+    /// Connects to an already-discovered WatchWise (or the remembered device) if
     /// one is visible, otherwise starts a scan to go find one. Without this,
     /// turning the toggle on does nothing until the next scan callback.
     private func triggerAutoConnect() {
         guard autoConnect, state != .connected, state != .connecting else { return }
         autoConnectAttempted = false
         if let target = devices.first(where: {
-            $0.isOpenBand || (lastDeviceID != nil && $0.id == lastDeviceID)
+            $0.isWatchWise || (lastDeviceID != nil && $0.id == lastDeviceID)
         }) {
             statusMessage = "Auto-connecting to \(target.name)…"
             connect(to: target)
@@ -238,7 +238,7 @@ final class BLEManager: NSObject, ObservableObject {
         }
     }
 
-    // Insert/update a discovered device, keeping OpenBand devices on top.
+    // Insert/update a discovered device, keeping WatchWise devices on top.
     private func upsert(_ d: DiscoveredDevice) {
         if let i = devices.firstIndex(where: { $0.id == d.id }) {
             devices[i].rssi = d.rssi
@@ -247,7 +247,7 @@ final class BLEManager: NSObject, ObservableObject {
             devices.append(d)
         }
         devices.sort {
-            if $0.isOpenBand != $1.isOpenBand { return $0.isOpenBand }
+            if $0.isWatchWise != $1.isWatchWise { return $0.isWatchWise }
             return $0.rssi > $1.rssi
         }
     }
@@ -261,14 +261,14 @@ final class BLEManager: NSObject, ObservableObject {
         statusMessage = "Scanning… (demo)"
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self, self.state == .scanning else { return }
-            let watch = DiscoveredDevice(id: UUID(), name: "OpenBand",
-                                         rssi: -47, isOpenBand: true, peripheral: nil)
+            let watch = DiscoveredDevice(id: UUID(), name: "WatchWise",
+                                         rssi: -47, isWatchWise: true, peripheral: nil)
             self.upsert(watch)
             self.upsert(DiscoveredDevice(id: UUID(), name: "AirPods Pro",
-                                         rssi: -63, isOpenBand: false, peripheral: nil))
+                                         rssi: -63, isWatchWise: false, peripheral: nil))
             self.upsert(DiscoveredDevice(id: UUID(), name: "Living Room TV",
-                                         rssi: -80, isOpenBand: false, peripheral: nil))
-            self.statusMessage = "Tap OpenBand to connect (demo)"
+                                         rssi: -80, isWatchWise: false, peripheral: nil))
+            self.statusMessage = "Tap WatchWise to connect (demo)"
             self.maybeAutoConnect(watch)
         }
     }
@@ -348,7 +348,7 @@ extension BLEManager: CBCentralManagerDelegate {
         let d = DiscoveredDevice(id: peripheral.identifier,
                                  name: name,
                                  rssi: RSSI.intValue,
-                                 isOpenBand: name.hasPrefix(OB.deviceNamePrefix),
+                                 isWatchWise: name.hasPrefix(WW.deviceNamePrefix),
                                  peripheral: peripheral)
         upsert(d)
         maybeAutoConnect(d)
@@ -360,7 +360,7 @@ extension BLEManager: CBCentralManagerDelegate {
         rememberDevice(id: peripheral.identifier, name: peripheral.name)
         statusMessage = "Connected — discovering services…"
         resetValues()
-        peripheral.discoverServices(OB.servicesToDiscover)
+        peripheral.discoverServices(WW.servicesToDiscover)
     }
 
     func centralManager(_ central: CBCentralManager,
@@ -389,14 +389,14 @@ extension BLEManager: CBPeripheralDelegate {
             statusMessage = "Service discovery failed"; return
         }
         for service in services {
-            peripheral.discoverCharacteristics(OB.charsToDiscover, for: service)
+            peripheral.discoverCharacteristics(WW.charsToDiscover, for: service)
         }
     }
 
     func peripheral(_ peripheral: CBPeripheral,
                     didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         guard let chars = service.characteristics else { return }
-        for c in chars where OB.charsToDiscover.contains(c.uuid) {
+        for c in chars where WW.charsToDiscover.contains(c.uuid) {
             peripheral.setNotifyValue(true, for: c)
             peripheral.readValue(for: c)
         }
@@ -414,7 +414,7 @@ extension BLEManager: CBPeripheralDelegate {
         guard !bytes.isEmpty else { return }
 
         switch uuid {
-        case OB.heartRateMeasure:
+        case WW.heartRateMeasure:
             let flags = bytes[0]
             let bpm: Int
             if flags & 0x01 == 0 {
@@ -430,19 +430,19 @@ extension BLEManager: CBPeripheralDelegate {
                 if hrHistory.count > hrHistoryMax { hrHistory.removeFirst() }
             }
 
-        case OB.spo2Char:
+        case WW.spo2Char:
             spo2 = bytes[0] > 0 ? Int(bytes[0]) : nil   // 0 = no reading yet
 
-        case OB.stepsChar:
+        case WW.stepsChar:
             var v: UInt32 = 0
             for (i, b) in bytes.prefix(4).enumerated() { v |= UInt32(b) << (8 * i) }
             steps = Int(v)                       // cumulative
             stepTracker.record(cumulative: Int(v))   // -> today's delta (Option A)
 
-        case OB.batteryLevel:
+        case WW.batteryLevel:
             battery = Int(bytes[0])
 
-        case OB.serialNumber:
+        case WW.serialNumber:
             // 12-hex-char ASCII string from the PSoC6 die ID, e.g. "1A2B3C4D5E6F"
             let s = String(decoding: data, as: UTF8.self)
                 .trimmingCharacters(in: .controlCharacters)

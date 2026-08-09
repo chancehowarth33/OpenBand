@@ -1,4 +1,4 @@
-OpenBand PCB Assembly Notes
+WatchWise PCB Assembly Notes
 =============================
 
 ## Hotplate Reflow Profile (full board front-side components)

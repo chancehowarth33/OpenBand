@@ -1,6 +1,6 @@
-# OpenBand Firmware
+# WatchWise Firmware
 
-OpenBand is a health-monitoring wearable built on Infineon's **PSoC 6 BLE** (`CY8CPROTO-063-BLE`, Cortex-M4 + Cortex-M0+) using **ModusToolbox** and **FreeRTOS**. It reads a **MAX30102** PPG sensor (heart rate / SpO2) and a **BMI270** IMU (motion / hardware step counter), runs a real-time health algorithm, and streams the results over **BLE**.
+WatchWise is a health-monitoring wearable built on Infineon's **PSoC 6 BLE** (`CY8CPROTO-063-BLE`, Cortex-M4 + Cortex-M0+) using **ModusToolbox** and **FreeRTOS**. It reads a **MAX30102** PPG sensor (heart rate / SpO2) and a **BMI270** IMU (motion / hardware step counter), runs a real-time health algorithm, and streams the results over **BLE**.
 
 All application code runs on the **CM4** core; the **CM0+** core runs the BLESS Bluetooth link-layer controller. The firmware project lives in [`firmware/`](firmware).
 
@@ -118,7 +118,7 @@ The `CY8CPROTO-063-BLE` has an **integrated BLESS** peripheral (not an external 
 
 | Service | Characteristics |
 |---------|-----------------|
-| OpenBand Health (custom 128-bit) | SpO2 (read+notify), StepCount (read+notify, uint32 LE) |
+| WatchWise Health (custom 128-bit) | SpO2 (read+notify), StepCount (read+notify, uint32 LE) |
 | Heart Rate (`0x180D`) | HR Measurement (`0x2A37`) |
 | Battery (`0x180F`) | Battery Level (`0x2A19`) |
 
@@ -129,7 +129,7 @@ Custom UUIDs:
 
 Init sequence: `wiced_bt_stack_init` → on `BTM_ENABLED_EVT`, `wiced_bt_gatt_db_init` + `wiced_bt_gatt_register` + start advertising → notify subscribed characteristics every 2 s. The app GATT callback handles all ATT operations explicitly (MTU, read-by-type, read, write, buffer allocation) because btstack v3.x does not. Advertising is **re-armed from the task loop** (via `wiced_bt_ble_get_current_advert_mode()`) so the device stays discoverable past the configured advertising-duration timeout, without racing the connection handshake.
 
-**Phone testing:** nRF Connect → scan for `OpenBand` → connect → enable notifications on SpO2 / StepCount.
+**Phone testing:** nRF Connect → scan for `WatchWise` → connect → enable notifications on SpO2 / StepCount.
 
 ---
 

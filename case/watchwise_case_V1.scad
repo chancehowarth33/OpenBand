@@ -1,5 +1,5 @@
 // ============================================================
-//  OpenBand — Two-Piece Screw Case with NATO Band Lugs
+//  WatchWise V1 — Two-Piece Screw Case with NATO Band Lugs
 // ============================================================
 //
 //  DESIGN
@@ -73,22 +73,6 @@ sensor_w  = 6.2;   sensor_ht = 3.9;   // MAX30 window — shrunk a bit (was 6.6 
 batt_pos  = [10.32, -5.34];  batt_sz = [3.1, 3.55];
 char_pos  = [10.32, -8.98];  char_sz = [3.1, 3.55];
 prog_pos  = [-13.06,  2.28]; prog_sz = [4.0, 8.5];
-
-// ── LED status windows (TOP / strap face) ───────────────────
-// 1.5mm round windows in the top piece, lined up with the P_BATT1
-// (power) and P_CHAR1 (charge) LEDs on the PCB.
-led_d        = 1.5;             // round hole diameter
-led_batt_pos = [14.93, -7.64];  // P_BATT1 centroid in case coords
-led_char_pos = [15.86,  2.79];  // P_CHAR1 centroid in case coords
-
-// ── Battery shelf (inside top piece cavity) ──────────────────
-// PCB Edge.Cuts has a chord at y=−15.87mm spanning x=±8.5mm (17mm wide).
-// The battery sits in the crescent below that flat PCB edge.
-// Shelf matches the chord so the PCB still drops in unobstructed.
-shelf_y       = -15.60;  // top face of shelf — 34.60mm from top of outer circle
-shelf_chord_w =  16.8;   // shelf width, centered at x=0
-shelf_t       =   1.5;   // shelf depth in +y (into cavity)
-shelf_h       =   1.0;   // shelf height in z
 
 // ── Lug / band slot parameters ───────────────────────────────
 band_slot_w = 23.0;  // slot width in y  (22mm band + 0.5mm each side)
@@ -180,19 +164,6 @@ module screw_boss() {
     }
 }
 
-// ── Battery shelf ────────────────────────────────────────────
-// Curved ledge along the inner wall of the top piece at y=shelf_y.
-// Battery bottom edge rests against it; intersection clips the box
-// to the circular cavity profile automatically.
-module battery_shelf() {
-    intersection() {
-        translate([0, 0, top_face])
-            cylinder(h=shelf_h, d=case_id, $fn=64);
-        translate([-shelf_chord_w/2, shelf_y - shelf_t, top_face])
-            cube([shelf_chord_w, shelf_t, shelf_h]);
-    }
-}
-
 // ── TOP PIECE (outer/strap side) ────────────────────────────
 module top_piece() {
     union() {
@@ -209,19 +180,11 @@ module top_piece() {
             // Re-cut interior to a PERFECT circle (lug overlap removed)
             translate([0, 0, top_face])
                 cylinder(h=top_h, d=case_id);
-            // LED status windows through strap face, over P_BATT1 & P_CHAR1.
-            // x is mirrored (-x) because the top piece flips over the PCB during
-            // assembly, so a hole at -x in this frame lands over the +x LEDs.
-            translate([-led_batt_pos[0], led_batt_pos[1], -0.01])
-                cylinder(h=top_face + 0.02, d=led_d, $fn=24);
-            translate([-led_char_pos[0], led_char_pos[1], -0.01])
-                cylinder(h=top_face + 0.02, d=led_d, $fn=24);
         }
-        // Bosses and shelf added AFTER the cavity re-cut so they remain solid
+        // Bosses added AFTER the cavity re-cut so they remain solid
         for (p = mh_pos)
             translate([p[0], p[1], top_face])
                 screw_boss();
-        battery_shelf();
     }
 }
 

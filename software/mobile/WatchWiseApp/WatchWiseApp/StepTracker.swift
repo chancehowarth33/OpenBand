@@ -1,6 +1,6 @@
 //
 //  StepTracker.swift
-//  OpenBandApp
+//  WatchWiseApp
 //
 //  Option A — the app owns the calendar.
 //
