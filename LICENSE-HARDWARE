@@ -1,0 +1,39 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Copyright (c) 2026 Chance Howarth
+
+The WatchWise hardware design files are licensed under the Creative Commons
+Attribution 4.0 International License.
+
+This covers the original hardware design work in this repository:
+
+  pcb/watchwise_main_kicad/     KiCad schematics, board layout, fabrication outputs
+  pcb/altium_project/           Altium schematics and board files (see exclusions below)
+  case/                         OpenSCAD sources, STL, and 3MF enclosure models
+  WatchWise-BOM.csv             Bill of materials
+  interactive_BOM.html          Generated interactive BOM
+
+You are free to share and adapt these files for any purpose, including
+commercially, provided you give appropriate credit, link to the license, and
+indicate whether changes were made.
+
+Full license text:
+  https://creativecommons.org/licenses/by/4.0/legalcode
+
+Human-readable summary (not a substitute for the license):
+  https://creativecommons.org/licenses/by/4.0/
+
+EXCLUSIONS
+
+This license applies only to original work by the copyright holder above. It
+does not extend to third-party material redistributed in this repository,
+including the University of Wisconsin-Madison ECE 453 Altium templates and the
+uw-altium-parts component library under pcb/altium_project/. Those remain the
+property of their respective owners. See the NOTICE file for details.
+
+DISCLAIMER
+
+These design files are provided as is, without warranty of any kind. This is a
+personal prototype, not a certified product. It is not a medical device and
+must not be used for medical purposes. Building electronics involves lithium
+batteries and mains-powered tools; you assume all risk.

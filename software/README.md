@@ -2,7 +2,7 @@
 
 WatchWise is a health-monitoring wearable built on Infineon's **PSoC 6 BLE** (`CY8CPROTO-063-BLE`, Cortex-M4 + Cortex-M0+) using **ModusToolbox** and **FreeRTOS**. It reads a **MAX30102** PPG sensor (heart rate / SpO2) and a **BMI270** IMU (motion / hardware step counter), runs a real-time health algorithm, and streams the results over **BLE**.
 
-All application code runs on the **CM4** core; the **CM0+** core runs the BLESS Bluetooth link-layer controller. The firmware project lives in [`ece453_mtb_base/`](ece453_mtb_base).
+All application code runs on the **CM4** core; the **CM0+** core runs the BLESS Bluetooth link-layer controller. The firmware project lives in [`firmware/`](firmware).
 
 ---
 
@@ -23,7 +23,7 @@ All application code runs on the **CM4** core; the **CM0+** core runs the BLESS 
 
 ## Build & flash
 
-All commands run from `ece453_mtb_base/`:
+All commands run from `firmware/`:
 
 ```bash
 make getlibs      # First-time: download .mtb dependencies into libs/
@@ -216,7 +216,7 @@ PPG thresholds/currents in `task_max30102.c` are starting values and depend heav
 
 | File | Role |
 |------|------|
-| `ece453/FreeRTOS/tasks/src/main.c` | Entry point; BSP init, scheduler start |
+| `app/FreeRTOS/tasks/src/main.c` | Entry point; BSP init, scheduler start |
 | `…/task_system_control.c` | I2C + UART init, task spawning, metric reporting |
 | `…/task_max30102.c` | MAX30102 PPG driver (+ LOW_POWER HR-only/finger-gating) |
 | `…/task_bmi270.c` | BMI270 driver + hardware step counter (+ LOW_POWER gyro-off) |

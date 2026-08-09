@@ -39,7 +39,7 @@ database (`task_ble.c` / `cycfg_gatt_db.h`):
 | Steps | (same custom service) | `C36072C1-2706-41F1-8D28-E0619FE31FFA` | uint32 little-endian |
 | Battery | `180F` | `2A19` | uint8 % |
 
-The watch advertises only its name (`WatchWise2`) with no service UUIDs, so the
+The device advertises only its name (`WatchWise2`) with no service UUIDs, so the
 app scans with `services: nil` and matches any peripheral whose advertised name
 starts with `WatchWise`. The firmware pushes notifications every 2 s.
 
@@ -55,7 +55,7 @@ WatchWiseApp/
 
 ## Troubleshooting
 
-- **Doesn’t find the watch:** make sure the firmware is flashed and advertising
+- **Doesn’t find the device:** make sure the firmware is flashed and advertising
   (it stops advertising ~2 min after boot if not connected, but the firmware
   re-arms it). Confirm it shows up in nRF Connect as `WatchWise2`.
 - **Only one phone at a time:** disconnect nRF Connect / other phones first —

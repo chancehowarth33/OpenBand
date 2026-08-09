@@ -6,11 +6,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 WatchWise is a health monitoring wearable application for Infineon's PSoC6 (Cortex-M4) built with ModusToolbox. It uses FreeRTOS to concurrently read from a MAX30102 PPG sensor (heart rate/SpO2) and BMI270 IMU (motion/steps), then processes sensor data through a real-time health algorithm.
 
-All application code runs on the CM4 core. The primary project directory is `ece453_mtb_base/`.
+All application code runs on the CM4 core. The primary project directory is `firmware/`.
 
 ## Build Commands
 
-All commands run from `ece453_mtb_base/`:
+All commands run from `firmware/`:
 
 ```bash
 make getlibs      # First-time setup: download all .mtb dependencies to libs/
@@ -40,7 +40,7 @@ There is no test framework. Linting is via clangd (configured in `.clangd`).
 
 `printf()` is redirected to UART via `cy_retarget_io` on **P5_0 (RX) / P5_1 (TX)** at **115200 baud** over the KitProg3 USB COM port. The system control task prints health metrics every 2 seconds.
 
-For GDB debugging: install the Cortex-Debug VSCode extension, open `ece453_mtb_base/` in VSCode, and press F5 to build, flash, and attach.
+For GDB debugging: install the Cortex-Debug VSCode extension, open `firmware/` in VSCode, and press F5 to build, flash, and attach.
 
 ## Architecture
 
@@ -135,7 +135,7 @@ make program DEFINES=SW_STEP_COUNTER    # workaround: software pedometer (PCB #1
 - Implemented entirely in `sw_step_counter.c`/`.h`; **`task_bmi270.c` is untouched**. The only existing-file change is a `#ifdef SW_STEP_COUNTER`-gated spawn in `task_system_control.c`.
 - When the flag is set it runs a FreeRTOS task that reads accel directly over I2C at ~50 Hz (its own transactions on the shared `i2c_mutex`), runs a magnitude → DC-removal → peak-detect algorithm (refractory period + 4-step warm-up to reject non-gait motion), and writes the cumulative count into `health_steps`, overriding the always-0 hardware read.
 - The whole file compiles to nothing without the flag — normal builds are byte-for-byte unaffected.
-- Thresholds (`SWS_TH_HIGH`, refractory, warm-up) are tunable in `sw_step_counter.c` and may need adjusting to how the watch is worn.
+- Thresholds (`SWS_TH_HIGH`, refractory, warm-up) are tunable in `sw_step_counter.c` and may need adjusting to how the device is worn.
 
 ### Low-Power Profile (`DEFINES=LOW_POWER`)
 
@@ -162,16 +162,16 @@ Reduces current draw for the "always track steps, measure HR/SpO2 only on demand
 
 | File | Role |
 |------|------|
-| `ece453/FreeRTOS/tasks/src/main.c` | Entry point; BSP init, scheduler start |
-| `ece453/FreeRTOS/tasks/src/task_system_control.c` | I2C + UART init, task spawning, metric reporting |
-| `ece453/FreeRTOS/tasks/src/task_max30102.c` | MAX30102 FIFO driver |
-| `ece453/FreeRTOS/tasks/src/task_bmi270.c` | BMI270 6-axis + step counter driver |
-| `ece453/FreeRTOS/tasks/src/task_ble.c` | WICED BT stack init, GAP/GATT callbacks, SpO2+Steps notify loop |
-| `ece453/FreeRTOS/tasks/src/health_algo.c` | HR/SpO2 signal processing |
-| `ece453/FreeRTOS/tasks/src/sw_step_counter.c` | Software pedometer fallback (built only with `DEFINES=SW_STEP_COUNTER`) |
-| `ece453/FreeRTOS/tasks/include/task_ble.h` | BLE task public interface; exposes `ble_connected` |
-| `ece453/FreeRTOS/tasks/include/bmi270_config.h` | BMI270 firmware blob (~8 KB array) |
-| `ece453/FreeRTOS/FreeRTOSConfig.h` | FreeRTOS kernel configuration |
+| `app/FreeRTOS/tasks/src/main.c` | Entry point; BSP init, scheduler start |
+| `app/FreeRTOS/tasks/src/task_system_control.c` | I2C + UART init, task spawning, metric reporting |
+| `app/FreeRTOS/tasks/src/task_max30102.c` | MAX30102 FIFO driver |
+| `app/FreeRTOS/tasks/src/task_bmi270.c` | BMI270 6-axis + step counter driver |
+| `app/FreeRTOS/tasks/src/task_ble.c` | WICED BT stack init, GAP/GATT callbacks, SpO2+Steps notify loop |
+| `app/FreeRTOS/tasks/src/health_algo.c` | HR/SpO2 signal processing |
+| `app/FreeRTOS/tasks/src/sw_step_counter.c` | Software pedometer fallback (built only with `DEFINES=SW_STEP_COUNTER`) |
+| `app/FreeRTOS/tasks/include/task_ble.h` | BLE task public interface; exposes `ble_connected` |
+| `app/FreeRTOS/tasks/include/bmi270_config.h` | BMI270 firmware blob (~8 KB array) |
+| `app/FreeRTOS/FreeRTOSConfig.h` | FreeRTOS kernel configuration |
 | `Makefile` | Build config: target board, toolchain, components |
 | `deps/btstack-integration.mtb` | WICED BT IPC transport adapter for integrated BLESS (release-v4.7.0) |
 | `bsps/.../config/GeneratedSource/cycfg_gatt_db.h/c` | BT Configurator output — GATT database array + handle defines |
@@ -195,7 +195,7 @@ Reduces current draw for the "always track steps, measure HR/SpO2 only on demand
 ### Step 1 — Fetch libraries
 
 ```bash
-cd ece453_mtb_base
+cd firmware
 make getlibs
 ```
 
@@ -218,7 +218,7 @@ Open the BT Configurator GUI:
    - Advertising interval: Fast (100 ms), Slow (1000 ms)
    - Include Heart Rate Service UUID in advertising payload
 5. **Generate Code** → output directory:
-   `ece453_mtb_base/bsps/TARGET_APP_CY8CPROTO-063-BLE/config/GeneratedSource/`
+   `firmware/bsps/TARGET_APP_CY8CPROTO-063-BLE/config/GeneratedSource/`
 
 ### Step 3 — Verify handles in task_ble.c
 

@@ -1,0 +1,73 @@
+WatchWise
+Copyright (c) 2026 Chance Howarth
+
+This repository combines original work with third-party material. The MIT
+license (LICENSE) and CC BY 4.0 license (LICENSE-HARDWARE) apply only to the
+original work described below. Third-party components remain under their own
+licenses.
+
+--------------------------------------------------------------------------------
+ORIGINAL WORK
+--------------------------------------------------------------------------------
+
+Software (MIT):
+  software/firmware/app/FreeRTOS/tasks/src/
+    health_algo.c, task_max30102.c, task_bmi270.c, task_ble.c,
+    sw_step_counter.c, ww_rtc.c
+  software/firmware/app/FreeRTOS/tasks/include/
+    (all headers except bmi270_config.h and task_system_control.h,
+     both noted under third-party below)
+  software/mobile/WatchWiseApp/     iOS application
+
+Hardware (CC BY 4.0):
+  pcb/watchwise_main_kicad/, case/, WatchWise-BOM.csv, interactive_BOM.html
+  (excluding UW ECE 453 templates and uw-altium-parts, noted below)
+
+--------------------------------------------------------------------------------
+THIRD-PARTY COMPONENTS
+--------------------------------------------------------------------------------
+
+Infineon Technologies AG / Cypress Semiconductor
+  software/firmware/bsps/          CY8CPROTO-063-BLE board support package
+  software/firmware/deps/          ModusToolbox dependency manifests
+  software/firmware/libs/          ModusToolbox libraries (not tracked)
+  software/mtb_shared/                    Shared ModusToolbox libraries, including
+                                          btstack and btstack-integration
+  software/firmware/LICENSE        Applicable Infineon license terms
+  software/firmware/main.c         Derived from mtb-example-empty-app
+
+  The firmware project is based on Infineon's mtb-example-empty-app template.
+  These files are subject to Infineon's license terms, not the MIT license
+  above. Some Infineon license terms are more restrictive than MIT; consult
+  software/firmware/LICENSE and the BSP EULA before redistributing.
+
+Amazon Web Services / Richard Barry
+  FreeRTOS kernel, distributed via ModusToolbox under the MIT license.
+
+Bosch Sensortec
+  software/firmware/app/FreeRTOS/tasks/include/bmi270_config.h
+  Contains the BMI270 feature-engine configuration blob, which originates from
+  Bosch Sensortec reference material and is subject to Bosch's license terms.
+
+University of Wisconsin-Madison, ECE 453
+  Course scaffolding by Joe Krachey (jkrachey@wisc.edu), Copyright (c) 2026:
+    software/firmware/app/FreeRTOS/tasks/include/task_system_control.h
+    software/firmware/app/FreeRTOS/tasks/src/task_system_control.c
+
+  These two began as course-provided scaffolding and were substantially
+  rewritten for this project (I2C bus and mutex setup, sensor task spawning,
+  and metric reporting). The original authorship notice is retained alongside
+  the WatchWise attribution, and these files are jointly held rather than
+  MIT-licensed by the WatchWise author alone.
+
+  pcb/altium_project/  ECE 453 Altium templates, output jobs, and the
+                       uw-altium-parts component library.
+
+--------------------------------------------------------------------------------
+NOT A MEDICAL DEVICE
+--------------------------------------------------------------------------------
+
+WatchWise is a personal engineering prototype. It has no regulatory clearance
+of any kind and must not be used to diagnose, treat, or monitor any medical
+condition. The heart rate and SpO2 values it produces are not clinically
+validated and should not inform any health decision.

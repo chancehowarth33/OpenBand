@@ -1,5 +1,9 @@
 .claude/
 
+# Private, do not publish
+patent/
+.netlify/
+
 # Altium backup and history folders
 **/.history/
 **/watchwise_main-backups/
