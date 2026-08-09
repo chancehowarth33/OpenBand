@@ -3,10 +3,10 @@
  * @brief Shared I2C bus and mutex, plus the system control task interface.
  *
  * Originated as UW-Madison ECE 453 course scaffolding and was substantially
- * rewritten for WatchWise.
+ * rewritten for OpenBand.
  *
  * @author Joe Krachey (jkrachey@wisc.edu) - original scaffolding
- * @author Chance Howarth - WatchWise implementation
+ * @author Chance Howarth - OpenBand implementation
  *
  * @copyright Copyright (c) 2026 Joe Krachey
  * @copyright Copyright (c) 2026 Chance Howarth

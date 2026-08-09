@@ -2,7 +2,7 @@
  * @file Infineon_Api.h
  * @author Chance Howarth
  * @brief Aggregates the C standard library and Infineon HAL/PDL headers used
- *        across the WatchWise tasks.
+ *        across the OpenBand tasks.
  *
  * @copyright Copyright (c) 2026 Chance Howarth. MIT licensed, see LICENSE.
  */

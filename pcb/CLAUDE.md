@@ -1,4 +1,4 @@
-# WatchWise PCB — Schematic & Layout Reference
+# OpenBand PCB — Schematic & Layout Reference
 
 All design files live in two directories:
 - `altium_project/` — original Altium source (binary, not easily readable)

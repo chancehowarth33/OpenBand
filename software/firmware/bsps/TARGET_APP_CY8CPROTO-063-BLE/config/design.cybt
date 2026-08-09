@@ -46,9 +46,9 @@
                                         <Field>
                                             <FieldProperties>
                                                 <Property id="Name" value="Name"/>
-                                                <Property id="Value" value="WatchWise"/>
+                                                <Property id="Value" value="OpenBand"/>
                                                 <Property id="Format" value="f_utf8s"/>
-                                                <Property id="ByteLength" value="9"/>
+                                                <Property id="ByteLength" value="8"/>
                                             </FieldProperties>
                                         </Field>
                                     </Fields>
@@ -151,7 +151,7 @@
                         </Service>
                         <Service type="org.bluetooth.service.custom" version="0.0.0">
                             <ServiceProperties>
-                                <Property id="DisplayName" value="WatchWise Health"/>
+                                <Property id="DisplayName" value="OpenBand Health"/>
                                 <Property id="EntityID" value="{b3c3e9eb-8d65-4217-a7cf-8be1e490a47c}"/>
                                 <Property id="UUID" value="5E021176-5E66-483F-AE53-D3291D2CC787"/>
                                 <Property id="ServiceDeclaration" value="Primary"/>
@@ -720,7 +720,7 @@
         <General>
             <Property id="DeviceAddress" value="00A050-000000"/>
             <Property id="MacGeneratedAddress" value="false"/>
-            <Property id="DeviceName" value="WatchWise"/>
+            <Property id="DeviceName" value="OpenBand"/>
             <Property id="Appearance" value="0"/>
             <Property id="HostTxPowerLevel" value="Pos_0"/>
             <Property id="EnableRpaTimeout" value="true"/>

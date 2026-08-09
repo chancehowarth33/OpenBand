@@ -3,10 +3,10 @@
  * @brief I2C and UART bring-up, sensor task spawning, and metric reporting.
  *
  * Originated as UW-Madison ECE 453 course scaffolding and was substantially
- * rewritten for WatchWise.
+ * rewritten for OpenBand.
  *
  * @author Joe Krachey (jkrachey@wisc.edu) - original scaffolding
- * @author Chance Howarth - WatchWise implementation
+ * @author Chance Howarth - OpenBand implementation
  *
  * @copyright Copyright (c) 2026 Joe Krachey
  * @copyright Copyright (c) 2026 Chance Howarth
@@ -55,7 +55,7 @@ void system_control_initialize(void) {
     print_mutex = xSemaphoreCreateMutex();
     CY_ASSERT(print_mutex != NULL);
 
-    PRINTF("\n\n=== WatchWise Boot ===\n");
+    PRINTF("\n\n=== OpenBand Boot ===\n");
 
 #ifdef DEBUG_NO_SLEEP
     /* Keep the high-frequency clocks up so the debug UART stays clean. Deep

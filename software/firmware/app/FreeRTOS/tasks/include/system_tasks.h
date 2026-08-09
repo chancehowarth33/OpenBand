@@ -1,7 +1,7 @@
 /**
  * @file system_tasks.h
  * @author Chance Howarth
- * @brief Aggregates the headers for every WatchWise system task.
+ * @brief Aggregates the headers for every OpenBand system task.
  *
  * @copyright Copyright (c) 2026 Chance Howarth. MIT licensed, see LICENSE.
  */

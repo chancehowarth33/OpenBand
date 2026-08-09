@@ -2,7 +2,7 @@ Creative Commons Attribution 4.0 International (CC BY 4.0)
 
 Copyright (c) 2026 Chance Howarth
 
-The WatchWise hardware design files are licensed under the Creative Commons
+The OpenBand hardware design files are licensed under the Creative Commons
 Attribution 4.0 International License.
 
 This covers the original hardware design work in this repository:
@@ -10,7 +10,7 @@ This covers the original hardware design work in this repository:
   pcb/watchwise_main_kicad/     KiCad schematics, board layout, fabrication outputs
   pcb/altium_project/           Altium schematics and board files (see exclusions below)
   case/                         OpenSCAD sources, STL, and 3MF enclosure models
-  WatchWise-BOM.csv             Bill of materials
+  OpenBand-BOM.csv             Bill of materials
   interactive_BOM.html          Generated interactive BOM
 
 You are free to share and adapt these files for any purpose, including

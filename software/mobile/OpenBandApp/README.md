@@ -1,6 +1,6 @@
-# WatchWise iOS App
+# OpenBand iOS App
 
-A native SwiftUI + CoreBluetooth app that connects to the WatchWise PSoC6
+A native SwiftUI + CoreBluetooth app that connects to the OpenBand PSoC6
 wearable over BLE and displays live **heart rate, SpO₂, step count, and
 battery** — a replacement for nRF Connect.
 
@@ -16,16 +16,16 @@ battery** — a replacement for nRF Connect.
 
 1. Open the project:
    ```bash
-   open mobile/WatchWiseApp/WatchWiseApp.xcodeproj
+   open mobile/OpenBandApp/OpenBandApp.xcodeproj
    ```
-2. Select the **WatchWiseApp** scheme and your iPhone as the run destination
+2. Select the **OpenBandApp** scheme and your iPhone as the run destination
    (plug it in / pair over Wi-Fi).
 3. Set your signing team: select the project → **Signing & Capabilities** →
    check *Automatically manage signing* → pick your Apple ID team. (You can
-   change the bundle id from `com.watchwise.WatchWiseApp` if it’s taken.)
+   change the bundle id from `com.openband.OpenBandApp` if it’s taken.)
 4. Press **⌘R** to build and run on the phone.
 5. On first launch tap **Allow** for the Bluetooth permission prompt. The app
-   auto-scans, finds `WatchWise2`, connects, and starts streaming.
+   auto-scans, finds `OpenBand2`, connects, and starts streaming.
 
 ## How it maps to the firmware
 
@@ -39,15 +39,15 @@ database (`task_ble.c` / `cycfg_gatt_db.h`):
 | Steps | (same custom service) | `C36072C1-2706-41F1-8D28-E0619FE31FFA` | uint32 little-endian |
 | Battery | `180F` | `2A19` | uint8 % |
 
-The device advertises only its name (`WatchWise2`) with no service UUIDs, so the
+The device advertises only its name (`OpenBand2`) with no service UUIDs, so the
 app scans with `services: nil` and matches any peripheral whose advertised name
-starts with `WatchWise`. The firmware pushes notifications every 2 s.
+starts with `OpenBand`. The firmware pushes notifications every 2 s.
 
 ## Project layout
 
 ```
-WatchWiseApp/
-  WatchWiseApp.swift   App entry; owns the shared BLEManager
+OpenBandApp/
+  OpenBandApp.swift   App entry; owns the shared BLEManager
   BLEManager.swift     CoreBluetooth scan/connect/subscribe + decoding
   ContentView.swift    Dashboard UI (metric cards + HR sparkline)
   Assets.xcassets/     App icon + accent color placeholders
@@ -57,7 +57,7 @@ WatchWiseApp/
 
 - **Doesn’t find the device:** make sure the firmware is flashed and advertising
   (it stops advertising ~2 min after boot if not connected, but the firmware
-  re-arms it). Confirm it shows up in nRF Connect as `WatchWise2`.
+  re-arms it). Confirm it shows up in nRF Connect as `OpenBand2`.
 - **Only one phone at a time:** disconnect nRF Connect / other phones first —
   the firmware accepts a single connection.
 - **Values show “—”:** they populate on the first notification (≤2 s) after the

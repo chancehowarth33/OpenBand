@@ -1,5 +1,5 @@
 ================================================================
- WatchWise — BMI270 step-counter debug log
+ OpenBand — BMI270 step-counter debug log
 ================================================================
 
 ISSUE

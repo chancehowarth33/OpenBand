@@ -1,4 +1,4 @@
-WatchWise
+OpenBand
 Copyright (c) 2026 Chance Howarth
 
 This repository combines original work with third-party material. The MIT
@@ -17,10 +17,10 @@ Software (MIT):
   software/firmware/app/FreeRTOS/tasks/include/
     (all headers except bmi270_config.h and task_system_control.h,
      both noted under third-party below)
-  software/mobile/WatchWiseApp/     iOS application
+  software/mobile/OpenBandApp/     iOS application
 
 Hardware (CC BY 4.0):
-  pcb/watchwise_main_kicad/, case/, WatchWise-BOM.csv, interactive_BOM.html
+  pcb/watchwise_main_kicad/, case/, OpenBand-BOM.csv, interactive_BOM.html
   (excluding UW ECE 453 templates and uw-altium-parts, noted below)
 
 --------------------------------------------------------------------------------
@@ -57,8 +57,8 @@ University of Wisconsin-Madison, ECE 453
   These two began as course-provided scaffolding and were substantially
   rewritten for this project (I2C bus and mutex setup, sensor task spawning,
   and metric reporting). The original authorship notice is retained alongside
-  the WatchWise attribution, and these files are jointly held rather than
-  MIT-licensed by the WatchWise author alone.
+  the OpenBand attribution, and these files are jointly held rather than
+  MIT-licensed by the OpenBand author alone.
 
   pcb/altium_project/  ECE 453 Altium templates, output jobs, and the
                        uw-altium-parts component library.
@@ -67,7 +67,7 @@ University of Wisconsin-Madison, ECE 453
 NOT A MEDICAL DEVICE
 --------------------------------------------------------------------------------
 
-WatchWise is a personal engineering prototype. It has no regulatory clearance
+OpenBand is a personal engineering prototype. It has no regulatory clearance
 of any kind and must not be used to diagnose, treat, or monitor any medical
 condition. The heart rate and SpO2 values it produces are not clinically
 validated and should not inform any health decision.

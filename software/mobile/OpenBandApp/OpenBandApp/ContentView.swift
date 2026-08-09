@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  WatchWiseApp
+//  OpenBandApp
 //
 //  Two screens: a device picker (ScanView) and, once connected, the live
 //  dashboard (DashboardView). The root swaps between them based on BLE state.
@@ -40,7 +40,7 @@ struct ScanView: View {
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
-                    Toggle("Auto-connect to WatchWise", isOn: $ble.autoConnect)
+                    Toggle("Auto-connect to OpenBand", isOn: $ble.autoConnect)
                     if let last = ble.lastDeviceName {
                         HStack {
                             Text("Last device").foregroundStyle(.secondary)
@@ -71,7 +71,7 @@ struct ScanView: View {
                     }
                 }
             }
-            .navigationTitle("WatchWise")
+            .navigationTitle("OpenBand")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { ble.startScan() } label: {
@@ -101,16 +101,16 @@ struct DeviceRow: View {
 
     var body: some View {
         HStack(spacing: 14) {
-            Image(systemName: device.isWatchWise ? "applewatch" : "dot.radiowaves.left.and.right")
+            Image(systemName: device.isOpenBand ? "applewatch" : "dot.radiowaves.left.and.right")
                 .font(.title3)
-                .foregroundStyle(device.isWatchWise ? Color.green : .secondary)
+                .foregroundStyle(device.isOpenBand ? Color.green : .secondary)
                 .frame(width: 28)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(device.name)
                     .font(.body)
                     .foregroundStyle(.primary)
-                Text(device.isWatchWise ? "WatchWise wearable" : "Other device")
+                Text(device.isOpenBand ? "OpenBand wearable" : "Other device")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -191,7 +191,7 @@ struct DashboardView: View {
                 }
                 .padding()
             }
-            .navigationTitle(ble.connectedDeviceName ?? "WatchWise")
+            .navigationTitle(ble.connectedDeviceName ?? "OpenBand")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Disconnect", role: .destructive) { ble.disconnect() }

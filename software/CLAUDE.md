@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-WatchWise is a health monitoring wearable application for Infineon's PSoC6 (Cortex-M4) built with ModusToolbox. It uses FreeRTOS to concurrently read from a MAX30102 PPG sensor (heart rate/SpO2) and BMI270 IMU (motion/steps), then processes sensor data through a real-time health algorithm.
+OpenBand is a health monitoring wearable application for Infineon's PSoC6 (Cortex-M4) built with ModusToolbox. It uses FreeRTOS to concurrently read from a MAX30102 PPG sensor (heart rate/SpO2) and BMI270 IMU (motion/steps), then processes sensor data through a real-time health algorithm.
 
 All application code runs on the CM4 core. The primary project directory is `firmware/`.
 
@@ -102,7 +102,7 @@ Do NOT use `bluetooth-freertos` (HCI UART only, for external AIROC chips) or `bl
 **GATT services** (currently defined in BT Configurator):
 | Service | UUID | Characteristics |
 |---------|------|-----------------|
-| WatchWise Health | Custom 128-bit | SP02 (read+notify, handle 0x000A), StepCount (read+notify, handle 0x000D) |
+| OpenBand Health | Custom 128-bit | SP02 (read+notify, handle 0x000A), StepCount (read+notify, handle 0x000D) |
 
 **Key init sequence in `task_ble`:**
 1. `wiced_bt_stack_init(app_bt_management_callback, &wiced_bt_cfg_settings)`
@@ -111,9 +111,9 @@ Do NOT use `bluetooth-freertos` (HCI UART only, for external AIROC chips) or `bl
 4. `wiced_bt_start_advertisements(BTM_BLE_ADVERT_UNDIRECTED_HIGH, 0, NULL)`
 5. Every 2 s: send notifications via `wiced_bt_gatt_server_send_notification()`
 
-**CCCD tracking**: GATT write events on `HDLD_WATCHWISE_HEALTH_SP02_CLIENT_CHAR_CONFIG` (0x000B) and `HDLD_WATCHWISE_HEALTH_STEPCOUNT_CLIENT_CHAR_CONFIG` (0x000E) are stored in `spo2_cccd` / `steps_cccd`. Bit 0 = `GATT_CLIENT_CONFIG_NOTIFICATION`.
+**CCCD tracking**: GATT write events on `HDLD_OPENBAND_HEALTH_SP02_CLIENT_CHAR_CONFIG` (0x000B) and `HDLD_OPENBAND_HEALTH_STEPCOUNT_CLIENT_CHAR_CONFIG` (0x000E) are stored in `spo2_cccd` / `steps_cccd`. Bit 0 = `GATT_CLIENT_CONFIG_NOTIFICATION`.
 
-**Phone testing:** nRF Connect (iOS/Android) → scan for `WatchWise` → Connect → tap the WatchWise Custom Service → enable notifications (↓↓↓) on SP02 and StepCount.
+**Phone testing:** nRF Connect (iOS/Android) → scan for `OpenBand` → Connect → tap the OpenBand Custom Service → enable notifications (↓↓↓) on SP02 and StepCount.
 
 ### BMI270 Initialization
 
@@ -210,11 +210,11 @@ Open the BT Configurator GUI:
 2. **Add service:** Heart Rate (from SIG profiles list)
    - Enable **Heart Rate Measurement** characteristic → check **Notify**
    - Enable **Body Sensor Location** characteristic → value = `0x04` (Wrist)
-3. **Add service:** Custom → name it `WatchWise Health`
+3. **Add service:** Custom → name it `OpenBand Health`
    - Add characteristic → name `SpO2`, UUID (128-bit, any unique), properties: **Read + Notify**
    - Add characteristic → name `StepCount`, UUID (128-bit, any unique), properties: **Read + Notify**
 4. **GAP / Advertising:**
-   - Device name: `WatchWise`
+   - Device name: `OpenBand`
    - Advertising interval: Fast (100 ms), Slow (1000 ms)
    - Include Heart Rate Service UUID in advertising payload
 5. **Generate Code** → output directory:
@@ -222,7 +222,7 @@ Open the BT Configurator GUI:
 
 ### Step 3 — Verify handles in task_ble.c
 
-Open the generated `cycfg_gatt_db.h` and confirm `HDLC_WATCHWISE_HEALTH_SP02_VALUE` and `HDLC_WATCHWISE_HEALTH_STEPCOUNT_VALUE` are defined. `task_ble.c` uses these directly — no manual updates needed as long as the characteristic names match.
+Open the generated `cycfg_gatt_db.h` and confirm `HDLC_OPENBAND_HEALTH_SP02_VALUE` and `HDLC_OPENBAND_HEALTH_STEPCOUNT_VALUE` are defined. `task_ble.c` uses these directly — no manual updates needed as long as the characteristic names match.
 
 ### Step 4 — Build and flash
 
