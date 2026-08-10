@@ -33,6 +33,11 @@ make clean        # Remove build artifacts
 make erase        # Erase device flash
 ```
 
+> **After the first `make getlibs`, apply the vendor patch in [`../patches/`](../patches).**
+> Without it the firmware still compiles, but the BLE controller never starts:
+> `Cy_BLE_StackSetFeatureConfig` rejects the stock feature mask. See
+> [`../patches/README.md`](../patches/README.md) for the one-line `git apply` and why it is needed.
+
 - **Toolchain:** GCC ARM, hardware floating point (`hardfp`)
 - **Target:** `APP_CY8CPROTO-063-BLE`
 - **Debug output:** `printf` → UART via `cy_retarget_io` on **P5_0 (RX) / P5_1 (TX)** at **115200 baud** over the KitProg3 USB COM port.

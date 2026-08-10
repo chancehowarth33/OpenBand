@@ -1,0 +1,25 @@
+diff --git a/COMPONENT_BLESS-IPC/platform/ipc/PSoC6IPC.h b/COMPONENT_BLESS-IPC/platform/ipc/PSoC6IPC.h
+index 07fb62b..274eea3 100644
+--- a/COMPONENT_BLESS-IPC/platform/ipc/PSoC6IPC.h
++++ b/COMPONENT_BLESS-IPC/platform/ipc/PSoC6IPC.h
+@@ -206,13 +206,15 @@ typedef struct
+ *  B5 : PERSISTENT_STORE_RESOLVING_LIST
+ *  B6 : PERSISTENT_STORE_WHITELIST
+ *  B7 : PERSISTENT_RADIO_CALIBRATION_MASK
+-*  Enabling only B0,B1,B3
++*  Enabling only B0 (DLE) — Privacy/PHY disabled to avoid CM0P_BLESS 5.0.8 validation failure.
++*  Original was 0x000Bu (DLE+Privacy+PHY) but Cy_BLE_StackSetFeatureConfig returns
++*  CY_BLE_ERROR_INVALID_PARAMETER with that combination against the cat1cm0p v1.10.0 binary.
+ */
+-#define CY_BLE_FEATURE_MASK 0x000Bu
++#define CY_BLE_FEATURE_MASK 0x0001u
+ 
+-#define CY_BLE_RESOLVABLE_DEV_LIST_SIZE 16
+-#define CY_BLE_BONDED_DEV_LIST_SIZE 16
+-#define CY_BLE_WHITE_LIST_SIZE 16
++#define CY_BLE_RESOLVABLE_DEV_LIST_SIZE 0   /* 0 when Privacy 1.2 is disabled */
++#define CY_BLE_BONDED_DEV_LIST_SIZE 4
++#define CY_BLE_WHITE_LIST_SIZE 4
+ 
+ cy_stc_ble_stack_params_t stackParam =
+ {

@@ -349,6 +349,13 @@ make build
 make program      # Flash via KitProg3 over the JPROG1 SWD header
 ```
 
+> **One required patch.** After the first `make getlibs`, apply
+> [`software/patches/btstack-integration-bless-ipc-featuremask.patch`](software/patches). Infineon's
+> `btstack-integration` requests a BLE feature mask that the prebuilt CM0+ controller binary
+> rejects, so the stack silently fails to start. The firmware compiles either way, which means you
+> only find out on hardware. [`software/patches/README.md`](software/patches/README.md) has the
+> command and the full explanation.
+
 Optional build flags, composable and off by default:
 
 ```bash
