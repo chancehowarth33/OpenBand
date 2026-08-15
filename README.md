@@ -5,7 +5,7 @@
   </picture>
 </p>
 
-<p align="center"><b>I built my own WHOOP.</b></p>
+<p align="center"><b>Open Source WHOOP.</b></p>
 
 <p align="center">
   An open-source, screenless wearable health tracker built from scratch: custom PCB, custom
