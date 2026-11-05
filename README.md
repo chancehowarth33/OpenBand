@@ -25,7 +25,7 @@
 ## Why I built this
 
 I wanted to know whether I could build a real consumer wearable end to end, by myself, rather
-than wiring a dev board to a breakout sensor and calling it a project. That means every layer:
+than wiring a dev board to a breakout sensor and calling it a project. That means every layer,
 schematic capture, a two-layer board with an RF section that actually works, hand assembly,
 bare-metal bring-up, an RTOS, sensor drivers written against datasheets, the signal processing
 that turns raw photodiode counts into a heart rate, a Bluetooth GATT server, a printed
@@ -41,7 +41,6 @@ soldered, and stream live to an app I wrote. Everything needed to build one is i
 schematics, board layout, fabrication outputs, firmware, enclosure models, the full bill of
 materials, and the iOS app.
 
-> Not affiliated with WHOOP, Inc. The name is used only as shorthand for the category of device.
 
 ### What it tracks
 
@@ -61,8 +60,7 @@ All four stream to the phone over BLE every 2 seconds.
 OpenBand is worn on the wrist with a standard strap. The electronics are a single ~38 mm
 circular board that drops into a 3D-printed enclosure; the strap threads through slots on either
 side, and four M1.6 screws retain the board from below. A cutout in the bottom of the case
-exposes the optical sensor so it sits directly against the skin, which is the whole game for
-photoplethysmography: the sensor has to be in firm, consistent contact with the wrist or the
+exposes the optical sensor so it sits directly against the skin and has to be in firm, consistent contact with the wrist or the
 pulse waveform disappears into noise.
 
 <p align="center">
@@ -76,7 +74,7 @@ retains it with four screws and exposes the MAX30102 window in the center.
 ![On the wrist](images/wrist_view.png)
 
 The enclosure is OpenSCAD, in [`case/`](case), and went through two revisions. V1 taught me
-most of what was wrong with it: the interior needed to be a true circle because the strap mounts
+most of what was wrong with it. The interior needed to be a true circle because the strap mounts
 were intruding on the board pocket, the sensor window was slightly too small, the screw holes
 were undersized for M1.6 threads, the programming-header opening did not line up with the pins,
 and the outer wall of the strap slot was too thin to survive being worn. V2 fixed all of it.
